@@ -48,7 +48,7 @@ public class Vinculacion extends Processing {
      else {
         i.ponDeclaracion(decVar); 
      }
-     i.exp().procesaCon(this);
+     i.exp().processWith(this);
    }     
    public void process(IBloque b) {
      for (Inst i: b.is())
@@ -58,12 +58,12 @@ public class Vinculacion extends Processing {
       return error; 
    }
    public void process(And exp) {
-     exp.opnd1().procesaCon(this);
-     exp.opnd2().procesaCon(this);
+     exp.opnd1().processWith(this);
+     exp.opnd2().processWith(this);
    }
    public void process(Suma exp) {
-     exp.opnd1().procesaCon(this);
-     exp.opnd2().procesaCon(this);
+     exp.opnd1().processWith(this);
+     exp.opnd2().processWith(this);
    }
    public void process(Var exp) {
      DecVar decVar = tablaDeSimbolos.get(exp.var());

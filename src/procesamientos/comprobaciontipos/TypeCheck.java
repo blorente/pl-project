@@ -5,8 +5,11 @@ import procesamientos.Processing;
 import procesamientos.comprobaciontipos.utils.TypeInferer;
 import programa.Program;
 import programa.Program.Type;
-import programa.Program.CteInt;
-import programa.Program.CteBool;
+import programa.Program.IntCt;
+import programa.Program.BoolCt;
+import programa.Program.RealCt;
+import programa.Program.UniCharCt;
+import programa.Program.UniStringCt;
 import programa.Program.Suma;
 import programa.Program.And;
 import programa.Program.IAsig;
@@ -33,17 +36,29 @@ public class TypeCheck extends Processing {
         exp.ponTipo(exp.declaracion().tipoDec());
     }
 
-    public void process(CteInt exp) {
+    public void process(IntCt exp) {
         exp.ponTipo(program.tInt());
     }
 
-    public void process(CteBool exp) {
+    public void process(BoolCt exp) {
         exp.ponTipo(program.tBool());
     }
 
+    public void process(RealCt exp) {
+        exp.ponTipo(program.tReal());
+    }
+
+    public void process(UniCharCt exp) {
+        exp.ponTipo(program.tUniChar());
+    }
+
+    public void process(UniStringCt exp) {
+        exp.ponTipo(program.tUniString());
+    }
+
     public void process(Suma exp) {
-        exp.opnd1().procesaCon(this);
-        exp.opnd2().procesaCon(this);
+        exp.opnd1().processWith(this);
+        exp.opnd2().processWith(this);
 
         Type inferredType = this.inferrer.inferSum(exp.opnd1().tipo(), exp.opnd2().tipo());
         if (inferredType.equals(program.tError())) {
@@ -53,8 +68,8 @@ public class TypeCheck extends Processing {
     }
 
     public void process(And exp) {
-        exp.opnd1().procesaCon(this);
-        exp.opnd2().procesaCon(this);
+        exp.opnd1().processWith(this);
+        exp.opnd2().processWith(this);
 
         Type inferredType = inferrer.inferAnd(exp.opnd1().tipo(), exp.opnd2().tipo());
         if (inferredType.equals(program.tError())) {
@@ -69,7 +84,7 @@ public class TypeCheck extends Processing {
     }
 
     public void process(IAsig i) {
-        i.exp().procesaCon(this);
+        i.exp().processWith(this);
         if (!i.declaracion().tipoDec().equals(i.exp().tipo())) {
             if (!i.exp().tipo().equals(program.tError()))
                 errores.msg(i.enlaceFuente() + ":" + ERROR_ASSIGNMENT);

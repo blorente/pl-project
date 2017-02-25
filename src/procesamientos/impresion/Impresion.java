@@ -2,8 +2,12 @@ package procesamientos.impresion;
 
 import procesamientos.Processing;
 
-import programa.Program.CteInt;
-import programa.Program.CteBool;
+import programa.Program;
+import programa.Program.IntCt;
+import programa.Program.BoolCt;
+import programa.Program.RealCt;
+import programa.Program.UniCharCt;
+import programa.Program.UniStringCt;
 import programa.Program.Suma;
 import programa.Program.And;
 import programa.Program.Dec;
@@ -48,32 +52,44 @@ public class Impresion extends Processing {
           System.out.print(" ");
    }
      
-   public void process(CteInt exp) {
+   public void process(IntCt exp) {
      System.out.print(exp.intVal());
      printAttributes(exp);
    } 
-   public void process(CteBool exp) {
+   public void process(BoolCt exp) {
      System.out.print(exp.boolVal());
      printAttributes(exp);
-   } 
-   public void process(Var exp) {
+   }
+    public void process(RealCt exp) {
+        System.out.print(exp.realVal());
+        printAttributes(exp);
+    }
+    public void process(UniCharCt exp) {
+        System.out.print(exp.charVal());
+        printAttributes(exp);
+    }
+    public void process(UniStringCt exp) {
+        System.out.print(exp.stringVal());
+        printAttributes(exp);
+    }
+    public void process(Var exp) {
      System.out.print(exp.var());
      printAttributes(exp);
    } 
    public void process(Suma exp) {
      System.out.print('('); 
-     exp.opnd1().procesaCon(this);
+     exp.opnd1().processWith(this);
      System.out.print('+');
      printAttributes(exp);
-     exp.opnd2().procesaCon(this);
+     exp.opnd2().processWith(this);
      System.out.print(')'); 
    } 
    public void process(And exp) {
      System.out.print('('); 
-     exp.opnd1().procesaCon(this);
+     exp.opnd1().processWith(this);
      System.out.print("&&");
      printAttributes(exp);
-     exp.opnd2().procesaCon(this);
+     exp.opnd2().processWith(this);
      System.out.print(')'); 
    }
    public void process(Prog p) {
@@ -90,7 +106,7 @@ public class Impresion extends Processing {
    public void process(IAsig i) {
       indent();
       System.out.print(i.var()+"=");
-      i.exp().procesaCon(this);
+      i.exp().processWith(this);
       printAttributes(i);
       System.out.println(); 
    }     

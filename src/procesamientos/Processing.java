@@ -1,7 +1,13 @@
 package procesamientos;
 
-import programa.Program.CteInt;
-import programa.Program.CteBool;
+import programa.Program;
+
+import programa.Program.IntCt;
+import programa.Program.BoolCt;
+import programa.Program.RealCt;
+import programa.Program.UniCharCt;
+import programa.Program.UniStringCt;
+
 import programa.Program.Var;
 import programa.Program.Suma;
 import programa.Program.Prog;
@@ -18,8 +24,12 @@ import programa.Program.Error;
 import programa.Program.Ok;
 
 public class Processing {
-   public void process(CteInt exp) {}
-   public void process(CteBool exp) {}
+   public void process(IntCt exp) {}
+   public void process(BoolCt exp) {}
+   public void process(RealCt exp) {}
+   public void process(UniCharCt exp) {}
+   public void process(UniStringCt exp) {}
+
    public void process(Var exp) {}
    public void process(Suma exp) {}
    public void process(And exp) {}

@@ -3,8 +3,8 @@ package procesamientos.generacioncodigo;
 import maquinaP.MaquinaP;
 import procesamientos.Processing;
 import programa.Program;
-import programa.Program.CteInt;
-import programa.Program.CteBool;
+import programa.Program.IntCt;
+import programa.Program.BoolCt;
 import programa.Program.Suma;
 import programa.Program.And;
 import programa.Program.Prog;
@@ -21,27 +21,27 @@ public class GeneracionDeCodigo extends Processing {
    public void process(Var exp) {
       maquina.addInstruccion(maquina.apilaDir(exp.declaracion().dir(),exp.enlaceFuente()));         
    } 
-   public void process(CteInt exp) {
+   public void process(IntCt exp) {
        maquina.addInstruccion(maquina.apilaInt(exp.intVal()));
    } 
-   public void process(CteBool exp) {
+   public void process(BoolCt exp) {
        maquina.addInstruccion(maquina.apilaBool(exp.boolVal()));
    } 
    public void process(Suma exp) {
-       exp.opnd1().procesaCon(this);
-       exp.opnd2().procesaCon(this);
+       exp.opnd1().processWith(this);
+       exp.opnd2().processWith(this);
        maquina.addInstruccion(maquina.suma());         
    } 
    public void process(And exp) {
-       exp.opnd1().procesaCon(this);
-       exp.opnd2().procesaCon(this);
+       exp.opnd1().processWith(this);
+       exp.opnd2().processWith(this);
        maquina.addInstruccion(maquina.and());         
    }   
    public void process(Prog p) {
       p.inst().procesaCon(this);
    }     
    public void process(IAsig i) {
-      i.exp().procesaCon(this);
+      i.exp().processWith(this);
       maquina.addInstruccion(maquina.desapilaDir(i.declaracion().dir()));
    }     
    public void process(IBloque b) {
