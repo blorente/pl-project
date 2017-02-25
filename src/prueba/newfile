@@ -1,0 +1,20 @@
+ 0:apilaInt(5)
+ 1:apilaInt(6)
+ 2:suma
+ 3:apilaInt(25)
+ 4:suma
+ 5:desapilaDir(0)
+ 6:apilaDir(0,linea 6)
+ 7:apilaInt(6)
+ 8:suma
+ 9:apilaInt(25)
+ 10:suma
+ 11:desapilaDir(1)
+
+
+Pila de evaluacion
+Datos
+ 0:36
+ 1:67
+ 2:null
+PC:12
