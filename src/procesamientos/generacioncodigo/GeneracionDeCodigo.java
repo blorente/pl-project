@@ -5,11 +5,14 @@ import procesamientos.Processing;
 import programa.Program;
 import programa.Program.IntCt;
 import programa.Program.BoolCt;
-import programa.Program.Suma;
+import programa.Program.Addition;
 import programa.Program.And;
 import programa.Program.Prog;
 import programa.Program.IBloque;
 import programa.Program.IAsig;
+import programa.Program.RealCt;
+import programa.Program.UniCharCt;
+import programa.Program.UniStringCt;
 import programa.Program.Var;
 
 
@@ -23,14 +26,24 @@ public class GeneracionDeCodigo extends Processing {
    } 
    public void process(IntCt exp) {
        maquina.addInstruccion(maquina.apilaInt(exp.intVal()));
-   } 
+   }
+   public void process(RealCt exp) {
+       maquina.addInstruccion(maquina.pushReal(exp.realVal()));
+   }
+   public void process(UniCharCt exp) {
+       maquina.addInstruccion(maquina.pushUniChar(exp.charVal()));
+   }
+   public void process(UniStringCt exp) {
+       maquina.addInstruccion(maquina.pushUniString(exp.stringVal()));
+   }
    public void process(BoolCt exp) {
-       maquina.addInstruccion(maquina.apilaBool(exp.boolVal()));
-   } 
-   public void process(Suma exp) {
-       exp.opnd1().processWith(this);
+       maquina.addInstruccion(maquina.pushBool(exp.boolVal()));
+   }
+   
+   public void process(Addition exp) {
+       exp.opnd1().processWith(this)
        exp.opnd2().processWith(this);
-       maquina.addInstruccion(maquina.suma());         
+       maquina.addInstruccion(maquina.addInt());        
    } 
    public void process(And exp) {
        exp.opnd1().processWith(this);

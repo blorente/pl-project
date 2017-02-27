@@ -1,13 +1,13 @@
 
 package prueba;
 
-import errores.Errores;
+import errores.Errors;
 import maquinaP.MaquinaP;
-import procesamientos.comprobaciontipos.TypeCheck;
-import procesamientos.comprobaciontipos.Vinculacion;
 import procesamientos.generacioncodigo.AsignacionDirecciones;
 import procesamientos.generacioncodigo.GeneracionDeCodigo;
 import procesamientos.impresion.Impresion;
+import procesamientos.typecheck.TypeCheck;
+import procesamientos.typecheck.Vinculacion;
 import programa.Program;
 
 
@@ -26,12 +26,14 @@ public class Prueba extends Program {
                 ibloque(
                         new Inst[]{
                                 iasig("x",
-                                        suma(suma(intct(5), intct(6), "linea 7"),
+                                        add(add(intct(5), intct(6), "linea 7"),
                                                 realct(25), "linea 7"), "linea 7"),
                                 iasig("string1", unistringct("Hello ")),
                                 iasig("string2", unistringct("World!")),
+                                iasig("x",
+                                		divide(var("x", "linea 11"), var("real", "linea 11"))),
                                 iasig("y",
-                                        suma(var("string1", "linea 8"), var("string2", "linea 8"), "linea 8"))
+                                        add(var("string1", "linea 8"), var("string2", "linea 8"), "linea 8"))
                         }));
     }
 
@@ -43,7 +45,7 @@ public class Prueba extends Program {
         Prueba programa = new Prueba();
         Impresion impresion = new Impresion();
         programa.root().procesaCon(impresion);
-        Errores errores = new Errores();
+        Errors errores = new Errors();
         Vinculacion vinculacion = new Vinculacion(errores);
         programa.root().procesaCon(vinculacion);
         if (!vinculacion.error()) {

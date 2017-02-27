@@ -1,14 +1,16 @@
 package procesamientos.impresion;
 
 import procesamientos.Processing;
-
 import programa.Program;
+import programa.Program.Division;
 import programa.Program.IntCt;
 import programa.Program.BoolCt;
+import programa.Program.Multiplication;
 import programa.Program.RealCt;
+import programa.Program.Subtraction;
 import programa.Program.UniCharCt;
 import programa.Program.UniStringCt;
-import programa.Program.Suma;
+import programa.Program.Addition;
 import programa.Program.And;
 import programa.Program.Dec;
 import programa.Program.DecVar;
@@ -76,14 +78,38 @@ public class Impresion extends Processing {
      System.out.print(exp.var());
      printAttributes(exp);
    } 
-   public void process(Suma exp) {
+   public void process(Addition exp) {
      System.out.print('('); 
      exp.opnd1().processWith(this);
      System.out.print('+');
      printAttributes(exp);
      exp.opnd2().processWith(this);
      System.out.print(')'); 
-   } 
+   }
+   public void process(Subtraction exp) {
+	     System.out.print('('); 
+	     exp.opnd1().processWith(this);
+	     System.out.print('-');
+	     printAttributes(exp);
+	     exp.opnd2().processWith(this);
+	     System.out.print(')'); 
+	   } 
+   public void process(Multiplication exp) {
+	     System.out.print('('); 
+	     exp.opnd1().processWith(this);
+	     System.out.print('*');
+	     printAttributes(exp);
+	     exp.opnd2().processWith(this);
+	     System.out.print(')'); 
+	   } 
+   public void process(Division exp) {
+	     System.out.print('('); 
+	     exp.opnd1().processWith(this);
+	     System.out.print('/');
+	     printAttributes(exp);
+	     exp.opnd2().processWith(this);
+	     System.out.print(')'); 
+	   } 
    public void process(And exp) {
      System.out.print('('); 
      exp.opnd1().processWith(this);

@@ -413,12 +413,54 @@ public abstract class Program {
         }
     }
 
-    public class Suma extends ExpBin {
-        public Suma(Exp opnd1, Exp opnd2) {
+    public class Addition extends ExpBin {
+        public Addition(Exp opnd1, Exp opnd2) {
             this(opnd1, opnd2, null);
         }
 
-        public Suma(Exp opnd1, Exp opnd2, String enlaceFuente) {
+        public Addition(Exp opnd1, Exp opnd2, String enlaceFuente) {
+            super(opnd1, opnd2, enlaceFuente);
+        }
+
+        public void processWith(Processing p) {
+            p.process(this);
+        }
+    }
+    
+    public class Subtraction extends ExpBin {
+        public Subtraction(Exp opnd1, Exp opnd2) {
+            this(opnd1, opnd2, null);
+        }
+
+        public Subtraction(Exp opnd1, Exp opnd2, String enlaceFuente) {
+            super(opnd1, opnd2, enlaceFuente);
+        }
+
+        public void processWith(Processing p) {
+            p.process(this);
+        }
+    }
+    
+    public class Multiplication extends ExpBin {
+        public Multiplication(Exp opnd1, Exp opnd2) {
+            this(opnd1, opnd2, null);
+        }
+
+        public Multiplication(Exp opnd1, Exp opnd2, String enlaceFuente) {
+            super(opnd1, opnd2, enlaceFuente);
+        }
+
+        public void processWith(Processing p) {
+            p.process(this);
+        }
+    }
+    
+    public class Division extends ExpBin {
+        public Division(Exp opnd1, Exp opnd2) {
+            this(opnd1, opnd2, null);
+        }
+
+        public Division(Exp opnd1, Exp opnd2, String enlaceFuente) {
             super(opnd1, opnd2, enlaceFuente);
         }
 
@@ -493,16 +535,35 @@ public abstract class Program {
         return new UniStringCt(val);
     }
 
-    public Exp suma(Exp exp1, Exp exp2) {
-        return new Suma(exp1, exp2);
+    public Exp add(Exp exp1, Exp exp2) {
+        return new Addition(exp1, exp2);
+    }
+    
+    public Exp subtract(Exp exp1, Exp exp2) {
+        return new Subtraction(exp1, exp2);
+    }
+    public Exp multiply(Exp exp1, Exp exp2) {
+        return new Multiplication(exp1, exp2);
+    }
+    public Exp divide(Exp exp1, Exp exp2) {
+        return new Division(exp1, exp2);
     }
 
     public Exp and(Exp exp1, Exp exp2) {
         return new And(exp1, exp2);
     }
 
-    public Exp suma(Exp exp1, Exp exp2, String enlaceFuente) {
-        return new Suma(exp1, exp2, enlaceFuente);
+    public Exp add(Exp exp1, Exp exp2, String enlaceFuente) {
+        return new Addition(exp1, exp2, enlaceFuente);
+    }
+    public Exp subtract(Exp exp1, Exp exp2, String enlaceFuente) {
+        return new Subtraction(exp1, exp2, enlaceFuente);
+    }
+    public Exp multiply(Exp exp1, Exp exp2, String enlaceFuente) {
+        return new Multiplication(exp1, exp2, enlaceFuente);
+    }
+    public Exp divide(Exp exp1, Exp exp2, String enlaceFuente) {
+        return new Division(exp1, exp2, enlaceFuente);
     }
 
     public Exp and(Exp exp1, Exp exp2, String enlaceFuente) {
