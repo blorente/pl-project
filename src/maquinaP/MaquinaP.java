@@ -101,7 +101,7 @@ public class MaquinaP {
 			this.valor = valor;
 		}
 
-		public String valorUniString() {
+		public String uniStringValue() {
 			return valor;
 		}
 
@@ -431,6 +431,10 @@ public class MaquinaP {
 			} else
 				pilaEvaluacion.push(datos[dir]);
 			pc++;
+		}
+
+		public String toString() {
+			return "pushDir(" + dir + ")";
 		}
 	}
 
@@ -762,6 +766,7 @@ public class MaquinaP {
 
 	public void ejecuta() {
 		while (pc != codigoP.size()) {
+			muestraEstado();
 			codigoP.get(pc).ejecuta();
 		}
 	}

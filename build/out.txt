@@ -11,27 +11,9 @@ UNISTRING string2
    string1=Hello 
    string2=World!
    x=(x/real)
+   y=(string1+string2)
 }
 
-Addition -------------------------
-Addition -------------------------
-CodigoP
- 0:pushReal(10.0)
- 1:desapilaDir(3)
- 2:pushInt(5)
- 3:pushInt(6)
- 4:addInt
--------------------------
-CodigoP
- 0:pushReal(10.0)
- 1:desapilaDir(3)
- 2:pushInt(5)
- 3:pushInt(6)
- 4:addInt
- 5:intToReal
- 6:pushReal(25.0)
- 7:addReal
--------------------------
 CodigoP
  0:pushReal(10.0)
  1:desapilaDir(3)
@@ -46,7 +28,14 @@ CodigoP
  10:desapilaDir(5)
  11:pushUniString(World!)
  12:desapilaDir(6)
- 13:desapilaDir(0)
+ 13:pushDir(0)
+ 14:pushDir(3)
+ 15:divReal
+ 16:desapilaDir(0)
+ 17:pushDir(5)
+ 18:pushDir(6)
+ 19:concat
+ 20:desapilaDir(1)
 Pila de evaluacion
 Datos
  0:null
@@ -112,7 +101,6 @@ Datos
  5:null
  6:null
 PC:5
-executing! 5
 Pila de evaluacion
  0:11.0
 Datos
@@ -199,3 +187,91 @@ Datos
  5:Hello 
  6:World!
 PC:13
+Pila de evaluacion
+ 0:36.0
+Datos
+ 0:36.0
+ 1:null
+ 2:null
+ 3:10.0
+ 4:null
+ 5:Hello 
+ 6:World!
+PC:14
+Pila de evaluacion
+ 0:36.0
+ 1:10.0
+Datos
+ 0:36.0
+ 1:null
+ 2:null
+ 3:10.0
+ 4:null
+ 5:Hello 
+ 6:World!
+PC:15
+Pila de evaluacion
+ 0:3.6
+Datos
+ 0:36.0
+ 1:null
+ 2:null
+ 3:10.0
+ 4:null
+ 5:Hello 
+ 6:World!
+PC:16
+Pila de evaluacion
+Datos
+ 0:3.6
+ 1:null
+ 2:null
+ 3:10.0
+ 4:null
+ 5:Hello 
+ 6:World!
+PC:17
+Pila de evaluacion
+ 0:Hello 
+Datos
+ 0:3.6
+ 1:null
+ 2:null
+ 3:10.0
+ 4:null
+ 5:Hello 
+ 6:World!
+PC:18
+Pila de evaluacion
+ 0:Hello 
+ 1:World!
+Datos
+ 0:3.6
+ 1:null
+ 2:null
+ 3:10.0
+ 4:null
+ 5:Hello 
+ 6:World!
+PC:19
+Pila de evaluacion
+ 0:Hello World!
+Datos
+ 0:3.6
+ 1:null
+ 2:null
+ 3:10.0
+ 4:null
+ 5:Hello 
+ 6:World!
+PC:20
+Pila de evaluacion
+Datos
+ 0:3.6
+ 1:Hello World!
+ 2:null
+ 3:10.0
+ 4:null
+ 5:Hello 
+ 6:World!
+PC:21

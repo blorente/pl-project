@@ -7,6 +7,9 @@ import programa.Program.Type;
 import programa.Program.IntCt;
 import programa.Program.BoolCt;
 import programa.Program.Addition;
+import programa.Program.Subtraction;
+import programa.Program.Multiplication;
+import programa.Program.Division;
 import programa.Program.And;
 import programa.Program.Prog;
 import programa.Program.IBloque;
@@ -46,7 +49,6 @@ public class GeneracionDeCodigo extends Processing {
    public void process(Addition exp) {
        Type t1 = exp.opnd1().tipo();
        Type t2 = exp.opnd2().tipo();
-       System.out.println("Addition -------------------------");
        exp.opnd1().processWith(this);
        if (t1.equals(program.tInt()) && t2.equals(program.tReal())) {
          maquina.addInstruccion(maquina.intToReal());
@@ -65,9 +67,68 @@ public class GeneracionDeCodigo extends Processing {
        if (exp.tipo().equals(program.tUniString())) {
          maquina.addInstruccion(maquina.concat());
        }
-       maquina.muestraCodigo();
-       System.out.println("-------------------------");
    }
+
+   public void process(Subtraction exp) {
+     Type t1 = exp.opnd1().tipo();
+     Type t2 = exp.opnd2().tipo();
+     exp.opnd1().processWith(this);
+     if (t1.equals(program.tInt()) && t2.equals(program.tReal())) {
+       maquina.addInstruccion(maquina.intToReal());
+     }
+     exp.opnd2().processWith(this);
+     if (t1.equals(program.tReal()) && t2.equals(program.tInt())) {
+       maquina.addInstruccion(maquina.intToReal());
+     }
+
+     if (exp.tipo().equals(program.tInt())) {
+       maquina.addInstruccion(maquina.subInt());
+     }
+     if (exp.tipo().equals(program.tReal())) {
+       maquina.addInstruccion(maquina.subReal());
+     }
+   }
+   public void process(Multiplication exp) {
+     Type t1 = exp.opnd1().tipo();
+     Type t2 = exp.opnd2().tipo();
+     exp.opnd1().processWith(this);
+     if (t1.equals(program.tInt()) && t2.equals(program.tReal())) {
+       maquina.addInstruccion(maquina.intToReal());
+     }
+     exp.opnd2().processWith(this);
+     if (t1.equals(program.tReal()) && t2.equals(program.tInt())) {
+       maquina.addInstruccion(maquina.intToReal());
+     }
+
+     if (exp.tipo().equals(program.tInt())) {
+       maquina.addInstruccion(maquina.mulInt());
+     }
+     if (exp.tipo().equals(program.tReal())) {
+       maquina.addInstruccion(maquina.mulReal());
+     }
+   }
+   public void process(Division exp) {
+     Type t1 = exp.opnd1().tipo();
+     Type t2 = exp.opnd2().tipo();
+     exp.opnd1().processWith(this);
+     if (t1.equals(program.tInt()) && t2.equals(program.tReal())) {
+       maquina.addInstruccion(maquina.intToReal());
+     }
+     exp.opnd2().processWith(this);
+     if (t1.equals(program.tReal()) && t2.equals(program.tInt())) {
+       maquina.addInstruccion(maquina.intToReal());
+     }
+
+     if (exp.tipo().equals(program.tInt())) {
+       maquina.addInstruccion(maquina.divInt());
+     }
+     if (exp.tipo().equals(program.tReal())) {
+       maquina.addInstruccion(maquina.divReal());
+     }
+   }
+
+
+
    public void process(And exp) {
        exp.opnd1().processWith(this);
        exp.opnd2().processWith(this);

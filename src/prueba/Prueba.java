@@ -33,8 +33,8 @@ public class Prueba extends Program {
                                 iasig("string2", unistringct("World!")),
                                 iasig("x",
                                 		divide(var("x", "linea 11"), var("real", "linea 11"))),
-                                //iasig("y",
-                                //        add(var("string1", "linea 8"), var("string2", "linea 8"), "linea 8"))
+                                iasig("y",
+                                      add(var("string1", "linea 8"), var("string2", "linea 8"), "linea 8"))
                         }));
     }
 
