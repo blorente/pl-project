@@ -116,19 +116,19 @@ public class MaquinaP {
 		}
 	}
 
-	private List<Instruccion> codigoP;
+	private List<Instruction> codigoP;
 	private Stack<Valor> pilaEvaluacion;
 	private Valor[] datos;
 	private int pc;
 
-	public interface Instruccion {
-		void ejecuta();
+	public interface Instruction {
+		void execute();
 	}
 
 	private IAddInt IADDINT;
 
-	private class IAddInt implements Instruccion {
-		public void ejecuta() {
+	private class IAddInt implements Instruction {
+		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
 			Valor opnd1 = pilaEvaluacion.pop();
 			Valor resul;
@@ -147,8 +147,8 @@ public class MaquinaP {
 
 	private IAddReal IADDREAL;
 
-	private class IAddReal implements Instruccion {
-		public void ejecuta() {
+	private class IAddReal implements Instruction {
+		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
 			Valor opnd1 = pilaEvaluacion.pop();
 			Valor resul;
@@ -167,8 +167,8 @@ public class MaquinaP {
 
 	private IConcat ICONCAT;
 
-	private class IConcat implements Instruccion {
-		public void ejecuta() {
+	private class IConcat implements Instruction {
+		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
 			Valor opnd1 = pilaEvaluacion.pop();
 			Valor resul;
@@ -188,8 +188,8 @@ public class MaquinaP {
 
 	private ISubInt ISUBINT;
 
-	private class ISubInt implements Instruccion {
-		public void ejecuta() {
+	private class ISubInt implements Instruction {
+		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
 			Valor opnd1 = pilaEvaluacion.pop();
 			Valor resul;
@@ -208,8 +208,8 @@ public class MaquinaP {
 
 	private ISubReal ISUBREAL;
 
-	private class ISubReal implements Instruccion {
-		public void ejecuta() {
+	private class ISubReal implements Instruction {
+		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
 			Valor opnd1 = pilaEvaluacion.pop();
 			Valor resul;
@@ -228,8 +228,8 @@ public class MaquinaP {
 
 	private IMulInt IMULINT;
 
-	private class IMulInt implements Instruccion {
-		public void ejecuta() {
+	private class IMulInt implements Instruction {
+		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
 			Valor opnd1 = pilaEvaluacion.pop();
 			Valor resul;
@@ -248,8 +248,8 @@ public class MaquinaP {
 
 	private IMulReal IMULREAL;
 
-	private class IMulReal implements Instruccion {
-		public void ejecuta() {
+	private class IMulReal implements Instruction {
+		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
 			Valor opnd1 = pilaEvaluacion.pop();
 			Valor resul;
@@ -268,8 +268,8 @@ public class MaquinaP {
 
 	private IDivInt IDIVINT;
 
-	private class IDivInt implements Instruccion {
-		public void ejecuta() {
+	private class IDivInt implements Instruction {
+		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
 			Valor opnd1 = pilaEvaluacion.pop();
 			Valor resul;
@@ -288,8 +288,8 @@ public class MaquinaP {
 
 	private IDivReal IDIVREAL;
 
-	private class IDivReal implements Instruccion {
-		public void ejecuta() {
+	private class IDivReal implements Instruction {
+		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
 			Valor opnd1 = pilaEvaluacion.pop();
 			Valor resul;
@@ -308,8 +308,8 @@ public class MaquinaP {
 	
 	private IMod IMOD;
 	
-	private class IMod implements Instruccion {
-		public void ejecuta() {
+	private class IMod implements Instruction {
+		public void execute() {
 			Valor op2 = pilaEvaluacion.pop();
 			Valor op1 = pilaEvaluacion.pop();
 			pilaEvaluacion.push(new IntValue(op1.intValue() % op2.intValue()));
@@ -319,8 +319,8 @@ public class MaquinaP {
 
 	private IAnd IAND;
 
-	private class IAnd implements Instruccion {
-		public void ejecuta() {
+	private class IAnd implements Instruction {
+		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
 			Valor opnd1 = pilaEvaluacion.pop();
 			Valor resul;
@@ -336,15 +336,43 @@ public class MaquinaP {
 			return "and";
 		};
 	}
+	
+	private INegInt INEGINT;
+	
+	private class INegInt implements Instruction {
+		public void execute() {
+			Valor operand = pilaEvaluacion.pop();
+			pilaEvaluacion.push(new IntValue(-operand.intValue()));
+			pc++;
+		}
+		
+		public String toString() {
+			return "negInt";
+		}		
+	}
+	
+	private INegReal INEGREAL;
 
-	private class IPushInt implements Instruccion {
+	private class INegReal implements Instruction {
+		public void execute() {
+			Valor operand = pilaEvaluacion.pop();
+			pilaEvaluacion.push(new RealValue(-operand.realValue()));
+			pc++;
+		}
+		
+		public String toString() {
+			return "negReal";
+		}		
+	}
+	
+	private class IPushInt implements Instruction {
 		private int value;
 
 		public IPushInt(int value) {
 			this.value = value;
 		}
 
-		public void ejecuta() {
+		public void execute() {
 			pilaEvaluacion.push(new IntValue(value));
 			pc++;
 		}
@@ -354,14 +382,14 @@ public class MaquinaP {
 		};
 	}
 
-	private class IPushReal implements Instruccion {
+	private class IPushReal implements Instruction {
 		private double valor;
 
 		public IPushReal(double valor) {
 			this.valor = valor;
 		}
 
-		public void ejecuta() {
+		public void execute() {
 			pilaEvaluacion.push(new RealValue(valor));
 			pc++;
 		}
@@ -371,14 +399,14 @@ public class MaquinaP {
 		};
 	}
 
-	private class IPushUniChar implements Instruccion {
+	private class IPushUniChar implements Instruction {
 		private char value;
 
 		public IPushUniChar(char value) {
 			this.value = value;
 		}
 
-		public void ejecuta() {
+		public void execute() {
 			pilaEvaluacion.push(new UniCharValue(value));
 			pc++;
 		}
@@ -388,14 +416,14 @@ public class MaquinaP {
 		};
 	}
 
-	private class IPushUniString implements Instruccion {
+	private class IPushUniString implements Instruction {
 		private String value;
 
 		public IPushUniString(String value) {
 			this.value = value;
 		}
 
-		public void ejecuta() {
+		public void execute() {
 			pilaEvaluacion.push(new UniStringValue(value));
 			pc++;
 		}
@@ -405,14 +433,14 @@ public class MaquinaP {
 		};
 	}
 
-	private class IDesapilaDir implements Instruccion {
+	private class IDesapilaDir implements Instruction {
 		private int dir;
 
 		public IDesapilaDir(int dir) {
 			this.dir = dir;
 		}
 
-		public void ejecuta() {
+		public void execute() {
 			datos[dir] = pilaEvaluacion.pop();
 			pc++;
 		}
@@ -422,7 +450,7 @@ public class MaquinaP {
 		};
 	}
 
-	private class IApilaDir implements Instruccion {
+	private class IApilaDir implements Instruction {
 		private int dir;
 		private String enlaceFuente;
 
@@ -435,7 +463,7 @@ public class MaquinaP {
 			this.dir = dir;
 		}
 
-		public void ejecuta() {
+		public void execute() {
 			if (datos[dir] == null) {
 				System.err.println(enlaceFuente + ":" + W_ACCESO);
 				pilaEvaluacion.push(UNKNOWN);
@@ -449,14 +477,14 @@ public class MaquinaP {
 		}
 	}
 
-	private class IPushBool implements Instruccion {
+	private class IPushBool implements Instruction {
 		private boolean valor;
 
 		public IPushBool(boolean valor) {
 			this.valor = valor;
 		}
 
-		public void ejecuta() {
+		public void execute() {
 			pilaEvaluacion.push(new BoolValue(valor));
 			pc++;
 		}
@@ -468,7 +496,7 @@ public class MaquinaP {
 
 	private IIntToReal IINTTOREAL;
 
-	private class IIntToReal implements Instruccion {
+	private class IIntToReal implements Instruction {
 		private String enlaceFuente;
 
 		public IIntToReal() {}
@@ -476,7 +504,7 @@ public class MaquinaP {
 			this.enlaceFuente = enlaceFuente;
 		}
 
-		public void ejecuta() {
+		public void execute() {
 			Valor source = pilaEvaluacion.pop();
 			Valor casted = new RealValue((double) source.intValue());
 			pilaEvaluacion.push(casted);
@@ -490,7 +518,7 @@ public class MaquinaP {
 
 	private ICharToReal ICHARTOREAL;
 
-	private class ICharToReal implements Instruccion {
+	private class ICharToReal implements Instruction {
 		private String enlaceFuente;
 
 		public ICharToReal() {}
@@ -498,7 +526,7 @@ public class MaquinaP {
 			this.enlaceFuente = enlaceFuente;
 		}
 
-		public void ejecuta() {
+		public void execute() {
 			Valor source = pilaEvaluacion.pop();
 			Valor casted = new RealValue((double) source.valorUniChar());
 			pilaEvaluacion.push(casted);
@@ -512,7 +540,7 @@ public class MaquinaP {
 
 	private IBoolToReal IBOOLTOREAL;
 
-	private class IBoolToReal implements Instruccion {
+	private class IBoolToReal implements Instruction {
 		private String enlaceFuente;
 
 		public IBoolToReal() {}
@@ -520,7 +548,7 @@ public class MaquinaP {
 			this.enlaceFuente = enlaceFuente;
 		}
 
-		public void ejecuta() {
+		public void execute() {
 			Valor source = pilaEvaluacion.pop();
 			Valor casted = new RealValue(source.valorBool() ? 1.0 : 0.0);
 			pilaEvaluacion.push(casted);
@@ -534,7 +562,7 @@ public class MaquinaP {
 
 	private IRealToInt IREALTOINT;
 
-	private class IRealToInt implements Instruccion {
+	private class IRealToInt implements Instruction {
 		private String enlaceFuente;
 
 		public IRealToInt() {}
@@ -542,7 +570,7 @@ public class MaquinaP {
 			this.enlaceFuente = enlaceFuente;
 		}
 
-		public void ejecuta() {
+		public void execute() {
 			Valor source = pilaEvaluacion.pop();
 			Valor casted = new IntValue((int) source.realValue());
 			pilaEvaluacion.push(casted);
@@ -556,7 +584,7 @@ public class MaquinaP {
 
 	private IBoolToInt IBOOLTOINT;
 
-	private class IBoolToInt implements Instruccion {
+	private class IBoolToInt implements Instruction {
 		private String enlaceFuente;
 
 		public IBoolToInt() {}
@@ -564,7 +592,7 @@ public class MaquinaP {
 			this.enlaceFuente = enlaceFuente;
 		}
 
-		public void ejecuta() {
+		public void execute() {
 			Valor source = pilaEvaluacion.pop();
 			Valor casted = new IntValue(source.valorBool() ? 1 : 0);
 			pilaEvaluacion.push(casted);
@@ -578,7 +606,7 @@ public class MaquinaP {
 
 	private ICharToInt ICHARTOINT;
 
-	private class ICharToInt implements Instruccion {
+	private class ICharToInt implements Instruction {
 		private String enlaceFuente;
 
 		public ICharToInt() {}
@@ -586,7 +614,7 @@ public class MaquinaP {
 			this.enlaceFuente = enlaceFuente;
 		}
 
-		public void ejecuta() {
+		public void execute() {
 			Valor source = pilaEvaluacion.pop();
 			Valor casted = new IntValue((int) source.valorUniChar());
 			pilaEvaluacion.push(casted);
@@ -600,7 +628,7 @@ public class MaquinaP {
 
 	private IIntToChar IINTTOCHAR;
 
-	private class IIntToChar implements Instruccion {
+	private class IIntToChar implements Instruction {
 		private String enlaceFuente;
 
 		public IIntToChar() {}
@@ -608,7 +636,7 @@ public class MaquinaP {
 			this.enlaceFuente = enlaceFuente;
 		}
 
-		public void ejecuta() {
+		public void execute() {
 			Valor source = pilaEvaluacion.pop();
 			Valor casted = new UniCharValue((char) source.intValue());
 			pilaEvaluacion.push(casted);
@@ -622,7 +650,7 @@ public class MaquinaP {
 
 	private ICharToString ICHARTOSTRING;
 
-	private class ICharToString implements Instruccion {
+	private class ICharToString implements Instruction {
 		private String enlaceFuente;
 
 		public ICharToString() {}
@@ -630,7 +658,7 @@ public class MaquinaP {
 			this.enlaceFuente = enlaceFuente;
 		}
 
-		public void ejecuta() {
+		public void execute() {
 			Valor source = pilaEvaluacion.pop();
 			Valor casted = new UniStringValue("" + source.valorUniChar());
 			pilaEvaluacion.push(casted);
@@ -643,111 +671,119 @@ public class MaquinaP {
 	}
 
 
-	public Instruccion addInt() {
+	public Instruction addInt() {
 		return IADDINT;
 	}
 
-	public Instruccion addReal() {
+	public Instruction addReal() {
 		return IADDREAL;
 	}
 
-	public Instruccion concat() {
+	public Instruction concat() {
 		return ICONCAT;
 	}
 
-	public Instruccion subInt() {
+	public Instruction subInt() {
 		return ISUBINT;
 	}
 
-	public Instruccion subReal() {
+	public Instruction subReal() {
 		return ISUBREAL;
 	}
 
-	public Instruccion mulInt() {
+	public Instruction mulInt() {
 		return IMULINT;
 	}
 
-	public Instruccion mulReal() {
+	public Instruction mulReal() {
 		return IMULREAL;
 	}
 
-	public Instruccion divInt() {
+	public Instruction divInt() {
 		return IDIVINT;
 	}
 
-	public Instruccion divReal() {
+	public Instruction divReal() {
 		return IDIVREAL;
 	}
 	
-	public Instruccion mod() {
+	public Instruction mod() {
 		return IMOD;
 	}
+	
+	public Instruction negInt() {
+		return INEGINT;
+	}
+	
+	public Instruction negReal() {
+		return INEGREAL;
+	}
 
-	public Instruccion and() {
+	public Instruction and() {
 		return IAND;
 	}
 
-	public Instruccion apilaInt(int val) {
+	public Instruction pushInt(int val) {
 		return new IPushInt(val);
 	}
 
-	public Instruccion pushReal(double val) {
+	public Instruction pushReal(double val) {
 		return new IPushReal(val);
 	}
 
-	public Instruccion pushUniChar(char val) {
+	public Instruction pushUniChar(char val) {
 		return new IPushUniChar(val);
 	}
 
-	public Instruccion pushUniString(String val) {
+	public Instruction pushUniString(String val) {
 		return new IPushUniString(val);
 	}
 
-	public Instruccion pushBool(boolean val) {
+	public Instruction pushBool(boolean val) {
 		return new IPushBool(val);
 	}
 
-	public Instruccion desapilaDir(int dir) {
+	public Instruction desapilaDir(int dir) {
 		return new IDesapilaDir(dir);
 	}
 
-	public Instruccion apilaDir(int dir) {
+	public Instruction apilaDir(int dir) {
 		return new IApilaDir(dir);
 	}
 
-	public Instruccion apilaDir(int dir, String dinfo) {
+	public Instruction apilaDir(int dir, String dinfo) {
 		return new IApilaDir(dir, dinfo);
 	}
 
-	public Instruccion intToReal() {
+	public Instruction intToReal() {
 		return IINTTOREAL;
 	}
 
-	public Instruccion intToChar() {
+	public Instruction intToChar() {
 		return IINTTOCHAR;
 	}
 
-	public Instruccion boolToInt() {
+	public Instruction boolToInt() {
 		return IBOOLTOINT;
 	}
 
-	public Instruccion boolToReal() {
+	public Instruction boolToReal() {
 		return IBOOLTOREAL;
 	}
 
-	public Instruccion charToInt() {
+	public Instruction charToInt() {
 		return ICHARTOINT;
 	}
 
-	public Instruccion charToReal() {
+	public Instruction charToReal() {
 		return ICHARTOREAL;
 	}
 
-	public Instruccion charToString() {
+	public Instruction charToString() {
 		return ICHARTOSTRING;
 	}
 
-	public void addInstruccion(Instruccion i) {
+	public void addInstruccion(Instruction i) {
 		codigoP.add(i);
 	}
 
@@ -767,6 +803,9 @@ public class MaquinaP {
 		ICONCAT = new IConcat();
 		IMOD = new IMod();
 		IAND = new IAnd();
+		
+		INEGINT = new INegInt();
+		INEGREAL = new INegReal();
 
 		IINTTOREAL = new IIntToReal();
 		IINTTOCHAR = new IIntToChar();
@@ -782,8 +821,7 @@ public class MaquinaP {
 
 	public void ejecuta() {
 		while (pc != codigoP.size()) {
-			muestraEstado();
-			codigoP.get(pc).ejecuta();
+			codigoP.get(pc).execute();
 		}
 	}
 

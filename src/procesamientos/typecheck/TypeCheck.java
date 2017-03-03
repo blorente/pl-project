@@ -6,6 +6,7 @@ import procesamientos.typecheck.utils.TypeInferer;
 import programa.Program;
 import programa.Program.Division;
 import programa.Program.Multiplication;
+import programa.Program.Negative;
 import programa.Program.Subtraction;
 import programa.Program.Type;
 import programa.Program.IntCt;
@@ -121,6 +122,16 @@ public class TypeCheck extends Processing {
         exp.opnd2().processWith(this);
 
         Type inferredType = inferrer.inferAnd(exp.opnd1().tipo(), exp.opnd2().tipo());
+        if (inferredType.equals(program.tError())) {
+            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+        }
+        exp.ponTipo(inferredType);
+    }
+    
+    public void process(Negative exp) {
+        exp.op().processWith(this);
+
+        Type inferredType = inferrer.inferNegative(exp.op().tipo());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
         }

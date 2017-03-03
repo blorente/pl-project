@@ -9,6 +9,7 @@ import procesamientos.Processing;
 import programa.Program.Addition;
 import programa.Program.Division;
 import programa.Program.Multiplication;
+import programa.Program.Negative;
 import programa.Program.Prog;
 import programa.Program.DecVar;
 import programa.Program.IAsig;
@@ -100,7 +101,10 @@ public class Vinculacion extends Processing {
 		exp.opnd2().processWith(this);
 	}
 
-
+	public void process(Negative exp) {
+		exp.op().processWith(this);
+	}
+	
 	public void process(Var exp) {
 		DecVar decVar = tablaDeSimbolos.get(exp.var());
 		if (decVar == null) {

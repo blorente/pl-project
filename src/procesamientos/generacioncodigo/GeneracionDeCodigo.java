@@ -10,6 +10,7 @@ import programa.Program.BoolCt;
 import programa.Program.Addition;
 import programa.Program.Subtraction;
 import programa.Program.Multiplication;
+import programa.Program.Negative;
 import programa.Program.Division;
 import programa.Program.And;
 import programa.Program.Prog;
@@ -32,7 +33,7 @@ public class GeneracionDeCodigo extends Processing {
       maquina.addInstruccion(maquina.apilaDir(exp.declaracion().dir(),exp.enlaceFuente()));
    }
    public void process(IntCt exp) {
-       maquina.addInstruccion(maquina.apilaInt(exp.intVal()));
+       maquina.addInstruccion(maquina.pushInt(exp.intVal()));
    }
    public void process(RealCt exp) {
        maquina.addInstruccion(maquina.pushReal(exp.realVal()));
@@ -138,6 +139,15 @@ public class GeneracionDeCodigo extends Processing {
        exp.opnd1().processWith(this);
        exp.opnd2().processWith(this);
        maquina.addInstruccion(maquina.and());
+   }
+   
+   public void process(Negative exp) {
+	   exp.op().processWith(this);
+	   if (exp.tipo().equals(program.tInt())) {
+		   maquina.addInstruccion(maquina.negInt());
+	   } else if (exp.tipo().equals(program.tReal())) {
+		   maquina.addInstruccion(maquina.negReal());
+	   }
    }
    public void process(Prog p) {
       p.inst().procesaCon(this);

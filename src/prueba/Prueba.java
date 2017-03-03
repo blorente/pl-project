@@ -36,7 +36,8 @@ public class Prueba extends Program {
                                 iasig("x",
                                 		divide(var("x", "linea 11"), var("real", "linea 11"))),
                                 iasig("y",
-                                      add(var("string1", "linea 8"), var("string2", "linea 8"), "linea 8"))
+                                      add(var("string1", "linea 8"), var("string2", "linea 8"), "linea 8")),
+                                iasig("resto", negative(var("resto", "linea 11"), "linea 13")),
                         }));
     }
 
@@ -66,6 +67,7 @@ public class Prueba extends Program {
                 maquina.ejecuta();
                 maquina.muestraEstado();
                 maquina.ejecuta();
+                maquina.muestraEstado();
             }
 
         }

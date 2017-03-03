@@ -385,16 +385,16 @@ public abstract class Program {
         }
     }
 
-    private abstract class ExpBin extends Exp {
+    private abstract class BinaryExp extends Exp {
         private Exp opnd1;
         private Exp opnd2;
         private String enlaceFuente;
 
-        public ExpBin(Exp opnd1, Exp opnd2) {
+        public BinaryExp(Exp opnd1, Exp opnd2) {
             this(opnd1, opnd2, null);
         }
 
-        public ExpBin(Exp opnd1, Exp opnd2, String enlaceFuente) {
+        public BinaryExp(Exp opnd1, Exp opnd2, String enlaceFuente) {
             this.enlaceFuente = enlaceFuente;
             this.opnd1 = opnd1;
             this.opnd2 = opnd2;
@@ -412,8 +412,8 @@ public abstract class Program {
             return enlaceFuente;
         }
     }
-
-    public class Addition extends ExpBin {
+    
+    public class Addition extends BinaryExp {
         public Addition(Exp opnd1, Exp opnd2) {
             this(opnd1, opnd2, null);
         }
@@ -427,7 +427,7 @@ public abstract class Program {
         }
     }
 
-    public class Subtraction extends ExpBin {
+    public class Subtraction extends BinaryExp {
         public Subtraction(Exp opnd1, Exp opnd2) {
             this(opnd1, opnd2, null);
         }
@@ -441,7 +441,7 @@ public abstract class Program {
         }
     }
 
-    public class Multiplication extends ExpBin {
+    public class Multiplication extends BinaryExp {
         public Multiplication(Exp opnd1, Exp opnd2) {
             this(opnd1, opnd2, null);
         }
@@ -455,7 +455,7 @@ public abstract class Program {
         }
     }
 
-    public class Division extends ExpBin {
+    public class Division extends BinaryExp {
         public Division(Exp opnd1, Exp opnd2) {
             this(opnd1, opnd2, null);
         }
@@ -468,7 +468,7 @@ public abstract class Program {
             p.process(this);
         }
     }
-    public class Modulus extends ExpBin {
+    public class Modulus extends BinaryExp {
         public Modulus(Exp opnd1, Exp opnd2) {
             this(opnd1, opnd2, null);
         }
@@ -482,13 +482,49 @@ public abstract class Program {
         }
     }
 
-    public class And extends ExpBin {
+    public class And extends BinaryExp {
         public And(Exp opnd1, Exp opnd2) {
             this(opnd1, opnd2, null);
         }
 
         public And(Exp opnd1, Exp opnd2, String enlaceFuente) {
             super(opnd1, opnd2, enlaceFuente);
+        }
+
+        public void processWith(Processing p) {
+            p.process(this);
+        }
+    }
+    
+    private abstract class UnaryExp extends Exp {
+        private Exp op;
+        private String enlaceFuente;
+
+        public UnaryExp(Exp op) {
+            this(op, null);
+        }
+
+        public UnaryExp(Exp op, String enlaceFuente) {
+            this.enlaceFuente = enlaceFuente;
+            this.op = op;
+        }
+
+        public Exp op() {
+            return op;
+        }
+
+        public String enlaceFuente() {
+            return enlaceFuente;
+        }
+    }
+    
+    public class Negative extends UnaryExp {
+        public Negative(Exp op) {
+            this(op, null);
+        }
+
+        public Negative(Exp op, String enlaceFuente) {
+            super(op, enlaceFuente);
         }
 
         public void processWith(Processing p) {
@@ -584,6 +620,10 @@ public abstract class Program {
 
     public Exp and(Exp exp1, Exp exp2, String enlaceFuente) {
         return new And(exp1, exp2, enlaceFuente);
+    }
+    
+    public Exp negative(Exp exp1, String enlaceFuente) {
+    	return new Negative(exp1, enlaceFuente);
     }
 
     public Type tInt() {

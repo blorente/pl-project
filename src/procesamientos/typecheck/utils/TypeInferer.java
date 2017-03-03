@@ -52,4 +52,11 @@ public class TypeInferer {
 
         return program.tError();
     }
+    
+    public Type inferNegative(Type op) {
+    	if (compat.isNumeric(op)) {
+    		return op;
+    	}
+    	return program.tError();
+    }
 }
