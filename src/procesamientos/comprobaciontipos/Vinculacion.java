@@ -4,14 +4,18 @@ import errores.Errores;
 import java.util.HashMap;
 import java.util.Map;
 import procesamientos.Processing;
-import programa.Program.Suma;
 import programa.Program.Prog;
+import programa.Program.Subtraction;
 import programa.Program.DecVar;
+import programa.Program.Division;
 import programa.Program.IAsig;
 import programa.Program.IBloque;
+import programa.Program.Addition;
 import programa.Program.And;
 import programa.Program.Dec;
 import programa.Program.Inst;
+import programa.Program.Modulus;
+import programa.Program.Multiplication;
 import programa.Program.Var;
 
 public class Vinculacion extends Processing {
@@ -61,10 +65,27 @@ public class Vinculacion extends Processing {
      exp.opnd1().processWith(this);
      exp.opnd2().processWith(this);
    }
-   public void process(Suma exp) {
+   public void process(Addition exp) {
      exp.opnd1().processWith(this);
      exp.opnd2().processWith(this);
    }
+   public void process(Subtraction exp) {
+	     exp.opnd1().processWith(this);
+	     exp.opnd2().processWith(this);
+	   }
+   public void process(Multiplication exp) {
+	     exp.opnd1().processWith(this);
+	     exp.opnd2().processWith(this);
+	   }
+   public void process(Division exp) {
+	     exp.opnd1().processWith(this);
+	     exp.opnd2().processWith(this);
+	   }
+   public void process(Modulus exp) {
+	     exp.opnd1().processWith(this);
+	     exp.opnd2().processWith(this);
+	   }
+   
    public void process(Var exp) {
      DecVar decVar = tablaDeSimbolos.get(exp.var());
      if (decVar == null) {

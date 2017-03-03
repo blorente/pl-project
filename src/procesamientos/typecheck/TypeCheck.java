@@ -9,6 +9,7 @@ import programa.Program.Multiplication;
 import programa.Program.Subtraction;
 import programa.Program.Type;
 import programa.Program.IntCt;
+import programa.Program.Modulus;
 import programa.Program.BoolCt;
 import programa.Program.RealCt;
 import programa.Program.UniCharCt;
@@ -97,6 +98,18 @@ public class TypeCheck extends Processing {
         exp.opnd2().processWith(this);
 
         Type inferredType = this.inferrer.inferArith(exp.opnd1().tipo(), exp.opnd2().tipo());
+        if (inferredType.equals(program.tError())) {
+            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+        }
+        exp.ponTipo(inferredType);
+    }
+    
+
+    public void process(Modulus exp) {
+        exp.opnd1().processWith(this);
+        exp.opnd2().processWith(this);
+
+        Type inferredType = this.inferrer.inferModulus(exp.opnd1().tipo(), exp.opnd2().tipo());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
         }

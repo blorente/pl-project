@@ -22,10 +22,12 @@ public class Prueba extends Program {
                         decvar(tUniChar(), "char", "linea 5"),
                         decvar(tUniString(), "string1", "linea 6"),
                         decvar(tUniString(), "string2", "linea 6"),
+                        decvar(tInt(), "resto", "linea 7"),
                 },
                 ibloque(
                         new Inst[]{
                                 iasig("real", realct(10)),
+                                iasig("resto", modulus(intct(3), intct(2), "linea 7"), "linea 7"),
                                 iasig("x",
                                         add(add(intct(5), intct(6), "linea 7"),
                                                 realct(25), "linea 7"), "linea 7"),
@@ -44,14 +46,16 @@ public class Prueba extends Program {
 
     public static void main(String[] args) {
         Prueba programa = new Prueba();
-        Impresion impresion = new Impresion();
-        programa.root().procesaCon(impresion);
         Errors errores = new Errors();
+        Impresion impresionSimple = new Impresion();
+        programa.root().procesaCon(impresionSimple);
         Vinculacion vinculacion = new Vinculacion(errores);
         programa.root().procesaCon(vinculacion);
         if (!vinculacion.error()) {
             TypeCheck ctipos = new TypeCheck(programa, errores);
             programa.root().procesaCon(ctipos);
+            Impresion impresionCompleta = new Impresion(true);
+            programa.root().procesaCon(impresionCompleta);
             if (programa.root().tipo().equals(programa.tOk())) {
                 AsignacionDirecciones asignaciondirs = new AsignacionDirecciones();
                 programa.root().procesaCon(asignaciondirs);

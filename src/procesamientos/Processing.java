@@ -11,6 +11,7 @@ import programa.Program.UniCharCt;
 import programa.Program.UniStringCt;
 import programa.Program.Var;
 import programa.Program.Addition;
+import programa.Program.Modulus;
 import programa.Program.Prog;
 import programa.Program.DecVar;
 import programa.Program.IAsig;
@@ -32,12 +33,13 @@ public class Processing {
    public void process(UniStringCt exp) {}
 
    public void process(Var exp) {}
-   
+
    public void process(Addition exp) {}
    public void process(Subtraction exp) {}
    public void process(Multiplication exp) {}
    public void process(Division exp) {}
-   
+   public void process(Modulus exp) {}
+
    public void process(And exp) {}
 
    public void process(Int t) {}

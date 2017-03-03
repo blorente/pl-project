@@ -10,7 +10,11 @@ import programa.Program.BoolCt;
 import programa.Program.RealCt;
 import programa.Program.UniCharCt;
 import programa.Program.UniStringCt;
-import programa.Program.Suma;
+import programa.Program.Addition;
+import programa.Program.Subtraction;
+import programa.Program.Multiplication;
+import programa.Program.Division;
+import programa.Program.Modulus;
 import programa.Program.And;
 import programa.Program.IAsig;
 import programa.Program.IBloque;
@@ -56,7 +60,7 @@ public class TypeCheck extends Processing {
         exp.ponTipo(program.tUniString());
     }
 
-    public void process(Suma exp) {
+    public void process(Addition exp) {
         exp.opnd1().processWith(this);
         exp.opnd2().processWith(this);
 
@@ -66,6 +70,48 @@ public class TypeCheck extends Processing {
         }
         exp.ponTipo(inferredType);
     }
+
+    public void process(Subtraction exp) {
+        exp.opnd1().processWith(this);
+        exp.opnd2().processWith(this);
+
+        Type inferredType = this.inferrer.inferArith(exp.opnd1().tipo(), exp.opnd2().tipo());
+        if (inferredType.equals(program.tError())) {
+            errores.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+        }
+        exp.ponTipo(inferredType);
+    }
+    public void process(Multiplication exp) {
+        exp.opnd1().processWith(this);
+        exp.opnd2().processWith(this);
+
+        Type inferredType = this.inferrer.inferArith(exp.opnd1().tipo(), exp.opnd2().tipo());
+        if (inferredType.equals(program.tError())) {
+            errores.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+        }
+        exp.ponTipo(inferredType);
+    }
+    public void process(Division exp) {
+        exp.opnd1().processWith(this);
+        exp.opnd2().processWith(this);
+
+        Type inferredType = this.inferrer.inferArith(exp.opnd1().tipo(), exp.opnd2().tipo());
+        if (inferredType.equals(program.tError())) {
+            errores.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+        }
+        exp.ponTipo(inferredType);
+    }
+    public void process(Modulus exp) {
+        exp.opnd1().processWith(this);
+        exp.opnd2().processWith(this);
+
+        Type inferredType = this.inferrer.inferModulus(exp.opnd1().tipo(), exp.opnd2().tipo());
+        if (inferredType.equals(program.tError())) {
+            errores.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+        }
+        exp.ponTipo(inferredType);
+    }
+
 
     public void process(And exp) {
         exp.opnd1().processWith(this);

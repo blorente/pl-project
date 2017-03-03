@@ -5,6 +5,7 @@ import procesamientos.Processing;
 import programa.Program;
 import programa.Program.Type;
 import programa.Program.IntCt;
+import programa.Program.Modulus;
 import programa.Program.BoolCt;
 import programa.Program.Addition;
 import programa.Program.Subtraction;
@@ -126,8 +127,12 @@ public class GeneracionDeCodigo extends Processing {
        maquina.addInstruccion(maquina.divReal());
      }
    }
-
-
+   
+   public void process(Modulus exp) {
+       exp.opnd1().processWith(this);
+       exp.opnd2().processWith(this);
+       maquina.addInstruccion(maquina.mod());
+   }
 
    public void process(And exp) {
        exp.opnd1().processWith(this);

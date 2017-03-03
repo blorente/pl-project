@@ -35,6 +35,15 @@ public class TypeInferer {
 
         return program.tInt();
 	}
+	
+	public Type inferModulus(Type op1, Type op2) {
+		
+		if (!op1.equals(program.tInt()) || !op2.equals(program.tInt())) {
+            return program.tError();
+        }
+
+        return program.tInt();
+	}
 
     public Type inferAnd(Type op1, Type op2) {
         if (compat.boolCompatible(op1, op2)) {

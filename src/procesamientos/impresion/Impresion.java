@@ -6,6 +6,7 @@ import programa.Program.Division;
 import programa.Program.IntCt;
 import programa.Program.BoolCt;
 import programa.Program.Multiplication;
+import programa.Program.Modulus;
 import programa.Program.RealCt;
 import programa.Program.Subtraction;
 import programa.Program.UniCharCt;
@@ -32,32 +33,32 @@ public class Impresion extends Processing {
    public Impresion() {
      this(false);
    }
-    
+
    private void printAttributes(Exp exp) {
        if(attributes) {
-          System.out.print("@{t:"+exp.tipo()+"}"); 
+          System.out.print("@{t:"+exp.tipo()+"}");
        }
    }
    private void printAttributes(Prog prog) {
        if(attributes) {
-          System.out.print("@{t:"+prog.tipo()+"}"); 
+          System.out.print("@{t:"+prog.tipo()+"}");
        }
    }
    private void printAttributes(Inst i) {
        if(attributes) {
-          System.out.print("@{t:"+i.tipo()+"}"); 
+          System.out.print("@{t:"+i.tipo()+"}");
        }
    }
-   
+
    private void indent() {
       for (int i = 0; i < indentation; i++)
           System.out.print(" ");
    }
-     
+
    public void process(IntCt exp) {
      System.out.print(exp.intVal());
      printAttributes(exp);
-   } 
+   }
    public void process(BoolCt exp) {
      System.out.print(exp.boolVal());
      printAttributes(exp);
@@ -77,65 +78,73 @@ public class Impresion extends Processing {
     public void process(Var exp) {
      System.out.print(exp.var());
      printAttributes(exp);
-   } 
+   }
    public void process(Addition exp) {
-     System.out.print('('); 
+     System.out.print('(');
      exp.opnd1().processWith(this);
      System.out.print('+');
      printAttributes(exp);
      exp.opnd2().processWith(this);
-     System.out.print(')'); 
+     System.out.print(')');
    }
    public void process(Subtraction exp) {
-	     System.out.print('('); 
+	     System.out.print('(');
 	     exp.opnd1().processWith(this);
 	     System.out.print('-');
 	     printAttributes(exp);
 	     exp.opnd2().processWith(this);
-	     System.out.print(')'); 
-	   } 
+	     System.out.print(')');
+	   }
    public void process(Multiplication exp) {
-	     System.out.print('('); 
+	     System.out.print('(');
 	     exp.opnd1().processWith(this);
 	     System.out.print('*');
 	     printAttributes(exp);
 	     exp.opnd2().processWith(this);
-	     System.out.print(')'); 
-	   } 
+	     System.out.print(')');
+	   }
    public void process(Division exp) {
-	     System.out.print('('); 
+	     System.out.print('(');
 	     exp.opnd1().processWith(this);
 	     System.out.print('/');
 	     printAttributes(exp);
 	     exp.opnd2().processWith(this);
-	     System.out.print(')'); 
-	   } 
+	     System.out.print(')');
+	   }
+     public void process(Modulus exp) {
+  	     System.out.print('(');
+  	     exp.opnd1().processWith(this);
+  	     System.out.print('%');
+  	     printAttributes(exp);
+  	     exp.opnd2().processWith(this);
+  	     System.out.print(')');
+  	   }
    public void process(And exp) {
-     System.out.print('('); 
+     System.out.print('(');
      exp.opnd1().processWith(this);
      System.out.print("&&");
      printAttributes(exp);
      exp.opnd2().processWith(this);
-     System.out.print(')'); 
+     System.out.print(')');
    }
    public void process(Prog p) {
-      for(Dec d: p.decs()) 
+      for(Dec d: p.decs())
           d.procesaCon(this);
       p.inst().procesaCon(this);
       printAttributes(p);
       System.out.println();
-   }     
+   }
    public void process(DecVar t) {
-      System.out.print(t.tipoDec()+" "+t.var());    
+      System.out.print(t.tipoDec()+" "+t.var());
       System.out.println();
-   }     
+   }
    public void process(IAsig i) {
       indent();
       System.out.print(i.var()+"=");
       i.exp().processWith(this);
       printAttributes(i);
-      System.out.println(); 
-   }     
+      System.out.println();
+   }
    public void process(IBloque b) {
       indent();
       System.out.println("{");
@@ -147,5 +156,5 @@ public class Impresion extends Processing {
       System.out.print("}");
       printAttributes(b);
       System.out.println();
-   }     
-}   
+   }
+}

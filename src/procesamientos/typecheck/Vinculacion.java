@@ -16,6 +16,7 @@ import programa.Program.IBloque;
 import programa.Program.And;
 import programa.Program.Dec;
 import programa.Program.Inst;
+import programa.Program.Modulus;
 import programa.Program.Subtraction;
 import programa.Program.Var;
 
@@ -93,6 +94,12 @@ public class Vinculacion extends Processing {
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
 	}
+	
+	public void process(Modulus exp) {
+		exp.opnd1().processWith(this);
+		exp.opnd2().processWith(this);
+	}
+
 
 	public void process(Var exp) {
 		DecVar decVar = tablaDeSimbolos.get(exp.var());

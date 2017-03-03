@@ -305,6 +305,17 @@ public class MaquinaP {
 			return "divReal";
 		};
 	}
+	
+	private IMod IMOD;
+	
+	private class IMod implements Instruccion {
+		public void ejecuta() {
+			Valor op2 = pilaEvaluacion.pop();
+			Valor op1 = pilaEvaluacion.pop();
+			pilaEvaluacion.push(new IntValue(op1.intValue() % op2.intValue()));
+			pc++;
+		}
+	}
 
 	private IAnd IAND;
 
@@ -667,6 +678,10 @@ public class MaquinaP {
 	public Instruccion divReal() {
 		return IDIVREAL;
 	}
+	
+	public Instruccion mod() {
+		return IMOD;
+	}
 
 	public Instruccion and() {
 		return IAND;
@@ -750,6 +765,7 @@ public class MaquinaP {
 		IDIVINT = new IDivInt();
 		IDIVREAL = new IDivReal();
 		ICONCAT = new IConcat();
+		IMOD = new IMod();
 		IAND = new IAnd();
 
 		IINTTOREAL = new IIntToReal();

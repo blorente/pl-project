@@ -426,7 +426,7 @@ public abstract class Program {
             p.process(this);
         }
     }
-    
+
     public class Subtraction extends ExpBin {
         public Subtraction(Exp opnd1, Exp opnd2) {
             this(opnd1, opnd2, null);
@@ -440,7 +440,7 @@ public abstract class Program {
             p.process(this);
         }
     }
-    
+
     public class Multiplication extends ExpBin {
         public Multiplication(Exp opnd1, Exp opnd2) {
             this(opnd1, opnd2, null);
@@ -454,13 +454,26 @@ public abstract class Program {
             p.process(this);
         }
     }
-    
+
     public class Division extends ExpBin {
         public Division(Exp opnd1, Exp opnd2) {
             this(opnd1, opnd2, null);
         }
 
         public Division(Exp opnd1, Exp opnd2, String enlaceFuente) {
+            super(opnd1, opnd2, enlaceFuente);
+        }
+
+        public void processWith(Processing p) {
+            p.process(this);
+        }
+    }
+    public class Modulus extends ExpBin {
+        public Modulus(Exp opnd1, Exp opnd2) {
+            this(opnd1, opnd2, null);
+        }
+
+        public Modulus(Exp opnd1, Exp opnd2, String enlaceFuente) {
             super(opnd1, opnd2, enlaceFuente);
         }
 
@@ -538,7 +551,7 @@ public abstract class Program {
     public Exp add(Exp exp1, Exp exp2) {
         return new Addition(exp1, exp2);
     }
-    
+
     public Exp subtract(Exp exp1, Exp exp2) {
         return new Subtraction(exp1, exp2);
     }
@@ -564,6 +577,9 @@ public abstract class Program {
     }
     public Exp divide(Exp exp1, Exp exp2, String enlaceFuente) {
         return new Division(exp1, exp2, enlaceFuente);
+    }
+    public Exp modulus(Exp exp1, Exp exp2, String enlaceFuente) {
+      return new Modulus(exp1, exp2, enlaceFuente);
     }
 
     public Exp and(Exp exp1, Exp exp2, String enlaceFuente) {

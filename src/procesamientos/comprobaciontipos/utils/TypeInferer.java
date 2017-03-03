@@ -1,6 +1,7 @@
 package procesamientos.comprobaciontipos.utils;
 
 import programa.Program;
+import programa.Program.Type;
 
 public class TypeInferer {
     private final CompatibilityChecker compat;
@@ -10,8 +11,28 @@ public class TypeInferer {
         this.program = program;
         this.compat = new CompatibilityChecker(program);
     }
+    
+    public Type inferModulus(Type op1, Type op2) {
+    	if (!op1.equals(program.tInt()) || !op2.equals(program.tInt())) {
+    		return program.tError();
+    	}
+    	
+    	return program.tInt();
+    }
+    
+    public Type inferArith(Type op1, Type op2) {
+    	if (!compat.arithCompatible(op1, op2)) {
+    		return program.tError();
+    	}
+    	
+        if (op1.equals(program.tReal()) || op2.equals(program.tReal())) {
+            return program.tReal();
+        }
 
-    public Program.Type inferSum(Program.Type op1, Program.Type op2) {
+        return program.tInt();
+    }
+
+    public Type inferSum(Type op1, Type op2) {
         if (!compat.sumCompatible(op1, op2)) {
             return program.tError();
         }
@@ -27,7 +48,7 @@ public class TypeInferer {
         return program.tInt();
     }
 
-    public Program.Type inferAnd(Program.Type op1, Program.Type op2) {
+    public Type inferAnd(Type op1, Type op2) {
         if (compat.boolCompatible(op1, op2)) {
             return program.tBool();
         }
