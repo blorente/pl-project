@@ -9,19 +9,24 @@ import programa.Program.Multiplication;
 import programa.Program.Negative;
 import programa.Program.Subtraction;
 import programa.Program.Type;
+import programa.Program.UniCharCast;
 import programa.Program.IntCt;
 import programa.Program.Modulus;
 import programa.Program.BoolCt;
 import programa.Program.RealCt;
 import programa.Program.StrElem;
 import programa.Program.UniCharCt;
+import programa.Program.UniStrCast;
 import programa.Program.UniStringCt;
 import programa.Program.Addition;
 import programa.Program.And;
+import programa.Program.BoolCast;
 import programa.Program.IAsig;
 import programa.Program.IBloque;
 import programa.Program.Inst;
+import programa.Program.IntCast;
 import programa.Program.Prog;
+import programa.Program.RealCast;
 import programa.Program.Var;
 
 
@@ -144,6 +149,56 @@ public class TypeCheck extends Processing {
         exp.op().processWith(this);
 
         Type inferredType = inferrer.inferNegative(exp.op().tipo());
+        if (inferredType.equals(program.tError())) {
+            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+        }
+        exp.ponTipo(inferredType);
+    }
+    
+    public void process(IntCast exp) {
+        exp.op().processWith(this);
+
+        Type inferredType = inferrer.inferIntCast(exp.op().tipo());
+        if (inferredType.equals(program.tError())) {
+            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+        }
+        exp.ponTipo(inferredType);
+    }
+    
+    public void process(RealCast exp) {
+        exp.op().processWith(this);
+
+        Type inferredType = inferrer.inferRealCast(exp.op().tipo());
+        if (inferredType.equals(program.tError())) {
+            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+        }
+        exp.ponTipo(inferredType);
+    }
+    
+    public void process(BoolCast exp) {
+        exp.op().processWith(this);
+
+        Type inferredType = inferrer.inferBoolCast(exp.op().tipo());
+        if (inferredType.equals(program.tError())) {
+            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+        }
+        exp.ponTipo(inferredType);
+    }
+    
+    public void process(UniCharCast exp) {
+        exp.op().processWith(this);
+
+        Type inferredType = inferrer.inferUniCharCast(exp.op().tipo());
+        if (inferredType.equals(program.tError())) {
+            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+        }
+        exp.ponTipo(inferredType);
+    }
+    
+    public void process(UniStrCast exp) {
+        exp.op().processWith(this);
+
+        Type inferredType = inferrer.inferUniStrCast(exp.op().tipo());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
         }

@@ -11,15 +11,20 @@ import programa.Program.Division;
 import programa.Program.Multiplication;
 import programa.Program.Negative;
 import programa.Program.Prog;
+import programa.Program.RealCast;
 import programa.Program.StrElem;
 import programa.Program.DecVar;
 import programa.Program.IAsig;
 import programa.Program.IBloque;
 import programa.Program.And;
+import programa.Program.BoolCast;
 import programa.Program.Dec;
 import programa.Program.Inst;
+import programa.Program.IntCast;
 import programa.Program.Modulus;
 import programa.Program.Subtraction;
+import programa.Program.UniCharCast;
+import programa.Program.UniStrCast;
 import programa.Program.Var;
 
 public class Vinculacion extends Processing {
@@ -108,6 +113,26 @@ public class Vinculacion extends Processing {
 	}
 
 	public void process(Negative exp) {
+		exp.op().processWith(this);
+	}
+	
+	public void process(IntCast exp) {
+		exp.op().processWith(this);
+	}
+	
+	public void process(RealCast exp) {
+		exp.op().processWith(this);
+	}
+	
+	public void process(BoolCast exp) {
+		exp.op().processWith(this);
+	}
+	
+	public void process(UniCharCast exp) {
+		exp.op().processWith(this);
+	}
+	
+	public void process(UniStrCast exp) {
 		exp.op().processWith(this);
 	}
 	

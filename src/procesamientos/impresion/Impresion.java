@@ -11,17 +11,22 @@ import programa.Program.Modulus;
 import programa.Program.RealCt;
 import programa.Program.StrElem;
 import programa.Program.Subtraction;
+import programa.Program.UniCharCast;
 import programa.Program.UniCharCt;
+import programa.Program.UniStrCast;
 import programa.Program.UniStringCt;
 import programa.Program.Addition;
 import programa.Program.And;
+import programa.Program.BoolCast;
 import programa.Program.Dec;
 import programa.Program.DecVar;
 import programa.Program.Exp;
 import programa.Program.IAsig;
 import programa.Program.IBloque;
 import programa.Program.Inst;
+import programa.Program.IntCast;
 import programa.Program.Prog;
+import programa.Program.RealCast;
 import programa.Program.Var;
 
 public class Impresion extends Processing {
@@ -158,6 +163,46 @@ public class Impresion extends Processing {
 		printAttributes(exp);
 		exp.op().processWith(this);
 		System.out.print(')');
+	}
+	
+	public void process(IntCast exp) {
+		System.out.print('(');
+		System.out.print("int");
+		System.out.print(')');
+		printAttributes(exp);
+		exp.op().processWith(this);
+	}
+	
+	public void process(RealCast exp) {
+		System.out.print('(');
+		System.out.print("real");
+		System.out.print(')');
+		printAttributes(exp);
+		exp.op().processWith(this);
+	}
+	
+	public void process(BoolCast exp) {
+		System.out.print('(');
+		System.out.print("bool");
+		System.out.print(')');
+		printAttributes(exp);
+		exp.op().processWith(this);
+	}
+	
+	public void process(UniCharCast exp) {
+		System.out.print('(');
+		System.out.print("char");
+		System.out.print(')');
+		printAttributes(exp);
+		exp.op().processWith(this);
+	}
+	
+	public void process(UniStrCast exp) {
+		System.out.print('(');
+		System.out.print("string");
+		System.out.print(')');
+		printAttributes(exp);
+		exp.op().processWith(this);
 	}
 
 	public void process(Prog p) {

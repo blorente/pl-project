@@ -543,6 +543,28 @@ public class MaquinaP {
 			return "intToReal";
 		}
 	}
+	
+	private IIntToBool IINTTOBOOL;
+
+	private class IIntToBool implements Instruction {
+		private String enlaceFuente;
+
+		public IIntToBool() {}
+		public IIntToBool(String enlaceFuente) {
+			this.enlaceFuente = enlaceFuente;
+		}
+
+		public void execute() {
+			Valor source = pilaEvaluacion.pop();
+			Valor casted = new BoolValue(source.intValue() == 0);
+			pilaEvaluacion.push(casted);
+			pc++;
+		}
+
+		public String toString() {
+			return "intToReal";
+		}
+	}
 
 	private ICharToReal ICHARTOREAL;
 
@@ -790,9 +812,17 @@ public class MaquinaP {
 	public Instruction intToReal() {
 		return IINTTOREAL;
 	}
+	
+	public Instruction intToBool() {
+		return IINTTOBOOL;
+	}
 
 	public Instruction intToChar() {
 		return IINTTOCHAR;
+	}
+	
+	public Instruction realToInt() {
+		return IREALTOINT;
 	}
 
 	public Instruction boolToInt() {
@@ -841,6 +871,7 @@ public class MaquinaP {
 		INEGREAL = new INegReal();
 
 		IINTTOREAL = new IIntToReal();
+		IINTTOBOOL = new IIntToBool();
 		IINTTOCHAR = new IIntToChar();
 		IREALTOINT = new IRealToInt();
 		IBOOLTOINT = new IBoolToInt();

@@ -4,6 +4,7 @@ import maquinaP.MaquinaP;
 import procesamientos.Processing;
 import programa.Program;
 import programa.Program.Type;
+import programa.Program.UniCharCast;
 import programa.Program.IntCt;
 import programa.Program.Modulus;
 import programa.Program.BoolCt;
@@ -13,12 +14,16 @@ import programa.Program.Multiplication;
 import programa.Program.Negative;
 import programa.Program.Division;
 import programa.Program.And;
+import programa.Program.BoolCast;
 import programa.Program.Prog;
+import programa.Program.RealCast;
 import programa.Program.IBloque;
+import programa.Program.IntCast;
 import programa.Program.IAsig;
 import programa.Program.RealCt;
 import programa.Program.StrElem;
 import programa.Program.UniCharCt;
+import programa.Program.UniStrCast;
 import programa.Program.UniStringCt;
 import programa.Program.Var;
 
@@ -154,6 +159,49 @@ public class GeneracionDeCodigo extends Processing {
 		   maquina.addInstruccion(maquina.negInt());
 	   } else if (exp.tipo().equals(program.tReal())) {
 		   maquina.addInstruccion(maquina.negReal());
+	   }
+   }
+   
+   public void process(IntCast exp) {
+	   exp.op().processWith(this);
+	   if (exp.op().tipo().equals(program.tReal())) {
+		   maquina.addInstruccion(maquina.realToInt());
+	   } else if (exp.op().tipo().equals(program.tBool())) {
+		   maquina.addInstruccion(maquina.boolToInt());
+	   } else if (exp.op().tipo().equals(program.tUniChar())) {
+		   maquina.addInstruccion(maquina.charToInt());
+	   }
+   }
+   
+   public void process(RealCast exp) {
+	   exp.op().processWith(this);
+	   if (exp.op().tipo().equals(program.tInt())) {
+		   maquina.addInstruccion(maquina.intToReal());
+	   } else if (exp.op().tipo().equals(program.tBool())) {
+		   maquina.addInstruccion(maquina.boolToReal());
+	   } else if (exp.op().tipo().equals(program.tUniChar())) {
+		   maquina.addInstruccion(maquina.charToReal());
+	   }
+   }
+   
+   public void process(BoolCast exp) {
+	   exp.op().processWith(this);
+	   if (exp.op().tipo().equals(program.tInt())) {
+		   maquina.addInstruccion(maquina.intToBool());
+	   }
+   }
+   
+   public void process(UniCharCast exp) {
+	   exp.op().processWith(this);
+	   if (exp.op().tipo().equals(program.tInt())) {
+		   maquina.addInstruccion(maquina.intToChar());
+	   }
+   }
+   
+   public void process(UniStrCast exp) {
+	   exp.op().processWith(this);
+	   if (exp.op().tipo().equals(program.tUniChar())) {
+		   maquina.addInstruccion(maquina.charToString());
 	   }
    }
    

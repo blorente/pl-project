@@ -10,6 +10,7 @@ import programa.Program.RealCt;
 import programa.Program.StrElem;
 import programa.Program.Subtraction;
 import programa.Program.UniCharCt;
+import programa.Program.UniStrCast;
 import programa.Program.UniStringCt;
 import programa.Program.Var;
 import programa.Program.Addition;
@@ -20,9 +21,13 @@ import programa.Program.IAsig;
 import programa.Program.IBloque;
 import programa.Program.And;
 import programa.Program.Int;
+import programa.Program.IntCast;
 import programa.Program.Bool;
+import programa.Program.BoolCast;
 import programa.Program.Real;
+import programa.Program.RealCast;
 import programa.Program.UniChar;
+import programa.Program.UniCharCast;
 import programa.Program.UniString;
 import programa.Program.Error;
 import programa.Program.Ok;
@@ -47,6 +52,11 @@ public class Processing {
    public void process(StrElem exp) {}
    
    public void process(Negative exp) {}
+   public void process(IntCast exp) {}
+   public void process(RealCast exp) {}
+   public void process(BoolCast exp) {}
+   public void process(UniCharCast exp) {}
+   public void process(UniStrCast exp) {}
 
    public void process(Int t) {}
    public void process(Bool t) {}

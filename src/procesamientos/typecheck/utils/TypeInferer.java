@@ -67,4 +67,39 @@ public class TypeInferer {
     	
     	return program.tError();
     }
+
+	public Type inferIntCast(Type tipo) {
+		if (compat.intCompatible(tipo)) {
+			return program.tInt();
+		}
+		return program.tError();
+	}
+
+	public Type inferRealCast(Type tipo) {
+		if (compat.realCompatible(tipo)) {
+			return program.tReal();
+		}
+		return program.tError();
+	}
+
+	public Type inferBoolCast(Type tipo) {
+		if (compat.boolCompatible(tipo)) {
+			return program.tBool();
+		}
+		return program.tError();
+	}
+
+	public Type inferUniCharCast(Type tipo) {
+		if (compat.charCompatible(tipo)) {
+			return program.tUniChar();
+		}
+		return program.tError();
+	}
+	
+	public Type inferUniStrCast(Type tipo) {
+		if (compat.strCompatible(tipo)) {
+			return program.tUniString();
+		}
+		return program.tError();
+	}
 }

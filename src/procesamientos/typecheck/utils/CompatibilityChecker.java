@@ -45,4 +45,38 @@ public class CompatibilityChecker {
     public boolean isInt(Type t) {
     	return t.equals(program.tInt());
     }
+    
+    public boolean isReal(Type t) {
+    	return t.equals(program.tReal());
+    }
+    
+    public boolean isChar(Type t) {
+    	return t.equals(program.tUniChar());
+    }
+
+	public boolean intCompatible(Type tipo) {
+		return isBool(tipo) ||
+				isInt(tipo) ||
+				isReal(tipo) ||
+				isChar(tipo);
+	}
+
+	public boolean realCompatible(Type tipo) {
+		return isBool(tipo) ||
+				isInt(tipo) ||
+				isReal(tipo) ||
+				isChar(tipo);
+	}
+
+	public boolean boolCompatible(Type tipo) {
+		return isBool(tipo) || isInt(tipo);
+	}
+
+	public boolean charCompatible(Type tipo) {
+		return isChar(tipo) || isInt(tipo);
+	}
+
+	public boolean strCompatible(Type tipo) {
+		return isString(tipo) || isChar(tipo);
+	}
 }

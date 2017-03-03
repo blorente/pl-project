@@ -15,19 +15,38 @@ public class Prueba extends Program {
 
 	public Prueba() {
 		programa = prog(
-				new Dec[] { decvar(tReal(), "x", "linea 1"), decvar(tUniString(), "y", "linea 2"),
-						decvar(tBool(), "z", "linea 3"), decvar(tReal(), "real", "linea 4"),
-						decvar(tUniChar(), "char", "linea 5"), decvar(tUniString(), "string1", "linea 6"),
-						decvar(tUniString(), "string2", "linea 6"), decvar(tInt(), "resto", "linea 7"),
-						decvar(tUniChar(), "strElem", "linea 8"), },
+				new Dec[] { decvar(tReal(), "x", "linea 1"),
+						decvar(tUniString(), "y", "linea 2"),
+						decvar(tBool(), "z", "linea 3"),
+						decvar(tReal(), "real", "linea 4"),
+						decvar(tUniChar(), "char", "linea 5"),
+						decvar(tUniString(), "string1", "linea 6"),
+						decvar(tUniString(), "string2", "linea 6"),
+						decvar(tInt(), "resto", "linea 7"),
+						decvar(tUniChar(), "strElem", "linea 8"),
+						decvar(tInt(), "ichar", "linea 8")},
 				ibloque(new Inst[] { iasig("real", realct(10)),
 						iasig("resto", modulus(intct(3), intct(2), "linea 7"), "linea 7"),
-						iasig("x", add(add(intct(5), intct(6), "linea 7"), realct(25), "linea 7"), "linea 7"),
-						iasig("string1", unistringct("Hello ")), iasig("string2", unistringct("World!")),
+						iasig("char", unicharct('b')),
+						iasig("x", 
+								add(add(intct(5), intct(6), "linea 7"), 
+										realct(25), "linea 7"), "linea 7"),
+						iasig("string1", unistringct("Hello ")), 
+						iasig("string2", unistringct("World!")),
 						iasig("x", divide(var("x", "linea 11"), var("real", "linea 11"))),
-						iasig("y", add(var("string1", "linea 8"), var("string2", "linea 8"), "linea 8")),
+						iasig("y", 
+								add(var("string1", "linea 8"), var("string2", "linea 8"), "linea 8")),
 						iasig("resto", negative(var("resto", "linea 11"), "linea 13")),
-						iasig("strElem", strElem(var("y", "linea 12"), negative(var("resto", "linea 13"), "linea 13"), "linea 14")) }));
+						iasig("strElem", 
+								strElem(var("y", "linea 12"), 
+										negative(var("resto", "linea 13"), "linea 13"), "linea 14")),
+						iasig("ichar", intct((int)'a')),
+						iasig("resto", intcast(var("real"))),
+						iasig("real", realcast(var("char"))),
+						iasig("char", charcast(var("ichar"))),
+						iasig("z", boolcast(var("ichar"))),
+						iasig("string2", strcast(var("char"))),
+						}));
 	}
 
 	public Prog root() {
