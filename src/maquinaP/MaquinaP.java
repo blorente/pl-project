@@ -432,10 +432,6 @@ public class MaquinaP {
 				pilaEvaluacion.push(datos[dir]);
 			pc++;
 		}
-
-		public String toString() {
-			return "apilaDir(" + dir + "," + enlaceFuente + ")";
-		};
 	}
 
 	private class IPushBool implements Instruccion {
@@ -452,8 +448,185 @@ public class MaquinaP {
 
 		public String toString() {
 			return "apilaBool(" + valor + ")";
-		};
+		}
 	}
+
+	private IIntToReal IINTTOREAL;
+
+	private class IIntToReal implements Instruccion {
+		private String enlaceFuente;
+
+		public IIntToReal() {}
+		public IIntToReal(String enlaceFuente) {
+			this.enlaceFuente = enlaceFuente;
+		}
+
+		public void ejecuta() {
+			Valor source = pilaEvaluacion.pop();
+			Valor casted = new RealValue((double) source.intValue());
+			pilaEvaluacion.push(casted);
+			pc++;
+		}
+
+		public String toString() {
+			return "intToReal";
+		}
+	}
+
+	private ICharToReal ICHARTOREAL;
+
+	private class ICharToReal implements Instruccion {
+		private String enlaceFuente;
+
+		public ICharToReal() {}
+		public ICharToReal(String enlaceFuente) {
+			this.enlaceFuente = enlaceFuente;
+		}
+
+		public void ejecuta() {
+			Valor source = pilaEvaluacion.pop();
+			Valor casted = new RealValue((double) source.valorUniChar());
+			pilaEvaluacion.push(casted);
+			pc++;
+		}
+
+		public String toString() {
+			return "charToReal";
+		}
+	}
+
+	private IBoolToReal IBOOLTOREAL;
+
+	private class IBoolToReal implements Instruccion {
+		private String enlaceFuente;
+
+		public IBoolToReal() {}
+		public IBoolToReal(String enlaceFuente) {
+			this.enlaceFuente = enlaceFuente;
+		}
+
+		public void ejecuta() {
+			Valor source = pilaEvaluacion.pop();
+			Valor casted = new RealValue(source.valorBool() ? 1.0 : 0.0);
+			pilaEvaluacion.push(casted);
+			pc++;
+		}
+
+		public String toString() {
+			return "boolToReal";
+		}
+	}
+
+	private IRealToInt IREALTOINT;
+
+	private class IRealToInt implements Instruccion {
+		private String enlaceFuente;
+
+		public IRealToInt() {}
+		public IRealToInt(String enlaceFuente) {
+			this.enlaceFuente = enlaceFuente;
+		}
+
+		public void ejecuta() {
+			Valor source = pilaEvaluacion.pop();
+			Valor casted = new IntValue((int) source.realValue());
+			pilaEvaluacion.push(casted);
+			pc++;
+		}
+
+		public String toString() {
+			return "realToInt";
+		}
+	}
+
+	private IBoolToInt IBOOLTOINT;
+
+	private class IBoolToInt implements Instruccion {
+		private String enlaceFuente;
+
+		public IBoolToInt() {}
+		public IBoolToInt(String enlaceFuente) {
+			this.enlaceFuente = enlaceFuente;
+		}
+
+		public void ejecuta() {
+			Valor source = pilaEvaluacion.pop();
+			Valor casted = new IntValue(source.valorBool() ? 1 : 0);
+			pilaEvaluacion.push(casted);
+			pc++;
+		}
+
+		public String toString() {
+			return "boolToInt";
+		}
+	}
+
+	private ICharToInt ICHARTOINT;
+
+	private class ICharToInt implements Instruccion {
+		private String enlaceFuente;
+
+		public ICharToInt() {}
+		public ICharToInt(String enlaceFuente) {
+			this.enlaceFuente = enlaceFuente;
+		}
+
+		public void ejecuta() {
+			Valor source = pilaEvaluacion.pop();
+			Valor casted = new IntValue((int) source.valorUniChar());
+			pilaEvaluacion.push(casted);
+			pc++;
+		}
+
+		public String toString() {
+			return "charToInt";
+		}
+	}
+
+	private IIntToChar IINTTOCHAR;
+
+	private class IIntToChar implements Instruccion {
+		private String enlaceFuente;
+
+		public IIntToChar() {}
+		public IIntToChar(String enlaceFuente) {
+			this.enlaceFuente = enlaceFuente;
+		}
+
+		public void ejecuta() {
+			Valor source = pilaEvaluacion.pop();
+			Valor casted = new UniCharValue((char) source.intValue());
+			pilaEvaluacion.push(casted);
+			pc++;
+		}
+
+		public String toString() {
+			return "intToChar";
+		}
+	}
+
+	private ICharToString ICHARTOSTRING;
+
+	private class ICharToString implements Instruccion {
+		private String enlaceFuente;
+
+		public ICharToString() {}
+		public ICharToString(String enlaceFuente) {
+			this.enlaceFuente = enlaceFuente;
+		}
+
+		public void ejecuta() {
+			Valor source = pilaEvaluacion.pop();
+			Valor casted = new UniStringValue("" + source.valorUniChar());
+			pilaEvaluacion.push(casted);
+			pc++;
+		}
+
+		public String toString() {
+			return "charToString";
+		}
+	}
+
 
 	public Instruccion addInt() {
 		return IADDINT;
@@ -527,6 +700,34 @@ public class MaquinaP {
 		return new IApilaDir(dir, dinfo);
 	}
 
+	public Instruccion intToReal() {
+		return IINTTOREAL;
+	}
+
+	public Instruccion intToChar() {
+		return IINTTOCHAR;
+	}
+
+	public Instruccion boolToInt() {
+		return IBOOLTOINT;
+	}
+
+	public Instruccion boolToReal() {
+		return IBOOLTOREAL;
+	}
+
+	public Instruccion charToInt() {
+		return ICHARTOINT;
+	}
+
+	public Instruccion charToReal() {
+		return ICHARTOREAL;
+	}
+
+	public Instruccion charToString() {
+		return ICHARTOSTRING;
+	}
+
 	public void addInstruccion(Instruccion i) {
 		codigoP.add(i);
 	}
@@ -537,7 +738,25 @@ public class MaquinaP {
 		datos = new Valor[tamdatos];
 		this.pc = 0;
 		IADDINT = new IAddInt();
+		IADDREAL = new IAddReal();
+		ISUBINT = new ISubInt();
+		ISUBREAL = new ISubReal();
+		IMULINT = new IMulInt();
+		IMULREAL = new IMulReal();
+		IDIVINT = new IDivInt();
+		IDIVREAL = new IDivReal();
+		ICONCAT = new IConcat();
 		IAND = new IAnd();
+
+		IINTTOREAL = new IIntToReal();
+		IINTTOCHAR = new IIntToChar();
+		IREALTOINT = new IRealToInt();
+		IBOOLTOINT = new IBoolToInt();
+		IBOOLTOREAL = new IBoolToReal();
+		ICHARTOINT = new ICharToInt();
+		ICHARTOREAL = new ICharToReal();
+		ICHARTOSTRING = new ICharToString();
+
 		UNKNOWN = new UnknownValue();
 	}
 

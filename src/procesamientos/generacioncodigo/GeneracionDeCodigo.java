@@ -3,6 +3,7 @@ package procesamientos.generacioncodigo;
 import maquinaP.MaquinaP;
 import procesamientos.Processing;
 import programa.Program;
+import programa.Program.Type;
 import programa.Program.IntCt;
 import programa.Program.BoolCt;
 import programa.Program.Addition;
@@ -17,13 +18,15 @@ import programa.Program.Var;
 
 
 public class GeneracionDeCodigo extends Processing {
-   private MaquinaP maquina; 
-   public GeneracionDeCodigo(MaquinaP maquina) {
-      this.maquina = maquina; 
+   private MaquinaP maquina;
+   private Program program;
+   public GeneracionDeCodigo(Program program, MaquinaP maquina) {
+     this.program = program;
+      this.maquina = maquina;
    }
    public void process(Var exp) {
-      maquina.addInstruccion(maquina.apilaDir(exp.declaracion().dir(),exp.enlaceFuente()));         
-   } 
+      maquina.addInstruccion(maquina.apilaDir(exp.declaracion().dir(),exp.enlaceFuente()));
+   }
    public void process(IntCt exp) {
        maquina.addInstruccion(maquina.apilaInt(exp.intVal()));
    }
@@ -39,26 +42,46 @@ public class GeneracionDeCodigo extends Processing {
    public void process(BoolCt exp) {
        maquina.addInstruccion(maquina.pushBool(exp.boolVal()));
    }
-   
+
    public void process(Addition exp) {
-       exp.opnd1().processWith(this)
+       Type t1 = exp.opnd1().tipo();
+       Type t2 = exp.opnd2().tipo();
+       System.out.println("Addition -------------------------");
+       exp.opnd1().processWith(this);
+       if (t1.equals(program.tInt()) && t2.equals(program.tReal())) {
+         maquina.addInstruccion(maquina.intToReal());
+       }
        exp.opnd2().processWith(this);
-       maquina.addInstruccion(maquina.addInt());        
-   } 
+       if (t1.equals(program.tReal()) && t2.equals(program.tInt())) {
+         maquina.addInstruccion(maquina.intToReal());
+       }
+
+       if (exp.tipo().equals(program.tInt())) {
+         maquina.addInstruccion(maquina.addInt());
+       }
+       if (exp.tipo().equals(program.tReal())) {
+         maquina.addInstruccion(maquina.addReal());
+       }
+       if (exp.tipo().equals(program.tUniString())) {
+         maquina.addInstruccion(maquina.concat());
+       }
+       maquina.muestraCodigo();
+       System.out.println("-------------------------");
+   }
    public void process(And exp) {
        exp.opnd1().processWith(this);
        exp.opnd2().processWith(this);
-       maquina.addInstruccion(maquina.and());         
-   }   
+       maquina.addInstruccion(maquina.and());
+   }
    public void process(Prog p) {
       p.inst().procesaCon(this);
-   }     
+   }
    public void process(IAsig i) {
       i.exp().processWith(this);
       maquina.addInstruccion(maquina.desapilaDir(i.declaracion().dir()));
-   }     
+   }
    public void process(IBloque b) {
       for(Program.Inst i: b.is())
           i.procesaCon(this);
-   }     
+   }
 }

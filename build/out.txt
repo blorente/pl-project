@@ -1,0 +1,201 @@
+REAL x
+UNISTRING y
+BOOL z
+REAL real
+UNICHAR char
+UNISTRING string1
+UNISTRING string2
+{
+   real=10.0
+   x=((5+6)+25.0)
+   string1=Hello 
+   string2=World!
+   x=(x/real)
+}
+
+Addition -------------------------
+Addition -------------------------
+CodigoP
+ 0:pushReal(10.0)
+ 1:desapilaDir(3)
+ 2:pushInt(5)
+ 3:pushInt(6)
+ 4:addInt
+-------------------------
+CodigoP
+ 0:pushReal(10.0)
+ 1:desapilaDir(3)
+ 2:pushInt(5)
+ 3:pushInt(6)
+ 4:addInt
+ 5:intToReal
+ 6:pushReal(25.0)
+ 7:addReal
+-------------------------
+CodigoP
+ 0:pushReal(10.0)
+ 1:desapilaDir(3)
+ 2:pushInt(5)
+ 3:pushInt(6)
+ 4:addInt
+ 5:intToReal
+ 6:pushReal(25.0)
+ 7:addReal
+ 8:desapilaDir(0)
+ 9:pushUniString(Hello )
+ 10:desapilaDir(5)
+ 11:pushUniString(World!)
+ 12:desapilaDir(6)
+ 13:desapilaDir(0)
+Pila de evaluacion
+Datos
+ 0:null
+ 1:null
+ 2:null
+ 3:null
+ 4:null
+ 5:null
+ 6:null
+PC:0
+Pila de evaluacion
+ 0:10.0
+Datos
+ 0:null
+ 1:null
+ 2:null
+ 3:null
+ 4:null
+ 5:null
+ 6:null
+PC:1
+Pila de evaluacion
+Datos
+ 0:null
+ 1:null
+ 2:null
+ 3:10.0
+ 4:null
+ 5:null
+ 6:null
+PC:2
+Pila de evaluacion
+ 0:5
+Datos
+ 0:null
+ 1:null
+ 2:null
+ 3:10.0
+ 4:null
+ 5:null
+ 6:null
+PC:3
+Pila de evaluacion
+ 0:5
+ 1:6
+Datos
+ 0:null
+ 1:null
+ 2:null
+ 3:10.0
+ 4:null
+ 5:null
+ 6:null
+PC:4
+Pila de evaluacion
+ 0:11
+Datos
+ 0:null
+ 1:null
+ 2:null
+ 3:10.0
+ 4:null
+ 5:null
+ 6:null
+PC:5
+executing! 5
+Pila de evaluacion
+ 0:11.0
+Datos
+ 0:null
+ 1:null
+ 2:null
+ 3:10.0
+ 4:null
+ 5:null
+ 6:null
+PC:6
+Pila de evaluacion
+ 0:11.0
+ 1:25.0
+Datos
+ 0:null
+ 1:null
+ 2:null
+ 3:10.0
+ 4:null
+ 5:null
+ 6:null
+PC:7
+Pila de evaluacion
+ 0:36.0
+Datos
+ 0:null
+ 1:null
+ 2:null
+ 3:10.0
+ 4:null
+ 5:null
+ 6:null
+PC:8
+Pila de evaluacion
+Datos
+ 0:36.0
+ 1:null
+ 2:null
+ 3:10.0
+ 4:null
+ 5:null
+ 6:null
+PC:9
+Pila de evaluacion
+ 0:Hello 
+Datos
+ 0:36.0
+ 1:null
+ 2:null
+ 3:10.0
+ 4:null
+ 5:null
+ 6:null
+PC:10
+Pila de evaluacion
+Datos
+ 0:36.0
+ 1:null
+ 2:null
+ 3:10.0
+ 4:null
+ 5:Hello 
+ 6:null
+PC:11
+Pila de evaluacion
+ 0:World!
+Datos
+ 0:36.0
+ 1:null
+ 2:null
+ 3:10.0
+ 4:null
+ 5:Hello 
+ 6:null
+PC:12
+Pila de evaluacion
+Datos
+ 0:36.0
+ 1:null
+ 2:null
+ 3:10.0
+ 4:null
+ 5:Hello 
+ 6:World!
+PC:13

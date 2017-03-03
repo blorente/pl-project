@@ -25,6 +25,7 @@ public class Prueba extends Program {
                 },
                 ibloque(
                         new Inst[]{
+                                iasig("real", realct(10)),
                                 iasig("x",
                                         add(add(intct(5), intct(6), "linea 7"),
                                                 realct(25), "linea 7"), "linea 7"),
@@ -32,8 +33,8 @@ public class Prueba extends Program {
                                 iasig("string2", unistringct("World!")),
                                 iasig("x",
                                 		divide(var("x", "linea 11"), var("real", "linea 11"))),
-                                iasig("y",
-                                        add(var("string1", "linea 8"), var("string2", "linea 8"), "linea 8"))
+                                //iasig("y",
+                                //        add(var("string1", "linea 8"), var("string2", "linea 8"), "linea 8"))
                         }));
     }
 
@@ -55,7 +56,7 @@ public class Prueba extends Program {
                 AsignacionDirecciones asignaciondirs = new AsignacionDirecciones();
                 programa.root().procesaCon(asignaciondirs);
                 MaquinaP maquina = new MaquinaP(asignaciondirs.tamanioDatos());
-                GeneracionDeCodigo generacioncod = new GeneracionDeCodigo(maquina);
+                GeneracionDeCodigo generacioncod = new GeneracionDeCodigo(programa, maquina);
                 programa.root().procesaCon(generacioncod);
                 maquina.muestraCodigo();
                 maquina.ejecuta();
@@ -67,4 +68,3 @@ public class Prueba extends Program {
 
     }
 }
-  
