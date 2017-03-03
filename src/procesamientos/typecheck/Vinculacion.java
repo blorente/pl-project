@@ -11,6 +11,7 @@ import programa.Program.Division;
 import programa.Program.Multiplication;
 import programa.Program.Negative;
 import programa.Program.Prog;
+import programa.Program.StrElem;
 import programa.Program.DecVar;
 import programa.Program.IAsig;
 import programa.Program.IBloque;
@@ -97,6 +98,11 @@ public class Vinculacion extends Processing {
 	}
 	
 	public void process(Modulus exp) {
+		exp.opnd1().processWith(this);
+		exp.opnd2().processWith(this);
+	}
+	
+	public void process(StrElem exp) {
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
 	}

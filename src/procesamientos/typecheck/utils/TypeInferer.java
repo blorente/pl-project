@@ -38,11 +38,11 @@ public class TypeInferer {
 	
 	public Type inferModulus(Type op1, Type op2) {
 		
-		if (!op1.equals(program.tInt()) || !op2.equals(program.tInt())) {
-            return program.tError();
+		if (compat.isInt(op1) && compat.isInt(op2)) {
+            return program.tInt();
         }
 
-        return program.tInt();
+        return program.tError();
 	}
 
     public Type inferAnd(Type op1, Type op2) {
@@ -57,6 +57,14 @@ public class TypeInferer {
     	if (compat.isNumeric(op)) {
     		return op;
     	}
+    	return program.tError();
+    }
+    
+    public Type inferStrElem(Type op1, Type op2) {
+    	if (compat.strElemCompatible(op1, op2)) {
+    		return program.tUniChar();
+    	}
+    	
     	return program.tError();
     }
 }

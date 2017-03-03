@@ -9,6 +9,7 @@ import programa.Program.Multiplication;
 import programa.Program.Negative;
 import programa.Program.Modulus;
 import programa.Program.RealCt;
+import programa.Program.StrElem;
 import programa.Program.Subtraction;
 import programa.Program.UniCharCt;
 import programa.Program.UniStringCt;
@@ -141,6 +142,14 @@ public class Impresion extends Processing {
 		printAttributes(exp);
 		exp.opnd2().processWith(this);
 		System.out.print(')');
+	}
+	
+	public void process(StrElem exp) {
+		exp.opnd1().processWith(this);
+		System.out.print("[");
+		printAttributes(exp);
+		exp.opnd2().processWith(this);
+		System.out.print(']');
 	}
 
 	public void process(Negative exp) {

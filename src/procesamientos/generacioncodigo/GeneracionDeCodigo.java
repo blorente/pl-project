@@ -17,6 +17,7 @@ import programa.Program.Prog;
 import programa.Program.IBloque;
 import programa.Program.IAsig;
 import programa.Program.RealCt;
+import programa.Program.StrElem;
 import programa.Program.UniCharCt;
 import programa.Program.UniStringCt;
 import programa.Program.Var;
@@ -141,6 +142,12 @@ public class GeneracionDeCodigo extends Processing {
        maquina.addInstruccion(maquina.and());
    }
    
+   public void process(StrElem exp) {
+	   exp.opnd1().processWith(this);
+       exp.opnd2().processWith(this);
+       maquina.addInstruccion(maquina.strElem());
+   }
+   
    public void process(Negative exp) {
 	   exp.op().processWith(this);
 	   if (exp.tipo().equals(program.tInt())) {
@@ -149,6 +156,7 @@ public class GeneracionDeCodigo extends Processing {
 		   maquina.addInstruccion(maquina.negReal());
 	   }
    }
+   
    public void process(Prog p) {
       p.inst().procesaCon(this);
    }

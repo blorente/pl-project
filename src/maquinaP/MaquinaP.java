@@ -315,6 +315,10 @@ public class MaquinaP {
 			pilaEvaluacion.push(new IntValue(op1.intValue() % op2.intValue()));
 			pc++;
 		}
+		
+		public String toString() {
+			return "mod";
+		}
 	}
 
 	private IAnd IAND;
@@ -335,6 +339,30 @@ public class MaquinaP {
 		public String toString() {
 			return "and";
 		};
+	}
+	
+	private IStrElem ISTRELEM;
+	
+	private class IStrElem implements Instruction {
+
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			int index = opnd2.intValue();
+			String source = opnd1.uniStringValue();
+			if (index >= source.length() || index < 0) {
+				pilaEvaluacion.push(UNKNOWN);
+			} else {
+				char value = source.charAt(index);
+				pilaEvaluacion.push(new UniCharValue(value));
+			}
+			pc++;			
+		}
+		
+		public String toString() {
+			return "strElem";
+		}
+		
 	}
 	
 	private INegInt INEGINT;
@@ -722,6 +750,10 @@ public class MaquinaP {
 	public Instruction and() {
 		return IAND;
 	}
+	
+	public Instruction strElem() {
+		return ISTRELEM;
+	}
 
 	public Instruction pushInt(int val) {
 		return new IPushInt(val);
@@ -803,6 +835,7 @@ public class MaquinaP {
 		ICONCAT = new IConcat();
 		IMOD = new IMod();
 		IAND = new IAnd();
+		ISTRELEM = new IStrElem();
 		
 		INEGINT = new INegInt();
 		INEGREAL = new INegReal();

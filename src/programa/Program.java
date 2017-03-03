@@ -496,6 +496,20 @@ public abstract class Program {
         }
     }
     
+    public class StrElem extends BinaryExp {
+    	public StrElem(Exp source, Exp index) {
+            this(source, index, null);
+        }
+
+        public StrElem(Exp source, Exp index, String enlaceFuente) {
+            super(source, index, enlaceFuente);
+        }
+
+        public void processWith(Processing p) {
+            p.process(this);
+        }
+    }
+    
     private abstract class UnaryExp extends Exp {
         private Exp op;
         private String enlaceFuente;
@@ -622,10 +636,14 @@ public abstract class Program {
         return new And(exp1, exp2, enlaceFuente);
     }
     
+    public Exp strElem(Exp string, Exp index, String enlaceFuente) {
+    	return new StrElem(string, index);
+    }
+    
     public Exp negative(Exp exp1, String enlaceFuente) {
     	return new Negative(exp1, enlaceFuente);
     }
-
+    
     public Type tInt() {
         return TINT;
     }

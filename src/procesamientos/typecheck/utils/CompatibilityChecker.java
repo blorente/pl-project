@@ -22,6 +22,10 @@ public class CompatibilityChecker {
         return (isString(op1) && isString(op2));
     }
 
+	public boolean strElemCompatible(Type op1, Type op2) {
+		return isString(op1) && isInt(op2);
+	}
+
     public boolean boolCompatible(Type op1, Type op2) {
         return (isBool(op1) && isBool(op2));
     }
@@ -31,10 +35,14 @@ public class CompatibilityChecker {
     }
 
     public boolean isNumeric(Type t) {
-        return t.equals(program.tInt()) || t.equals(program.tReal());
+        return isInt(t) || t.equals(program.tReal());
     }
 
     public boolean isString(Type t) {
         return t.equals(program.tUniString());
+    }
+    
+    public boolean isInt(Type t) {
+    	return t.equals(program.tInt());
     }
 }

@@ -13,6 +13,7 @@ import programa.Program.IntCt;
 import programa.Program.Modulus;
 import programa.Program.BoolCt;
 import programa.Program.RealCt;
+import programa.Program.StrElem;
 import programa.Program.UniCharCt;
 import programa.Program.UniStringCt;
 import programa.Program.Addition;
@@ -122,6 +123,17 @@ public class TypeCheck extends Processing {
         exp.opnd2().processWith(this);
 
         Type inferredType = inferrer.inferAnd(exp.opnd1().tipo(), exp.opnd2().tipo());
+        if (inferredType.equals(program.tError())) {
+            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+        }
+        exp.ponTipo(inferredType);
+    }
+    
+    public void process(StrElem exp) {
+        exp.opnd1().processWith(this);
+        exp.opnd2().processWith(this);
+
+        Type inferredType = inferrer.inferStrElem(exp.opnd1().tipo(), exp.opnd2().tipo());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
         }

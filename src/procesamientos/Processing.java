@@ -7,6 +7,7 @@ import programa.Program.BoolCt;
 import programa.Program.Multiplication;
 import programa.Program.Negative;
 import programa.Program.RealCt;
+import programa.Program.StrElem;
 import programa.Program.Subtraction;
 import programa.Program.UniCharCt;
 import programa.Program.UniStringCt;
@@ -42,6 +43,8 @@ public class Processing {
    public void process(Modulus exp) {}
 
    public void process(And exp) {}
+   
+   public void process(StrElem exp) {}
    
    public void process(Negative exp) {}
 
