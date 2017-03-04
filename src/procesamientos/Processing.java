@@ -2,10 +2,15 @@ package procesamientos;
 
 import programa.Program;
 import programa.Program.Division;
+import programa.Program.Equals;
 import programa.Program.IntCt;
+import programa.Program.Less;
+import programa.Program.LessEq;
 import programa.Program.BoolCt;
 import programa.Program.Multiplication;
 import programa.Program.Negative;
+import programa.Program.Not;
+import programa.Program.NotEquals;
 import programa.Program.RealCt;
 import programa.Program.StrElem;
 import programa.Program.Subtraction;
@@ -30,7 +35,10 @@ import programa.Program.UniChar;
 import programa.Program.UniCharCast;
 import programa.Program.UniString;
 import programa.Program.Error;
+import programa.Program.Greater;
+import programa.Program.GreaterEq;
 import programa.Program.Ok;
+import programa.Program.Or;
 
 public class Processing {
    public void process(IntCt exp) {}
@@ -48,6 +56,14 @@ public class Processing {
    public void process(Modulus exp) {}
 
    public void process(And exp) {}
+   public void process(Or exp) {}
+   public void process(Not exp) {}
+   public void process(Equals exp) {}
+   public void process(NotEquals exp) {}
+   public void process(Greater exp) {}
+   public void process(GreaterEq exp) {}
+   public void process(Less exp) {}
+   public void process(LessEq exp) {}
    
    public void process(StrElem exp) {}
    

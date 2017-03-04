@@ -494,6 +494,118 @@ public abstract class Program {
 		}
 	}
 
+	public class Or extends BinaryExp {
+		public Or(Exp opnd1, Exp opnd2) {
+			this(opnd1, opnd2, null);
+		}
+
+		public Or(Exp opnd1, Exp opnd2, String enlaceFuente) {
+			super(opnd1, opnd2, enlaceFuente);
+		}
+
+		public void processWith(Processing p) {
+			p.process(this);
+		}
+	}
+
+	public class Not extends UnaryExp {
+		public Not(Exp opnd1) {
+			this(opnd1, null);
+		}
+
+		public Not(Exp opnd1, String enlaceFuente) {
+			super(opnd1, enlaceFuente);
+		}
+
+		public void processWith(Processing p) {
+			p.process(this);
+		}
+	}
+
+	public class Equals extends BinaryExp {
+		public Equals(Exp opnd1, Exp opnd2) {
+			this(opnd1, opnd2, null);
+		}
+
+		public Equals(Exp opnd1, Exp opnd2, String enlaceFuente) {
+			super(opnd1, opnd2, enlaceFuente);
+		}
+
+		public void processWith(Processing p) {
+			p.process(this);
+		}
+	}
+
+	public class NotEquals extends BinaryExp {
+		public NotEquals(Exp opnd1, Exp opnd2) {
+			this(opnd1, opnd2, null);
+		}
+
+		public NotEquals(Exp opnd1, Exp opnd2, String enlaceFuente) {
+			super(opnd1, opnd2, enlaceFuente);
+		}
+
+		public void processWith(Processing p) {
+			p.process(this);
+		}
+	}
+
+	public class Greater extends BinaryExp {
+		public Greater(Exp opnd1, Exp opnd2) {
+			this(opnd1, opnd2, null);
+		}
+
+		public Greater(Exp opnd1, Exp opnd2, String enlaceFuente) {
+			super(opnd1, opnd2, enlaceFuente);
+		}
+
+		public void processWith(Processing p) {
+			p.process(this);
+		}
+	}
+
+	public class GreaterEq extends BinaryExp {
+		public GreaterEq(Exp opnd1, Exp opnd2) {
+			this(opnd1, opnd2, null);
+		}
+
+		public GreaterEq(Exp opnd1, Exp opnd2, String enlaceFuente) {
+			super(opnd1, opnd2, enlaceFuente);
+		}
+
+		public void processWith(Processing p) {
+			p.process(this);
+		}
+	}
+
+	public class Less extends BinaryExp {
+		public Less(Exp opnd1, Exp opnd2) {
+			this(opnd1, opnd2, null);
+		}
+
+		public Less(Exp opnd1, Exp opnd2, String enlaceFuente) {
+			super(opnd1, opnd2, enlaceFuente);
+		}
+
+		public void processWith(Processing p) {
+			p.process(this);
+		}
+	}
+
+	public class LessEq extends BinaryExp {
+		public LessEq(Exp opnd1, Exp opnd2) {
+			this(opnd1, opnd2, null);
+		}
+
+		public LessEq(Exp opnd1, Exp opnd2, String enlaceFuente) {
+			super(opnd1, opnd2, enlaceFuente);
+		}
+
+		public void processWith(Processing p) {
+			p.process(this);
+		}
+	}
+
 	public class StrElem extends BinaryExp {
 		public StrElem(Exp source, Exp index) {
 			this(source, index, null);
@@ -557,7 +669,7 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-	
+
 	public class RealCast extends UnaryExp {
 		public RealCast(Exp op) {
 			this(op, null);
@@ -571,6 +683,7 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
+
 	public class BoolCast extends UnaryExp {
 		public BoolCast(Exp op) {
 			this(op, null);
@@ -584,7 +697,7 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-	
+
 	public class UniCharCast extends UnaryExp {
 		public UniCharCast(Exp op) {
 			this(op, null);
@@ -598,7 +711,7 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-	
+
 	public class UniStrCast extends UnaryExp {
 		public UniStrCast(Exp op) {
 			this(op, null);
@@ -709,6 +822,38 @@ public abstract class Program {
 		return new And(exp1, exp2, enlaceFuente);
 	}
 
+	public Exp or(Exp exp1, Exp exp2) {
+		return new Or(exp1, exp2);
+	}
+
+	public Exp not(Exp exp) {
+		return new Not(exp);
+	}
+
+	public Exp equals(Exp exp1, Exp exp2) {
+		return new Equals(exp1, exp2);
+	}
+
+	public Exp notequals(Exp exp1, Exp exp2) {
+		return new NotEquals(exp1, exp2);
+	}
+
+	public Exp greater(Exp exp1, Exp exp2) {
+		return new Greater(exp1, exp2);
+	}
+
+	public Exp greatereq(Exp exp1, Exp exp2) {
+		return new GreaterEq(exp1, exp2);
+	}
+
+	public Exp less(Exp exp1, Exp exp2) {
+		return new Less(exp1, exp2);
+	}
+
+	public Exp lesseq(Exp exp1, Exp exp2) {
+		return new LessEq(exp1, exp2);
+	}
+
 	public Exp strElem(Exp string, Exp index, String enlaceFuente) {
 		return new StrElem(string, index);
 	}
@@ -720,19 +865,19 @@ public abstract class Program {
 	public Exp intcast(Exp exp) {
 		return new IntCast(exp);
 	}
-	
+
 	public Exp realcast(Exp exp) {
 		return new RealCast(exp);
 	}
-	
+
 	public Exp boolcast(Exp exp) {
 		return new BoolCast(exp);
 	}
-	
+
 	public Exp charcast(Exp exp) {
 		return new UniCharCast(exp);
 	}
-	
+
 	public Exp strcast(Exp exp) {
 		return new UniStrCast(exp);
 	}

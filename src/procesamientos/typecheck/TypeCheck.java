@@ -5,12 +5,20 @@ import procesamientos.Processing;
 import procesamientos.typecheck.utils.TypeInferer;
 import programa.Program;
 import programa.Program.Division;
+import programa.Program.Equals;
+import programa.Program.Greater;
+import programa.Program.GreaterEq;
 import programa.Program.Multiplication;
 import programa.Program.Negative;
+import programa.Program.Not;
+import programa.Program.NotEquals;
+import programa.Program.Or;
 import programa.Program.Subtraction;
 import programa.Program.Type;
 import programa.Program.UniCharCast;
 import programa.Program.IntCt;
+import programa.Program.Less;
+import programa.Program.LessEq;
 import programa.Program.Modulus;
 import programa.Program.BoolCt;
 import programa.Program.RealCt;
@@ -127,7 +135,89 @@ public class TypeCheck extends Processing {
         exp.opnd1().processWith(this);
         exp.opnd2().processWith(this);
 
-        Type inferredType = inferrer.inferAnd(exp.opnd1().tipo(), exp.opnd2().tipo());
+        Type inferredType = inferrer.inferBoolBinExp(exp.opnd1().tipo(), exp.opnd2().tipo());
+        if (inferredType.equals(program.tError())) {
+            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+        }
+        exp.ponTipo(inferredType);
+    }
+    
+    public void process(Or exp) {
+        exp.opnd1().processWith(this);
+        exp.opnd2().processWith(this);
+
+        Type inferredType = inferrer.inferBoolBinExp(exp.opnd1().tipo(), exp.opnd2().tipo());
+        if (inferredType.equals(program.tError())) {
+            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+        }
+        exp.ponTipo(inferredType);
+    }
+    
+    public void process(Not exp) {
+        exp.op().processWith(this);
+
+        Type inferredType = inferrer.inferBoolUnExp(exp.op().tipo());
+        if (inferredType.equals(program.tError())) {
+            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+        }
+        exp.ponTipo(inferredType);
+    }
+    
+    public void process(Equals exp) {
+        exp.opnd1().processWith(this);
+        exp.opnd2().processWith(this);
+
+        Type inferredType = inferrer.inferComparator(exp.opnd1().tipo(), exp.opnd2().tipo());
+        if (inferredType.equals(program.tError())) {
+            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+        }
+        exp.ponTipo(inferredType);
+    }
+    public void process(NotEquals exp) {
+        exp.opnd1().processWith(this);
+        exp.opnd2().processWith(this);
+
+        Type inferredType = inferrer.inferComparator(exp.opnd1().tipo(), exp.opnd2().tipo());
+        if (inferredType.equals(program.tError())) {
+            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+        }
+        exp.ponTipo(inferredType);
+    }
+    public void process(Greater exp) {
+        exp.opnd1().processWith(this);
+        exp.opnd2().processWith(this);
+
+        Type inferredType = inferrer.inferComparator(exp.opnd1().tipo(), exp.opnd2().tipo());
+        if (inferredType.equals(program.tError())) {
+            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+        }
+        exp.ponTipo(inferredType);
+    }
+    public void process(GreaterEq exp) {
+        exp.opnd1().processWith(this);
+        exp.opnd2().processWith(this);
+
+        Type inferredType = inferrer.inferComparator(exp.opnd1().tipo(), exp.opnd2().tipo());
+        if (inferredType.equals(program.tError())) {
+            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+        }
+        exp.ponTipo(inferredType);
+    }
+    public void process(Less exp) {
+        exp.opnd1().processWith(this);
+        exp.opnd2().processWith(this);
+
+        Type inferredType = inferrer.inferComparator(exp.opnd1().tipo(), exp.opnd2().tipo());
+        if (inferredType.equals(program.tError())) {
+            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+        }
+        exp.ponTipo(inferredType);
+    }
+    public void process(LessEq exp) {
+        exp.opnd1().processWith(this);
+        exp.opnd2().processWith(this);
+
+        Type inferredType = inferrer.inferComparator(exp.opnd1().tipo(), exp.opnd2().tipo());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
         }

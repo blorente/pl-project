@@ -8,8 +8,14 @@ import java.util.Map;
 import procesamientos.Processing;
 import programa.Program.Addition;
 import programa.Program.Division;
+import programa.Program.Equals;
+import programa.Program.Greater;
+import programa.Program.GreaterEq;
 import programa.Program.Multiplication;
 import programa.Program.Negative;
+import programa.Program.Not;
+import programa.Program.NotEquals;
+import programa.Program.Or;
 import programa.Program.Prog;
 import programa.Program.RealCast;
 import programa.Program.StrElem;
@@ -21,6 +27,8 @@ import programa.Program.BoolCast;
 import programa.Program.Dec;
 import programa.Program.Inst;
 import programa.Program.IntCast;
+import programa.Program.Less;
+import programa.Program.LessEq;
 import programa.Program.Modulus;
 import programa.Program.Subtraction;
 import programa.Program.UniCharCast;
@@ -49,8 +57,7 @@ public class Vinculacion extends Processing {
 	public void process(DecVar d) {
 		if (tablaDeSimbolos.containsKey(d.var())) {
 			error = true;
-			errores.msg(d.enlaceFuente() + ":" + ERROR_ID_DUPLICADO + "("
-					+ d.var() + ")");
+			errores.msg(d.enlaceFuente() + ":" + ERROR_ID_DUPLICADO + "(" + d.var() + ")");
 		} else {
 			tablaDeSimbolos.put(d.var(), d);
 		}
@@ -60,8 +67,7 @@ public class Vinculacion extends Processing {
 		DecVar decVar = tablaDeSimbolos.get(i.var());
 		if (decVar == null) {
 			error = true;
-			errores.msg(i.enlaceFuente() + ":" + ERROR_ID_NO_DECLARADO + "("
-					+ i.var() + ")");
+			errores.msg(i.enlaceFuente() + ":" + ERROR_ID_NO_DECLARADO + "(" + i.var() + ")");
 		} else {
 			i.ponDeclaracion(decVar);
 		}
@@ -80,6 +86,45 @@ public class Vinculacion extends Processing {
 	public void process(And exp) {
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
+	}
+
+	public void process(Or exp) {
+		exp.opnd1().processWith(this);
+		exp.opnd2().processWith(this);
+	}
+
+	public void process(Equals exp) {
+		exp.opnd1().processWith(this);
+		exp.opnd2().processWith(this);
+	}
+
+	public void process(NotEquals exp) {
+		exp.opnd1().processWith(this);
+		exp.opnd2().processWith(this);
+	}
+
+	public void process(Greater exp) {
+		exp.opnd1().processWith(this);
+		exp.opnd2().processWith(this);
+	}
+
+	public void process(GreaterEq exp) {
+		exp.opnd1().processWith(this);
+		exp.opnd2().processWith(this);
+	}
+
+	public void process(Less exp) {
+		exp.opnd1().processWith(this);
+		exp.opnd2().processWith(this);
+	}
+
+	public void process(LessEq exp) {
+		exp.opnd1().processWith(this);
+		exp.opnd2().processWith(this);
+	}
+
+	public void process(Not exp) {
+		exp.op().processWith(this);
 	}
 
 	public void process(Addition exp) {
@@ -101,12 +146,12 @@ public class Vinculacion extends Processing {
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
 	}
-	
+
 	public void process(Modulus exp) {
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
 	}
-	
+
 	public void process(StrElem exp) {
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
@@ -115,33 +160,32 @@ public class Vinculacion extends Processing {
 	public void process(Negative exp) {
 		exp.op().processWith(this);
 	}
-	
+
 	public void process(IntCast exp) {
 		exp.op().processWith(this);
 	}
-	
+
 	public void process(RealCast exp) {
 		exp.op().processWith(this);
 	}
-	
+
 	public void process(BoolCast exp) {
 		exp.op().processWith(this);
 	}
-	
+
 	public void process(UniCharCast exp) {
 		exp.op().processWith(this);
 	}
-	
+
 	public void process(UniStrCast exp) {
 		exp.op().processWith(this);
 	}
-	
+
 	public void process(Var exp) {
 		DecVar decVar = tablaDeSimbolos.get(exp.var());
 		if (decVar == null) {
 			error = true;
-			errores.msg(exp.enlaceFuente() + ":" + ERROR_ID_NO_DECLARADO + "("
-					+ exp.var() + ")");
+			errores.msg(exp.enlaceFuente() + ":" + ERROR_ID_NO_DECLARADO + "(" + exp.var() + ")");
 		} else {
 			exp.ponDeclaracion(decVar);
 		}

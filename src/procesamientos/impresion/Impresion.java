@@ -3,10 +3,16 @@ package procesamientos.impresion;
 import procesamientos.Processing;
 import programa.Program;
 import programa.Program.Division;
+import programa.Program.Equals;
 import programa.Program.IntCt;
+import programa.Program.Less;
+import programa.Program.LessEq;
 import programa.Program.BoolCt;
 import programa.Program.Multiplication;
 import programa.Program.Negative;
+import programa.Program.Not;
+import programa.Program.NotEquals;
+import programa.Program.Or;
 import programa.Program.Modulus;
 import programa.Program.RealCt;
 import programa.Program.StrElem;
@@ -21,6 +27,8 @@ import programa.Program.BoolCast;
 import programa.Program.Dec;
 import programa.Program.DecVar;
 import programa.Program.Exp;
+import programa.Program.Greater;
+import programa.Program.GreaterEq;
 import programa.Program.IAsig;
 import programa.Program.IBloque;
 import programa.Program.Inst;
@@ -148,7 +156,76 @@ public class Impresion extends Processing {
 		exp.opnd2().processWith(this);
 		System.out.print(')');
 	}
-	
+
+	public void process(Or exp) {
+		System.out.print('(');
+		exp.opnd1().processWith(this);
+		System.out.print("||");
+		printAttributes(exp);
+		exp.opnd2().processWith(this);
+		System.out.print(')');
+	}
+
+	public void process(Not exp) {
+		System.out.print('!');
+		exp.op().processWith(this);
+		printAttributes(exp);
+	}
+
+	public void process(Equals exp) {
+		System.out.print('(');
+		exp.opnd1().processWith(this);
+		System.out.print("==");
+		printAttributes(exp);
+		exp.opnd2().processWith(this);
+		System.out.print(')');
+	}
+
+	public void process(NotEquals exp) {
+		System.out.print('(');
+		exp.opnd1().processWith(this);
+		System.out.print("!=");
+		printAttributes(exp);
+		exp.opnd2().processWith(this);
+		System.out.print(')');
+	}
+
+	public void process(Greater exp) {
+		System.out.print('(');
+		exp.opnd1().processWith(this);
+		System.out.print(">");
+		printAttributes(exp);
+		exp.opnd2().processWith(this);
+		System.out.print(')');
+	}
+
+	public void process(GreaterEq exp) {
+		System.out.print('(');
+		exp.opnd1().processWith(this);
+		System.out.print(">=");
+		printAttributes(exp);
+		exp.opnd2().processWith(this);
+		System.out.print(')');
+	}
+
+	public void process(Less exp) {
+		System.out.print('(');
+		exp.opnd1().processWith(this);
+		System.out.print("<");
+		printAttributes(exp);
+		exp.opnd2().processWith(this);
+		System.out.print(')');
+	}
+
+	public void process(LessEq exp) {
+		System.out.print('(');
+		exp.opnd1().processWith(this);
+		System.out.print("<=");
+		printAttributes(exp);
+		exp.opnd2().processWith(this);
+		System.out.print(')');
+	}
+
 	public void process(StrElem exp) {
 		exp.opnd1().processWith(this);
 		System.out.print("[");
@@ -164,7 +241,7 @@ public class Impresion extends Processing {
 		exp.op().processWith(this);
 		System.out.print(')');
 	}
-	
+
 	public void process(IntCast exp) {
 		System.out.print('(');
 		System.out.print("int");
@@ -172,7 +249,7 @@ public class Impresion extends Processing {
 		printAttributes(exp);
 		exp.op().processWith(this);
 	}
-	
+
 	public void process(RealCast exp) {
 		System.out.print('(');
 		System.out.print("real");
@@ -180,7 +257,7 @@ public class Impresion extends Processing {
 		printAttributes(exp);
 		exp.op().processWith(this);
 	}
-	
+
 	public void process(BoolCast exp) {
 		System.out.print('(');
 		System.out.print("bool");
@@ -188,7 +265,7 @@ public class Impresion extends Processing {
 		printAttributes(exp);
 		exp.op().processWith(this);
 	}
-	
+
 	public void process(UniCharCast exp) {
 		System.out.print('(');
 		System.out.print("char");
@@ -196,7 +273,7 @@ public class Impresion extends Processing {
 		printAttributes(exp);
 		exp.op().processWith(this);
 	}
-	
+
 	public void process(UniStrCast exp) {
 		System.out.print('(');
 		System.out.print("string");

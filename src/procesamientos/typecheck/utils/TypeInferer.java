@@ -45,12 +45,28 @@ public class TypeInferer {
         return program.tError();
 	}
 
-    public Type inferAnd(Type op1, Type op2) {
+    public Type inferBoolBinExp(Type op1, Type op2) {
         if (compat.boolCompatible(op1, op2)) {
             return program.tBool();
         }
 
         return program.tError();
+    }
+    
+    public Type inferBoolUnExp(Type op) {
+        if (compat.isBool(op)) {
+            return program.tBool();
+        }
+
+        return program.tError();
+    }
+    
+    public Type inferComparator(Type op1, Type op2) {
+    	if(compat.comparatorCompatible(op1, op2)) {
+    		return program.tBool();
+    	}
+    	
+    	return program.tError();
     }
     
     public Type inferNegative(Type op) {

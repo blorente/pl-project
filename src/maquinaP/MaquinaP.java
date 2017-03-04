@@ -175,8 +175,7 @@ public class MaquinaP {
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
-				resul = new UniStringValue(opnd1.uniStringValue()
-						+ opnd2.uniStringValue());
+				resul = new UniStringValue(opnd1.uniStringValue() + opnd2.uniStringValue());
 			pilaEvaluacion.push(resul);
 			pc++;
 		}
@@ -305,17 +304,22 @@ public class MaquinaP {
 			return "divReal";
 		};
 	}
-	
+
 	private IMod IMOD;
-	
+
 	private class IMod implements Instruction {
 		public void execute() {
+			Valor resul;
 			Valor op2 = pilaEvaluacion.pop();
 			Valor op1 = pilaEvaluacion.pop();
-			pilaEvaluacion.push(new IntValue(op1.intValue() % op2.intValue()));
+			if (op1 == UNKNOWN || op2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new IntValue(op1.intValue() % op2.intValue());
+			pilaEvaluacion.push(resul);
 			pc++;
 		}
-		
+
 		public String toString() {
 			return "mod";
 		}
@@ -340,59 +344,687 @@ public class MaquinaP {
 			return "and";
 		};
 	}
+
+	private IOr IOR;
+
+	private class IOr implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.valorBool() || opnd2.valorBool());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "or";
+		};
+	}
+
+	private INot INOT;
+
+	private class INot implements Instruction {
+		public void execute() {
+			Valor resul;
+			Valor op = pilaEvaluacion.pop();
+			if (op == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(!op.valorBool());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "not";
+		};
+	}
+	
+	private IEqualsInt IEQUALSINT;
+	private class IEqualsInt implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.intValue() == opnd2.intValue());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "equalsInt";
+		};
+	}
+	
+	private IEqualsReal IEQUALSREAL;
+	private class IEqualsReal implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.realValue() == opnd2.realValue());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "equalsReal";
+		};
+	}
+	
+	private IEqualsBool IEQUALSBOOL;
+	private class IEqualsBool implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.valorBool() == opnd2.valorBool());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "equalsBool";
+		};
+	}
+	
+	private IEqualsChar IEQUALSCHAR;
+	private class IEqualsChar implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.valorUniChar() == opnd2.valorUniChar());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "equalsChar";
+		};
+	}
+	
+	private IEqualsString IEQUALSSTRING;
+	private class IEqualsString implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.uniStringValue().equals(opnd2.uniStringValue()));
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "equalsString";
+		};
+	}
+	
+	private INotEqualsInt INOTEQUALSINT;
+	private class INotEqualsInt implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.intValue() != opnd2.intValue());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "notEqualsInt";
+		};
+	}
+	
+	private INotEqualsReal INOTEQUALSREAL;
+	private class INotEqualsReal implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.realValue() != opnd2.realValue());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "notEqualsReal";
+		};
+	}
+	
+	private INotEqualsBool INOTEQUALSBOOL;
+	private class INotEqualsBool implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.valorBool() != opnd2.valorBool());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "notEqualsBool";
+		};
+	}
+	
+	private INotEqualsChar INOTEQUALSCHAR;
+	private class INotEqualsChar implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.valorUniChar() != opnd2.valorUniChar());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "notEqualsChar";
+		};
+	}
+	
+	private INotEqualsString INOTEQUALSSTRING;
+	private class INotEqualsString implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(!opnd1.uniStringValue().equals(opnd2.uniStringValue()));
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "notEqualsString";
+		};
+	}
+	
+	private IGreaterInt IGREATERINT;
+	private class IGreaterInt implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.intValue() > opnd2.intValue());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "greaterInt";
+		};
+	}
+	
+	private IGreaterReal IGREATERREAL;
+	private class IGreaterReal implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.realValue() > opnd2.realValue());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "greaterReal";
+		};
+	}
+	
+	private IGreaterBool IGREATERBOOL;
+	private class IGreaterBool implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue((opnd1.valorBool() == true)
+				&& (opnd2.valorBool() == false));
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "greaterBool";
+		};
+	}
+	
+	private IGreaterChar IGREATERCHAR;
+	private class IGreaterChar implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.valorUniChar() > opnd2.valorUniChar());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "greaterChar";
+		};
+	}
+	
+	private IGreaterString IGREATERSTRING;
+	private class IGreaterString implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.uniStringValue().compareTo(opnd2.uniStringValue()) > 0);
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "greaterString";
+		};
+	}
+	
+	private IGreaterEqInt IGREATEREQINT;
+	private class IGreaterEqInt implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.intValue() >= opnd2.intValue());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "greaterEqsInt";
+		};
+	}
+	
+	private IGreaterEqReal IGREATEREQREAL;
+	private class IGreaterEqReal implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.realValue() >= opnd2.realValue());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "greaterEqReal";
+		};
+	}
+	
+	private IGreaterEqBool IGREATEREQBOOL;
+	private class IGreaterEqBool implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(
+						(opnd1.valorBool() == true) || 
+						(opnd1.valorBool() == false) && (opnd2.valorBool() == false));
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "greaterEqBool";
+		};
+	}
+	
+	private IGreaterEqChar IGREATEREQCHAR;
+	private class IGreaterEqChar implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.valorUniChar() >= opnd2.valorUniChar());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "greaterEqChar";
+		};
+	}
+	
+	private IGreaterEqString IGREATEREQSTRING;
+	private class IGreaterEqString implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.uniStringValue().compareTo(opnd2.uniStringValue()) >= 0);
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "greaterEqString";
+		};
+	}
+	
+	private ILessInt ILESSINT;
+	private class ILessInt implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.intValue() < opnd2.intValue());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "lessInt";
+		};
+	}
+	
+	private ILessReal ILESSREAL;
+	private class ILessReal implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.realValue() < opnd2.realValue());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "lessReal";
+		};
+	}
+	
+	private ILessBool ILESSBOOL;
+	private class ILessBool implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue((opnd1.valorBool() == false)
+				&& (opnd2.valorBool() == true));
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "lessBool";
+		};
+	}
+	
+	private ILessChar ILESSCHAR;
+	private class ILessChar implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.valorUniChar() < opnd2.valorUniChar());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "lessChar";
+		};
+	}
+	
+	private ILessString ILESSSTRING;
+	private class ILessString implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.uniStringValue().compareTo(opnd2.uniStringValue()) < 0);
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "lessString";
+		};
+	}
+	
+	private ILessEqInt ILESSEQINT;
+	private class ILessEqInt implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.intValue() <= opnd2.intValue());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "lessEqInt";
+		};
+	}
+	
+	private ILessEqReal ILESSEQREAL;
+	private class ILessEqReal implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.realValue() <= opnd2.realValue());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "lessEqReal";
+		};
+	}
+	
+	private ILessEqBool ILESSEQBOOL;
+	private class ILessEqBool implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(
+						(opnd1.valorBool() == false) || 
+						(opnd1.valorBool() == true) && (opnd2.valorBool() == true));
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "lessEqBool";
+		};
+	}
+	
+	private ILessEqChar ILESSEQCHAR;
+	private class ILessEqChar implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.valorUniChar() <= opnd2.valorUniChar());
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "lessEqChar";
+		};
+	}
+	
+	private ILessEqString ILESSEQSTRING;
+	private class ILessEqString implements Instruction {
+		public void execute() {
+			Valor opnd2 = pilaEvaluacion.pop();
+			Valor opnd1 = pilaEvaluacion.pop();
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
+				resul = UNKNOWN;
+			else
+				resul = new BoolValue(opnd1.uniStringValue().compareTo(opnd2.uniStringValue()) <= 0);
+			pilaEvaluacion.push(resul);
+			pc++;
+		}
+
+		public String toString() {
+			return "lessEqString";
+		};
+	}
 	
 	private IStrElem ISTRELEM;
-	
+
 	private class IStrElem implements Instruction {
 
 		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
 			Valor opnd1 = pilaEvaluacion.pop();
-			int index = opnd2.intValue();
-			String source = opnd1.uniStringValue();
-			if (index >= source.length() || index < 0) {
+			Valor resul;
+			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN) {
 				pilaEvaluacion.push(UNKNOWN);
 			} else {
-				char value = source.charAt(index);
-				pilaEvaluacion.push(new UniCharValue(value));
+				int index = opnd2.intValue();
+				String source = opnd1.uniStringValue();
+				if (index >= source.length() || index < 0) {
+					pilaEvaluacion.push(UNKNOWN);
+				} else {
+					char value = source.charAt(index);
+					pilaEvaluacion.push(new UniCharValue(value));
+				}
 			}
-			pc++;			
+			pc++;
 		}
-		
+
 		public String toString() {
 			return "strElem";
 		}
-		
+
 	}
-	
+
 	private INegInt INEGINT;
-	
+
 	private class INegInt implements Instruction {
 		public void execute() {
 			Valor operand = pilaEvaluacion.pop();
-			pilaEvaluacion.push(new IntValue(-operand.intValue()));
+			if (operand == UNKNOWN) {
+				pilaEvaluacion.push(UNKNOWN);
+			} else {
+				pilaEvaluacion.push(new IntValue(-operand.intValue()));
+			}
 			pc++;
 		}
-		
+
 		public String toString() {
 			return "negInt";
-		}		
+		}
 	}
-	
+
 	private INegReal INEGREAL;
 
 	private class INegReal implements Instruction {
 		public void execute() {
 			Valor operand = pilaEvaluacion.pop();
-			pilaEvaluacion.push(new RealValue(-operand.realValue()));
+			if (operand == UNKNOWN) {
+				pilaEvaluacion.push(UNKNOWN);
+			} else {
+				pilaEvaluacion.push(new RealValue(-operand.realValue()));
+			}
 			pc++;
 		}
-		
+
 		public String toString() {
 			return "negReal";
-		}		
+		}
 	}
-	
+
 	private class IPushInt implements Instruction {
 		private int value;
 
@@ -527,15 +1159,21 @@ public class MaquinaP {
 	private class IIntToReal implements Instruction {
 		private String enlaceFuente;
 
-		public IIntToReal() {}
+		public IIntToReal() {
+		}
+
 		public IIntToReal(String enlaceFuente) {
 			this.enlaceFuente = enlaceFuente;
 		}
 
 		public void execute() {
 			Valor source = pilaEvaluacion.pop();
-			Valor casted = new RealValue((double) source.intValue());
-			pilaEvaluacion.push(casted);
+			if (source == UNKNOWN) {
+				pilaEvaluacion.push(UNKNOWN);
+			} else {
+				Valor casted = new RealValue((double) source.intValue());
+				pilaEvaluacion.push(casted);
+			}
 			pc++;
 		}
 
@@ -543,21 +1181,27 @@ public class MaquinaP {
 			return "intToReal";
 		}
 	}
-	
+
 	private IIntToBool IINTTOBOOL;
 
 	private class IIntToBool implements Instruction {
 		private String enlaceFuente;
 
-		public IIntToBool() {}
+		public IIntToBool() {
+		}
+
 		public IIntToBool(String enlaceFuente) {
 			this.enlaceFuente = enlaceFuente;
 		}
 
 		public void execute() {
 			Valor source = pilaEvaluacion.pop();
-			Valor casted = new BoolValue(source.intValue() == 0);
-			pilaEvaluacion.push(casted);
+			if (source == UNKNOWN) {
+				pilaEvaluacion.push(UNKNOWN);
+			} else {
+				Valor casted = new BoolValue(source.intValue() == 0);
+				pilaEvaluacion.push(casted);
+			}
 			pc++;
 		}
 
@@ -571,15 +1215,21 @@ public class MaquinaP {
 	private class ICharToReal implements Instruction {
 		private String enlaceFuente;
 
-		public ICharToReal() {}
+		public ICharToReal() {
+		}
+
 		public ICharToReal(String enlaceFuente) {
 			this.enlaceFuente = enlaceFuente;
 		}
 
 		public void execute() {
 			Valor source = pilaEvaluacion.pop();
-			Valor casted = new RealValue((double) source.valorUniChar());
-			pilaEvaluacion.push(casted);
+			if (source == UNKNOWN) {
+				pilaEvaluacion.push(UNKNOWN);
+			} else {
+				Valor casted = new RealValue((double) source.valorUniChar());
+				pilaEvaluacion.push(casted);
+			}
 			pc++;
 		}
 
@@ -593,15 +1243,21 @@ public class MaquinaP {
 	private class IBoolToReal implements Instruction {
 		private String enlaceFuente;
 
-		public IBoolToReal() {}
+		public IBoolToReal() {
+		}
+
 		public IBoolToReal(String enlaceFuente) {
 			this.enlaceFuente = enlaceFuente;
 		}
 
 		public void execute() {
 			Valor source = pilaEvaluacion.pop();
-			Valor casted = new RealValue(source.valorBool() ? 1.0 : 0.0);
-			pilaEvaluacion.push(casted);
+			if (source == UNKNOWN) {
+				pilaEvaluacion.push(UNKNOWN);
+			} else {
+				Valor casted = new RealValue(source.valorBool() ? 1.0 : 0.0);
+				pilaEvaluacion.push(casted);
+			}
 			pc++;
 		}
 
@@ -615,15 +1271,21 @@ public class MaquinaP {
 	private class IRealToInt implements Instruction {
 		private String enlaceFuente;
 
-		public IRealToInt() {}
+		public IRealToInt() {
+		}
+
 		public IRealToInt(String enlaceFuente) {
 			this.enlaceFuente = enlaceFuente;
 		}
 
 		public void execute() {
 			Valor source = pilaEvaluacion.pop();
-			Valor casted = new IntValue((int) source.realValue());
-			pilaEvaluacion.push(casted);
+			if (source == UNKNOWN) {
+				pilaEvaluacion.push(UNKNOWN);
+			} else {
+				Valor casted = new IntValue((int) source.realValue());
+				pilaEvaluacion.push(casted);
+			}
 			pc++;
 		}
 
@@ -637,15 +1299,21 @@ public class MaquinaP {
 	private class IBoolToInt implements Instruction {
 		private String enlaceFuente;
 
-		public IBoolToInt() {}
+		public IBoolToInt() {
+		}
+
 		public IBoolToInt(String enlaceFuente) {
 			this.enlaceFuente = enlaceFuente;
 		}
 
 		public void execute() {
 			Valor source = pilaEvaluacion.pop();
-			Valor casted = new IntValue(source.valorBool() ? 1 : 0);
-			pilaEvaluacion.push(casted);
+			if (source == UNKNOWN) {
+				pilaEvaluacion.push(UNKNOWN);
+			} else {
+				Valor casted = new IntValue(source.valorBool() ? 1 : 0);
+				pilaEvaluacion.push(casted);
+			}
 			pc++;
 		}
 
@@ -659,15 +1327,21 @@ public class MaquinaP {
 	private class ICharToInt implements Instruction {
 		private String enlaceFuente;
 
-		public ICharToInt() {}
+		public ICharToInt() {
+		}
+
 		public ICharToInt(String enlaceFuente) {
 			this.enlaceFuente = enlaceFuente;
 		}
 
 		public void execute() {
 			Valor source = pilaEvaluacion.pop();
-			Valor casted = new IntValue((int) source.valorUniChar());
-			pilaEvaluacion.push(casted);
+			if (source == UNKNOWN) {
+				pilaEvaluacion.push(UNKNOWN);
+			} else {
+				Valor casted = new IntValue((int) source.valorUniChar());
+				pilaEvaluacion.push(casted);
+			}
 			pc++;
 		}
 
@@ -681,15 +1355,21 @@ public class MaquinaP {
 	private class IIntToChar implements Instruction {
 		private String enlaceFuente;
 
-		public IIntToChar() {}
+		public IIntToChar() {
+		}
+
 		public IIntToChar(String enlaceFuente) {
 			this.enlaceFuente = enlaceFuente;
 		}
 
 		public void execute() {
 			Valor source = pilaEvaluacion.pop();
-			Valor casted = new UniCharValue((char) source.intValue());
-			pilaEvaluacion.push(casted);
+			if (source == UNKNOWN) {
+				pilaEvaluacion.push(UNKNOWN);
+			} else {
+				Valor casted = new UniCharValue((char) source.intValue());
+				pilaEvaluacion.push(casted);
+			}
 			pc++;
 		}
 
@@ -703,15 +1383,21 @@ public class MaquinaP {
 	private class ICharToString implements Instruction {
 		private String enlaceFuente;
 
-		public ICharToString() {}
+		public ICharToString() {
+		}
+
 		public ICharToString(String enlaceFuente) {
 			this.enlaceFuente = enlaceFuente;
 		}
 
 		public void execute() {
 			Valor source = pilaEvaluacion.pop();
-			Valor casted = new UniStringValue("" + source.valorUniChar());
-			pilaEvaluacion.push(casted);
+			if (source == UNKNOWN) {
+				pilaEvaluacion.push(UNKNOWN);
+			} else {
+				Valor casted = new UniStringValue("" + source.valorUniChar());
+				pilaEvaluacion.push(casted);
+			}
 			pc++;
 		}
 
@@ -719,7 +1405,6 @@ public class MaquinaP {
 			return "charToString";
 		}
 	}
-
 
 	public Instruction addInt() {
 		return IADDINT;
@@ -756,15 +1441,15 @@ public class MaquinaP {
 	public Instruction divReal() {
 		return IDIVREAL;
 	}
-	
+
 	public Instruction mod() {
 		return IMOD;
 	}
-	
+
 	public Instruction negInt() {
 		return INEGINT;
 	}
-	
+
 	public Instruction negReal() {
 		return INEGREAL;
 	}
@@ -772,7 +1457,111 @@ public class MaquinaP {
 	public Instruction and() {
 		return IAND;
 	}
+
+	public Instruction or() {
+		return IOR;
+	}
+
+	public Instruction not() {
+		return INOT;
+	}
 	
+	public Instruction equalsInt() {
+		return IEQUALSINT;
+	}
+	public Instruction equalsReal() {
+		return IEQUALSREAL;
+	}
+	public Instruction equalsBool() {
+		return IEQUALSBOOL;
+	}
+	public Instruction equalsChar() {
+		return IEQUALSCHAR;
+	}
+	public Instruction equalsString() {
+		return IEQUALSSTRING;
+	}
+	
+	public Instruction notEqualsInt() {
+		return INOTEQUALSINT;
+	}
+	public Instruction notEqualsReal() {
+		return INOTEQUALSREAL;
+	}
+	public Instruction notEqualsBool() {
+		return INOTEQUALSBOOL;
+	}
+	public Instruction notEqualsChar() {
+		return INOTEQUALSCHAR;
+	}
+	public Instruction notEqualsString() {
+		return INOTEQUALSSTRING;
+	}
+	
+	public Instruction greaterInt() {
+		return IGREATERINT;
+	}
+	public Instruction greaterReal() {
+		return IGREATERREAL;
+	}
+	public Instruction greaterBool() {
+		return IGREATERBOOL;
+	}
+	public Instruction greaterChar() {
+		return IGREATERCHAR;
+	}
+	public Instruction greaterString() {
+		return IGREATERSTRING;
+	}
+	
+	public Instruction greaterEqInt() {
+		return IGREATEREQINT;
+	}
+	public Instruction greaterEqReal() {
+		return IGREATEREQREAL;
+	}
+	public Instruction greaterEqBool() {
+		return IGREATEREQBOOL;
+	}
+	public Instruction greaterEqChar() {
+		return IGREATEREQCHAR;
+	}
+	public Instruction greaterEqString() {
+		return IGREATEREQSTRING;
+	}
+	
+	public Instruction lessInt() {
+		return ILESSINT;
+	}
+	public Instruction lessReal() {
+		return ILESSREAL;
+	}
+	public Instruction lessBool() {
+		return ILESSBOOL;
+	}
+	public Instruction lessChar() {
+		return ILESSCHAR;
+	}
+	public Instruction lessString() {
+		return ILESSSTRING;
+	}
+	
+	public Instruction lessEqInt() {
+		return ILESSEQINT;
+	}	
+	public Instruction lessEqReal() {
+		return ILESSEQREAL;
+	}
+	public Instruction lessEqBool() {
+		return ILESSEQBOOL;
+	}
+	public Instruction lessEqChar() {
+		return ILESSEQCHAR;
+	}
+	public Instruction lessEqString() {
+		return ILESSEQSTRING;
+	}
+
 	public Instruction strElem() {
 		return ISTRELEM;
 	}
@@ -812,7 +1601,7 @@ public class MaquinaP {
 	public Instruction intToReal() {
 		return IINTTOREAL;
 	}
-	
+
 	public Instruction intToBool() {
 		return IINTTOBOOL;
 	}
@@ -820,7 +1609,7 @@ public class MaquinaP {
 	public Instruction intToChar() {
 		return IINTTOCHAR;
 	}
-	
+
 	public Instruction realToInt() {
 		return IREALTOINT;
 	}
@@ -864,9 +1653,44 @@ public class MaquinaP {
 		IDIVREAL = new IDivReal();
 		ICONCAT = new IConcat();
 		IMOD = new IMod();
+
 		IAND = new IAnd();
-		ISTRELEM = new IStrElem();
+		IOR = new IOr();
+		INOT = new INot();
 		
+		IEQUALSINT = new IEqualsInt();
+		IEQUALSREAL = new IEqualsReal();
+		IEQUALSBOOL = new IEqualsBool();
+		IEQUALSCHAR = new IEqualsChar();
+		IEQUALSSTRING = new IEqualsString();
+		INOTEQUALSINT = new INotEqualsInt();
+		INOTEQUALSREAL = new INotEqualsReal();
+		INOTEQUALSBOOL = new INotEqualsBool();
+		INOTEQUALSCHAR = new INotEqualsChar();
+		INOTEQUALSSTRING = new INotEqualsString();
+		IGREATERINT = new IGreaterInt();
+		IGREATERREAL = new IGreaterReal();
+		IGREATERBOOL = new IGreaterBool();
+		IGREATERCHAR = new IGreaterChar();
+		IGREATERSTRING = new IGreaterString();
+		IGREATEREQINT = new IGreaterEqInt();
+		IGREATEREQREAL = new IGreaterEqReal();
+		IGREATEREQBOOL = new IGreaterEqBool();
+		IGREATEREQCHAR = new IGreaterEqChar();
+		IGREATEREQSTRING = new IGreaterEqString();
+		ILESSINT = new ILessInt();
+		ILESSREAL = new ILessReal();
+		ILESSBOOL = new ILessBool();
+		ILESSCHAR = new ILessChar();
+		ILESSSTRING = new ILessString();
+		ILESSEQINT = new ILessEqInt();
+		ILESSEQREAL = new ILessEqReal();
+		ILESSEQBOOL = new ILessEqBool();
+		ILESSEQCHAR = new ILessEqChar();
+		ILESSEQSTRING = new ILessEqString();		
+
+		ISTRELEM = new IStrElem();
+
 		INEGINT = new INegInt();
 		INEGREAL = new INegReal();
 
