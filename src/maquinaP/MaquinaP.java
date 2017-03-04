@@ -2,6 +2,7 @@ package maquinaP;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Stack;
 
 public class MaquinaP {
@@ -13,7 +14,7 @@ public class MaquinaP {
 			throw new UnsupportedOperationException();
 		}
 
-		public boolean valorBool() {
+		public boolean boolValue() {
 			throw new UnsupportedOperationException();
 		}
 
@@ -21,7 +22,7 @@ public class MaquinaP {
 			throw new UnsupportedOperationException();
 		}
 
-		public char valorUniChar() {
+		public char uniCharValue() {
 			throw new UnsupportedOperationException();
 		}
 
@@ -53,7 +54,7 @@ public class MaquinaP {
 			this.valor = valor;
 		}
 
-		public boolean valorBool() {
+		public boolean boolValue() {
 			return valor;
 		}
 
@@ -85,7 +86,7 @@ public class MaquinaP {
 			this.valor = valor;
 		}
 
-		public char valorUniChar() {
+		public char uniCharValue() {
 			return valor;
 		}
 
@@ -335,7 +336,7 @@ public class MaquinaP {
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
-				resul = new BoolValue(opnd1.valorBool() && opnd2.valorBool());
+				resul = new BoolValue(opnd1.boolValue() && opnd2.boolValue());
 			pilaEvaluacion.push(resul);
 			pc++;
 		}
@@ -355,7 +356,7 @@ public class MaquinaP {
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
-				resul = new BoolValue(opnd1.valorBool() || opnd2.valorBool());
+				resul = new BoolValue(opnd1.boolValue() || opnd2.boolValue());
 			pilaEvaluacion.push(resul);
 			pc++;
 		}
@@ -374,7 +375,7 @@ public class MaquinaP {
 			if (op == UNKNOWN)
 				resul = UNKNOWN;
 			else
-				resul = new BoolValue(!op.valorBool());
+				resul = new BoolValue(!op.boolValue());
 			pilaEvaluacion.push(resul);
 			pc++;
 		}
@@ -431,7 +432,7 @@ public class MaquinaP {
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
-				resul = new BoolValue(opnd1.valorBool() == opnd2.valorBool());
+				resul = new BoolValue(opnd1.boolValue() == opnd2.boolValue());
 			pilaEvaluacion.push(resul);
 			pc++;
 		}
@@ -450,7 +451,7 @@ public class MaquinaP {
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
-				resul = new BoolValue(opnd1.valorUniChar() == opnd2.valorUniChar());
+				resul = new BoolValue(opnd1.uniCharValue() == opnd2.uniCharValue());
 			pilaEvaluacion.push(resul);
 			pc++;
 		}
@@ -526,7 +527,7 @@ public class MaquinaP {
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
-				resul = new BoolValue(opnd1.valorBool() != opnd2.valorBool());
+				resul = new BoolValue(opnd1.boolValue() != opnd2.boolValue());
 			pilaEvaluacion.push(resul);
 			pc++;
 		}
@@ -545,7 +546,7 @@ public class MaquinaP {
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
-				resul = new BoolValue(opnd1.valorUniChar() != opnd2.valorUniChar());
+				resul = new BoolValue(opnd1.uniCharValue() != opnd2.uniCharValue());
 			pilaEvaluacion.push(resul);
 			pc++;
 		}
@@ -621,8 +622,8 @@ public class MaquinaP {
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
-				resul = new BoolValue((opnd1.valorBool() == true)
-				&& (opnd2.valorBool() == false));
+				resul = new BoolValue((opnd1.boolValue() == true)
+				&& (opnd2.boolValue() == false));
 			pilaEvaluacion.push(resul);
 			pc++;
 		}
@@ -641,7 +642,7 @@ public class MaquinaP {
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
-				resul = new BoolValue(opnd1.valorUniChar() > opnd2.valorUniChar());
+				resul = new BoolValue(opnd1.uniCharValue() > opnd2.uniCharValue());
 			pilaEvaluacion.push(resul);
 			pc++;
 		}
@@ -718,8 +719,8 @@ public class MaquinaP {
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(
-						(opnd1.valorBool() == true) || 
-						(opnd1.valorBool() == false) && (opnd2.valorBool() == false));
+						(opnd1.boolValue() == true) || 
+						(opnd1.boolValue() == false) && (opnd2.boolValue() == false));
 			pilaEvaluacion.push(resul);
 			pc++;
 		}
@@ -738,7 +739,7 @@ public class MaquinaP {
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
-				resul = new BoolValue(opnd1.valorUniChar() >= opnd2.valorUniChar());
+				resul = new BoolValue(opnd1.uniCharValue() >= opnd2.uniCharValue());
 			pilaEvaluacion.push(resul);
 			pc++;
 		}
@@ -814,8 +815,8 @@ public class MaquinaP {
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
-				resul = new BoolValue((opnd1.valorBool() == false)
-				&& (opnd2.valorBool() == true));
+				resul = new BoolValue((opnd1.boolValue() == false)
+				&& (opnd2.boolValue() == true));
 			pilaEvaluacion.push(resul);
 			pc++;
 		}
@@ -834,7 +835,7 @@ public class MaquinaP {
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
-				resul = new BoolValue(opnd1.valorUniChar() < opnd2.valorUniChar());
+				resul = new BoolValue(opnd1.uniCharValue() < opnd2.uniCharValue());
 			pilaEvaluacion.push(resul);
 			pc++;
 		}
@@ -911,8 +912,8 @@ public class MaquinaP {
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(
-						(opnd1.valorBool() == false) || 
-						(opnd1.valorBool() == true) && (opnd2.valorBool() == true));
+						(opnd1.boolValue() == false) || 
+						(opnd1.boolValue() == true) && (opnd2.boolValue() == true));
 			pilaEvaluacion.push(resul);
 			pc++;
 		}
@@ -931,7 +932,7 @@ public class MaquinaP {
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
-				resul = new BoolValue(opnd1.valorUniChar() <= opnd2.valorUniChar());
+				resul = new BoolValue(opnd1.uniCharValue() <= opnd2.uniCharValue());
 			pilaEvaluacion.push(resul);
 			pc++;
 		}
@@ -1227,7 +1228,7 @@ public class MaquinaP {
 			if (source == UNKNOWN) {
 				pilaEvaluacion.push(UNKNOWN);
 			} else {
-				Valor casted = new RealValue((double) source.valorUniChar());
+				Valor casted = new RealValue((double) source.uniCharValue());
 				pilaEvaluacion.push(casted);
 			}
 			pc++;
@@ -1255,7 +1256,7 @@ public class MaquinaP {
 			if (source == UNKNOWN) {
 				pilaEvaluacion.push(UNKNOWN);
 			} else {
-				Valor casted = new RealValue(source.valorBool() ? 1.0 : 0.0);
+				Valor casted = new RealValue(source.boolValue() ? 1.0 : 0.0);
 				pilaEvaluacion.push(casted);
 			}
 			pc++;
@@ -1311,7 +1312,7 @@ public class MaquinaP {
 			if (source == UNKNOWN) {
 				pilaEvaluacion.push(UNKNOWN);
 			} else {
-				Valor casted = new IntValue(source.valorBool() ? 1 : 0);
+				Valor casted = new IntValue(source.boolValue() ? 1 : 0);
 				pilaEvaluacion.push(casted);
 			}
 			pc++;
@@ -1339,7 +1340,7 @@ public class MaquinaP {
 			if (source == UNKNOWN) {
 				pilaEvaluacion.push(UNKNOWN);
 			} else {
-				Valor casted = new IntValue((int) source.valorUniChar());
+				Valor casted = new IntValue((int) source.uniCharValue());
 				pilaEvaluacion.push(casted);
 			}
 			pc++;
@@ -1395,7 +1396,7 @@ public class MaquinaP {
 			if (source == UNKNOWN) {
 				pilaEvaluacion.push(UNKNOWN);
 			} else {
-				Valor casted = new UniStringValue("" + source.valorUniChar());
+				Valor casted = new UniStringValue("" + source.uniCharValue());
 				pilaEvaluacion.push(casted);
 			}
 			pc++;
@@ -1403,6 +1404,166 @@ public class MaquinaP {
 
 		public String toString() {
 			return "charToString";
+		}
+	}
+	
+	private IReadInt IREADINT;
+	private class IReadInt implements Instruction {
+		private Scanner in;
+		
+		public IReadInt() {
+			in = new Scanner(System.in);
+		}
+		
+		public void execute() {
+			int value = in.nextInt();
+			pilaEvaluacion.push(new IntValue(value));
+			pc++;
+		}
+		
+		public String toString() {
+			return "readInt";
+		}
+ 	}
+	
+	private IReadReal IREADREAL;
+	private class IReadReal implements Instruction {
+		private Scanner in;
+		
+		public IReadReal() {
+			in = new Scanner(System.in);
+		}
+		
+		public void execute() {
+			double value = in.nextDouble();
+			pilaEvaluacion.push(new RealValue(value));
+			pc++;
+		}
+		
+		public String toString() {
+			return "readDouble";
+		}
+ 	}
+	
+	private IReadBool IREADBOOL;
+	private class IReadBool implements Instruction {
+		private Scanner in;
+		
+		public IReadBool() {
+			in = new Scanner(System.in);
+		}
+		
+		public void execute() {
+			boolean value = in.nextBoolean();
+			pilaEvaluacion.push(new BoolValue(value));
+			pc++;
+		}
+		
+		public String toString() {
+			return "readBool";
+		}
+ 	}
+	
+	private IReadChar IREADCHAR;
+	private class IReadChar implements Instruction {
+		private Scanner in;
+		
+		public IReadChar() {
+			in = new Scanner(System.in);
+		}
+		
+		public void execute() {
+			char value = in.findInLine(".").charAt(0);
+			pilaEvaluacion.push(new UniCharValue(value));
+			pc++;
+		}
+		
+		public String toString() {
+			return "readIntChar";
+		}
+ 	}
+	
+	private IReadString IREADSTRING;
+	private class IReadString implements Instruction {
+		private Scanner in;
+		
+		public IReadString() {
+			in = new Scanner(System.in);
+		}
+		
+		public void execute() {
+			String value = in.next();
+			pilaEvaluacion.push(new UniStringValue(value));
+			pc++;
+		}
+		
+		public String toString() {
+			return "readString";
+		}
+ 	}
+	
+	private IWriteString IWRITESTRING;
+	private class IWriteString implements Instruction {
+		public void execute() {
+			Valor value = pilaEvaluacion.pop();
+			System.out.println(value.uniStringValue());
+			pc++;
+		}
+		
+		public String toString() {
+			return "writeString";
+		}
+	}
+	
+	private IWriteInt IWRITEINT;
+	private class IWriteInt implements Instruction {
+		public void execute() {
+			Valor value = pilaEvaluacion.pop();
+			System.out.println(value.intValue());
+			pc++;
+		}
+		
+		public String toString() {
+			return "writeInt";
+		}
+	}
+	
+	private IWriteReal IWRITEREAL;
+	private class IWriteReal implements Instruction {
+		public void execute() {
+			Valor value = pilaEvaluacion.pop();
+			System.out.println(value.realValue());
+			pc++;
+		}
+		
+		public String toString() {
+			return "writeReal";
+		}
+	}
+	
+	private IWriteBool IWRITEBOOL;
+	private class IWriteBool implements Instruction {
+		public void execute() {
+			Valor value = pilaEvaluacion.pop();
+			System.out.println(value.boolValue());
+			pc++;
+		}
+		
+		public String toString() {
+			return "writeBool";
+		}
+	}
+	
+	private IWriteChar IWRITECHAR;
+	private class IWriteChar implements Instruction {
+		public void execute() {
+			Valor value = pilaEvaluacion.pop();
+			System.out.println(value.uniCharValue());
+			pc++;
+		}
+		
+		public String toString() {
+			return "writeChar";
 		}
 	}
 
@@ -1633,8 +1794,49 @@ public class MaquinaP {
 	public Instruction charToString() {
 		return ICHARTOSTRING;
 	}
+	
+	public Instruction readInt() {
+		return IREADINT;
+	}
+	
+	public Instruction readReal() {
+		return IREADREAL;
+	}
+	
+	public Instruction readBool() {
+		return IREADBOOL;
+	}
+	
+	public Instruction readChar() {
+		return IREADCHAR;
+	}
+	
+	public Instruction readString() {
+		return IREADSTRING;
+	}
+	
+	public Instruction writeInt() {
+		return IWRITEINT;
+	}
+	
+	public Instruction writeReal() {
+		return IWRITEREAL;
+	}
 
-	public void addInstruccion(Instruction i) {
+	public Instruction writeBool() {
+		return IWRITEBOOL;
+	}
+		
+	public Instruction writeChar() {
+		return IWRITECHAR;
+	}
+	
+	public Instruction writeString() {
+		return IWRITESTRING;
+	}
+	
+
+	public void addInstruction(Instruction i) {
 		codigoP.add(i);
 	}
 
@@ -1703,6 +1905,17 @@ public class MaquinaP {
 		ICHARTOINT = new ICharToInt();
 		ICHARTOREAL = new ICharToReal();
 		ICHARTOSTRING = new ICharToString();
+		
+		IREADINT = new IReadInt();
+		IREADREAL = new IReadReal();
+		IREADBOOL = new IReadBool();
+		IREADCHAR = new IReadChar();
+		IREADSTRING = new IReadString();
+		IWRITEINT = new IWriteInt();
+		IWRITEREAL = new IWriteReal();
+		IWRITEBOOL = new IWriteBool();
+		IWRITECHAR = new IWriteChar();
+		IWRITESTRING = new IWriteString();
 
 		UNKNOWN = new UnknownValue();
 	}

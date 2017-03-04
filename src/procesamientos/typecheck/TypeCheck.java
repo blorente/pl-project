@@ -31,6 +31,8 @@ import programa.Program.And;
 import programa.Program.BoolCast;
 import programa.Program.IAsig;
 import programa.Program.IBloque;
+import programa.Program.IRead;
+import programa.Program.IWrite;
 import programa.Program.Inst;
 import programa.Program.IntCast;
 import programa.Program.Prog;
@@ -321,6 +323,14 @@ public class TypeCheck extends Processing {
             b.ponTipo(program.tOk());
         else
             b.ponTipo(program.tError());
+    }
+    
+    public void process(IRead i) {
+    	i.ponTipo(program.tOk());
+    }
+    
+    public void process(IWrite i) {
+    	i.ponTipo(program.tOk());
     }
 
 }

@@ -247,6 +247,56 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
+	
+	public class IRead extends Inst {
+		private String variable;
+		private DecVar declaracion;
+		
+		public IRead(String refvar) {
+			this.variable = refvar;
+		}
+		
+		public String var() {
+			return variable;
+		}
+		
+		public DecVar declaracion() {
+			return declaracion;
+		}
+
+		public void ponDeclaracion(DecVar d) {
+			declaracion = d;
+		}
+		
+		public void procesaCon(Processing p) {
+			p.process(this);
+		}
+	}
+	
+	public class IWrite extends Inst {
+		private String variable;
+		private DecVar declaracion;
+		
+		public IWrite(String refvar) {
+			this.variable = refvar;
+		}
+		
+		public String var() {
+			return variable;
+		}
+
+		public DecVar declaracion() {
+			return declaracion;
+		}
+
+		public void ponDeclaracion(DecVar d) {
+			declaracion = d;
+		}
+		
+		public void procesaCon(Processing p) {
+			p.process(this);
+		}
+	}
 
 	public abstract class Exp {
 		private Type tipo;
@@ -748,6 +798,14 @@ public abstract class Program {
 
 	public Inst ibloque(Inst[] is) {
 		return new IBloque(is);
+	}
+	
+	public Inst iread(String v) {
+		return new IRead(v);
+	}
+	
+	public Inst iwrite(String v) {
+		return new IWrite(v);
 	}
 
 	public Exp var(String id) {

@@ -31,6 +31,8 @@ import programa.Program.Greater;
 import programa.Program.GreaterEq;
 import programa.Program.IAsig;
 import programa.Program.IBloque;
+import programa.Program.IRead;
+import programa.Program.IWrite;
 import programa.Program.Inst;
 import programa.Program.IntCast;
 import programa.Program.Prog;
@@ -156,7 +158,7 @@ public class Impresion extends Processing {
 		exp.opnd2().processWith(this);
 		System.out.print(')');
 	}
-
+	
 	public void process(Or exp) {
 		System.out.print('(');
 		exp.opnd1().processWith(this);
@@ -165,13 +167,13 @@ public class Impresion extends Processing {
 		exp.opnd2().processWith(this);
 		System.out.print(')');
 	}
-
+	
 	public void process(Not exp) {
 		System.out.print('!');
 		exp.op().processWith(this);
 		printAttributes(exp);
 	}
-
+	
 	public void process(Equals exp) {
 		System.out.print('(');
 		exp.opnd1().processWith(this);
@@ -180,7 +182,7 @@ public class Impresion extends Processing {
 		exp.opnd2().processWith(this);
 		System.out.print(')');
 	}
-
+	
 	public void process(NotEquals exp) {
 		System.out.print('(');
 		exp.opnd1().processWith(this);
@@ -189,7 +191,7 @@ public class Impresion extends Processing {
 		exp.opnd2().processWith(this);
 		System.out.print(')');
 	}
-
+	
 	public void process(Greater exp) {
 		System.out.print('(');
 		exp.opnd1().processWith(this);
@@ -198,7 +200,7 @@ public class Impresion extends Processing {
 		exp.opnd2().processWith(this);
 		System.out.print(')');
 	}
-
+	
 	public void process(GreaterEq exp) {
 		System.out.print('(');
 		exp.opnd1().processWith(this);
@@ -207,7 +209,7 @@ public class Impresion extends Processing {
 		exp.opnd2().processWith(this);
 		System.out.print(')');
 	}
-
+	
 	public void process(Less exp) {
 		System.out.print('(');
 		exp.opnd1().processWith(this);
@@ -216,7 +218,7 @@ public class Impresion extends Processing {
 		exp.opnd2().processWith(this);
 		System.out.print(')');
 	}
-
+	
 	public void process(LessEq exp) {
 		System.out.print('(');
 		exp.opnd1().processWith(this);
@@ -224,8 +226,8 @@ public class Impresion extends Processing {
 		printAttributes(exp);
 		exp.opnd2().processWith(this);
 		System.out.print(')');
-	}
-
+	}	
+	
 	public void process(StrElem exp) {
 		exp.opnd1().processWith(this);
 		System.out.print("[");
@@ -241,7 +243,7 @@ public class Impresion extends Processing {
 		exp.op().processWith(this);
 		System.out.print(')');
 	}
-
+	
 	public void process(IntCast exp) {
 		System.out.print('(');
 		System.out.print("int");
@@ -249,7 +251,7 @@ public class Impresion extends Processing {
 		printAttributes(exp);
 		exp.op().processWith(this);
 	}
-
+	
 	public void process(RealCast exp) {
 		System.out.print('(');
 		System.out.print("real");
@@ -257,7 +259,7 @@ public class Impresion extends Processing {
 		printAttributes(exp);
 		exp.op().processWith(this);
 	}
-
+	
 	public void process(BoolCast exp) {
 		System.out.print('(');
 		System.out.print("bool");
@@ -265,7 +267,7 @@ public class Impresion extends Processing {
 		printAttributes(exp);
 		exp.op().processWith(this);
 	}
-
+	
 	public void process(UniCharCast exp) {
 		System.out.print('(');
 		System.out.print("char");
@@ -273,7 +275,7 @@ public class Impresion extends Processing {
 		printAttributes(exp);
 		exp.op().processWith(this);
 	}
-
+	
 	public void process(UniStrCast exp) {
 		System.out.print('(');
 		System.out.print("string");
@@ -314,5 +316,15 @@ public class Impresion extends Processing {
 		System.out.print("}");
 		printAttributes(b);
 		System.out.println();
+	}
+	
+	public void process(IRead r) {
+		System.out.println("read into " + r.var());
+		printAttributes(r);
+	}
+	
+	public void process(IWrite w) {
+		System.out.println("write from " + w.var());
+		printAttributes(w);
 	}
 }

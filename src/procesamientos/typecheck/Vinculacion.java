@@ -22,6 +22,8 @@ import programa.Program.StrElem;
 import programa.Program.DecVar;
 import programa.Program.IAsig;
 import programa.Program.IBloque;
+import programa.Program.IRead;
+import programa.Program.IWrite;
 import programa.Program.And;
 import programa.Program.BoolCast;
 import programa.Program.Dec;
@@ -77,6 +79,26 @@ public class Vinculacion extends Processing {
 	public void process(IBloque b) {
 		for (Inst i : b.is())
 			i.procesaCon(this);
+	}
+	
+	public void process(IRead i) {
+		DecVar decVar = tablaDeSimbolos.get(i.var());
+		if (decVar == null) {
+			error = true;
+			errores.msg(ERROR_ID_NO_DECLARADO + "(" + i.var() + ")");
+		} else {
+			i.ponDeclaracion(decVar);
+		}
+	}
+	
+	public void process(IWrite i) {
+		DecVar decVar = tablaDeSimbolos.get(i.var());
+		if (decVar == null) {
+			error = true;
+			errores.msg(ERROR_ID_NO_DECLARADO + "(" + i.var() + ")");
+		} else {
+			i.ponDeclaracion(decVar);
+		}
 	}
 
 	public boolean error() {

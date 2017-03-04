@@ -34,6 +34,7 @@ public class Prueba extends Program {
 						decvar(tBool(), "mygteq", "linea 10"),
 						decvar(tBool(), "myless", "linea 10"),
 						decvar(tBool(), "mylteq", "linea 10"),
+						decvar(tInt(), "mynum"),
 						},
 				ibloque(new Inst[] { iasig("real", realct(10)),
 						iasig("resto", modulus(intct(3), intct(2), "linea 7"), "linea 7"),
@@ -65,6 +66,8 @@ public class Prueba extends Program {
 						iasig("mygteq", greatereq(unicharct('a'), unicharct('b'))),
 						iasig("myless", less(unistringct("aaa"), unistringct("ab"))),
 						iasig("mylteq", lesseq(realct(3), intct(4))),
+						iread("mynum"),
+						iwrite("mynum"),
 						}));
 	}
 

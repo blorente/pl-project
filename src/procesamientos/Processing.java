@@ -24,6 +24,8 @@ import programa.Program.Prog;
 import programa.Program.DecVar;
 import programa.Program.IAsig;
 import programa.Program.IBloque;
+import programa.Program.IRead;
+import programa.Program.IWrite;
 import programa.Program.And;
 import programa.Program.Int;
 import programa.Program.IntCast;
@@ -87,4 +89,6 @@ public class Processing {
 
    public void process(IAsig i) {}
    public void process(IBloque i) {}
+   public void process(IRead i) {}
+   public void process(IWrite i) {}
 }
