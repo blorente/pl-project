@@ -8,6 +8,7 @@ import programa.Program.Division;
 import programa.Program.Equals;
 import programa.Program.Greater;
 import programa.Program.GreaterEq;
+import programa.Program.IWhile;
 import programa.Program.Multiplication;
 import programa.Program.Negative;
 import programa.Program.Not;
@@ -30,7 +31,7 @@ import programa.Program.Addition;
 import programa.Program.And;
 import programa.Program.BoolCast;
 import programa.Program.IAsig;
-import programa.Program.IBloque;
+import programa.Program.IBlock;
 import programa.Program.IRead;
 import programa.Program.IWrite;
 import programa.Program.Inst;
@@ -298,7 +299,7 @@ public class TypeCheck extends Processing {
     }
 
     public void process(Prog p) {
-        p.inst().procesaCon(this);
+        p.inst().processWith(this);
         p.ponTipo(p.inst().tipo());
     }
 
@@ -313,10 +314,10 @@ public class TypeCheck extends Processing {
         }
     }
 
-    public void process(IBloque b) {
+    public void process(IBlock b) {
         boolean ok = true;
         for (Inst i : b.is()) {
-            i.procesaCon(this);
+            i.processWith(this);
             ok = ok && i.tipo().equals(program.tOk());
         }
         if (ok)
@@ -331,6 +332,16 @@ public class TypeCheck extends Processing {
     
     public void process(IWrite i) {
     	i.ponTipo(program.tOk());
+    }
+    
+    public void process(IWhile wh) {
+    	wh.getCond().processWith(this);
+    	wh.getBody().processWith(this);
+    	if (wh.getCond().tipo().equals(program.tError()) ||
+    			wh.getBody().tipo().equals(program.tError()))
+    		wh.ponTipo(program.tError());
+    	else
+    		wh.ponTipo(program.tOk());
     }
 
 }

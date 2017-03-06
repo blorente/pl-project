@@ -1,8 +1,10 @@
 package procesamientos;
 
 import programa.Program;
+import programa.Program.BinaryExp;
 import programa.Program.Division;
 import programa.Program.Equals;
+import programa.Program.IWhile;
 import programa.Program.IntCt;
 import programa.Program.Less;
 import programa.Program.LessEq;
@@ -23,7 +25,7 @@ import programa.Program.Modulus;
 import programa.Program.Prog;
 import programa.Program.DecVar;
 import programa.Program.IAsig;
-import programa.Program.IBloque;
+import programa.Program.IBlock;
 import programa.Program.IRead;
 import programa.Program.IWrite;
 import programa.Program.And;
@@ -88,7 +90,8 @@ public class Processing {
    public void process(DecVar d) {}
 
    public void process(IAsig i) {}
-   public void process(IBloque i) {}
+   public void process(IBlock i) {}
    public void process(IRead i) {}
    public void process(IWrite i) {}
+   public void process(IWhile i) {}
 }

@@ -11,6 +11,7 @@ import programa.Program.Division;
 import programa.Program.Equals;
 import programa.Program.Greater;
 import programa.Program.GreaterEq;
+import programa.Program.IWhile;
 import programa.Program.Multiplication;
 import programa.Program.Negative;
 import programa.Program.Not;
@@ -21,7 +22,7 @@ import programa.Program.RealCast;
 import programa.Program.StrElem;
 import programa.Program.DecVar;
 import programa.Program.IAsig;
-import programa.Program.IBloque;
+import programa.Program.IBlock;
 import programa.Program.IRead;
 import programa.Program.IWrite;
 import programa.Program.And;
@@ -53,7 +54,7 @@ public class Vinculacion extends Processing {
 	public void process(Prog p) {
 		for (Dec d : p.decs())
 			d.procesaCon(this);
-		p.inst().procesaCon(this);
+		p.inst().processWith(this);
 	}
 
 	public void process(DecVar d) {
@@ -76,9 +77,9 @@ public class Vinculacion extends Processing {
 		i.exp().processWith(this);
 	}
 
-	public void process(IBloque b) {
+	public void process(IBlock b) {
 		for (Inst i : b.is())
-			i.procesaCon(this);
+			i.processWith(this);
 	}
 	
 	public void process(IRead i) {
@@ -97,8 +98,13 @@ public class Vinculacion extends Processing {
 			error = true;
 			errores.msg(ERROR_ID_NO_DECLARADO + "(" + i.var() + ")");
 		} else {
-			i.ponDeclaracion(decVar);
+			i.putDeclaration(decVar);
 		}
+	}
+	
+	public void process(IWhile wh) {
+		wh.getCond().processWith(this);
+		wh.getBody().processWith(this);
 	}
 
 	public boolean error() {

@@ -25,7 +25,7 @@ import programa.Program.And;
 import programa.Program.BoolCast;
 import programa.Program.Prog;
 import programa.Program.RealCast;
-import programa.Program.IBloque;
+import programa.Program.IBlock;
 import programa.Program.IRead;
 import programa.Program.IWrite;
 import programa.Program.IntCast;
@@ -385,7 +385,7 @@ public class GeneracionDeCodigo extends Processing {
 	}
 
 	public void process(Prog p) {
-		p.inst().procesaCon(this);
+		p.inst().processWith(this);
 	}
 
 	public void process(IAsig i) {
@@ -393,9 +393,9 @@ public class GeneracionDeCodigo extends Processing {
 		maquina.addInstruction(maquina.desapilaDir(i.declaracion().dir()));
 	}
 
-	public void process(IBloque b) {
+	public void process(IBlock b) {
 		for (Program.Inst i : b.is())
-			i.procesaCon(this);
+			i.processWith(this);
 	}
 	
 	public void process(IRead r) {
@@ -414,16 +414,16 @@ public class GeneracionDeCodigo extends Processing {
 	}
 	
 	public void process(IWrite w) {
-		maquina.addInstruction(maquina.apilaDir(w.declaracion().dir()));
-		if (w.declaracion().tipoDec().equals(program.tInt())) {
+		maquina.addInstruction(maquina.apilaDir(w.declaration().dir()));
+		if (w.declaration().tipoDec().equals(program.tInt())) {
 			maquina.addInstruction(maquina.writeInt());
-		} else if (w.declaracion().tipoDec().equals(program.tReal())) {
+		} else if (w.declaration().tipoDec().equals(program.tReal())) {
 			maquina.addInstruction(maquina.writeReal());
-		}  else if (w.declaracion().tipoDec().equals(program.tBool())) {
+		}  else if (w.declaration().tipoDec().equals(program.tBool())) {
 			maquina.addInstruction(maquina.writeBool());
-		}  else if (w.declaracion().tipoDec().equals(program.tUniChar())) {
+		}  else if (w.declaration().tipoDec().equals(program.tUniChar())) {
 			maquina.addInstruction(maquina.writeChar());
-		}  else if (w.declaracion().tipoDec().equals(program.tUniString())) {
+		}  else if (w.declaration().tipoDec().equals(program.tUniString())) {
 			maquina.addInstruction(maquina.writeString());
 		}
 	}

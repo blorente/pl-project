@@ -122,7 +122,7 @@ public abstract class Program {
 			this.tipo = tipo;
 		}
 
-		public void procesaCon(Processing p) {
+		public void processWith(Processing p) {
 			p.process(this);
 		}
 	}
@@ -174,6 +174,8 @@ public abstract class Program {
 
 	public abstract class Inst {
 		private Type tipo;
+		protected int firstInstDir;
+		protected int nextInstDir;		
 
 		public Inst() {
 			tipo = null;
@@ -185,9 +187,25 @@ public abstract class Program {
 
 		public void ponTipo(Type tipo) {
 			this.tipo = tipo;
+		}		
+
+		public int dirFirst() {
+			return firstInstDir;
+		}
+		
+		public void putDirFirst(int dir) {
+			firstInstDir = dir;
 		}
 
-		public abstract void procesaCon(Processing p);
+		public int dirNext() {
+			return nextInstDir;
+		}
+
+		public void putDirNext(int dir) {
+			nextInstDir = dir;
+		}
+
+		public abstract void processWith(Processing p);
 	}
 
 	public class IAsig extends Inst {
@@ -227,15 +245,15 @@ public abstract class Program {
 			declaracion = d;
 		}
 
-		public void procesaCon(Processing p) {
+		public void processWith(Processing p) {
 			p.process(this);
 		}
 	}
 
-	public class IBloque extends Inst {
+	public class IBlock extends Inst {
 		private Inst[] is;
 
-		public IBloque(Inst[] is) {
+		public IBlock(Inst[] is) {
 			this.is = is;
 		}
 
@@ -243,23 +261,23 @@ public abstract class Program {
 			return is;
 		}
 
-		public void procesaCon(Processing p) {
+		public void processWith(Processing p) {
 			p.process(this);
 		}
 	}
-	
+
 	public class IRead extends Inst {
 		private String variable;
 		private DecVar declaracion;
-		
+
 		public IRead(String refvar) {
 			this.variable = refvar;
 		}
-		
+
 		public String var() {
 			return variable;
 		}
-		
+
 		public DecVar declaracion() {
 			return declaracion;
 		}
@@ -267,39 +285,66 @@ public abstract class Program {
 		public void ponDeclaracion(DecVar d) {
 			declaracion = d;
 		}
-		
-		public void procesaCon(Processing p) {
+
+		public void processWith(Processing p) {
 			p.process(this);
 		}
 	}
-	
+
 	public class IWrite extends Inst {
 		private String variable;
-		private DecVar declaracion;
-		
+		private DecVar declaration;
+
 		public IWrite(String refvar) {
 			this.variable = refvar;
 		}
-		
+
 		public String var() {
 			return variable;
 		}
 
-		public DecVar declaracion() {
-			return declaracion;
+		public DecVar declaration() {
+			return declaration;
 		}
 
-		public void ponDeclaracion(DecVar d) {
-			declaracion = d;
+		public void putDeclaration(DecVar d) {
+			declaration = d;
 		}
-		
-		public void procesaCon(Processing p) {
+
+		public void processWith(Processing p) {
 			p.process(this);
 		}
+	}
+
+	public class IWhile extends Inst {
+
+		private Exp cond;
+		private Inst body;
+
+		public IWhile(Exp cond, Inst body) {
+			this.cond = cond;
+			this.body = body;
+		}
+
+		public Exp getCond() {
+			return cond;
+		}
+
+		public Inst getBody() {
+			return body;
+		}
+
+		@Override
+		public void processWith(Processing p) {
+			p.process(this);
+		}
+
 	}
 
 	public abstract class Exp {
 		private Type tipo;
+		protected int firstInstDir;
+		protected int nextInstDir;
 
 		public Exp() {
 			tipo = null;
@@ -311,6 +356,22 @@ public abstract class Program {
 
 		public Type tipo() {
 			return tipo;
+		}
+
+		public int dirFirst() {
+			return firstInstDir;
+		}
+
+		public void putDirFirst(int dir) {
+			firstInstDir = dir;
+		}
+
+		public int dirNext() {
+			return nextInstDir;
+		}
+
+		public void putDirNext(int dir) {
+			nextInstDir = dir;
 		}
 
 		public abstract void processWith(Processing p);
@@ -432,7 +493,7 @@ public abstract class Program {
 		}
 	}
 
-	private abstract class BinaryExp extends Exp {
+	public abstract class BinaryExp extends Exp {
 		private Exp opnd1;
 		private Exp opnd2;
 		private String enlaceFuente;
@@ -796,16 +857,20 @@ public abstract class Program {
 		return new IAsig(v, e, enlaceFuente);
 	}
 
-	public Inst ibloque(Inst[] is) {
-		return new IBloque(is);
+	public Inst iblock(Inst[] is) {
+		return new IBlock(is);
 	}
-	
+
 	public Inst iread(String v) {
 		return new IRead(v);
 	}
-	
+
 	public Inst iwrite(String v) {
 		return new IWrite(v);
+	}
+
+	public Inst iwhile(Exp cond, Inst body) {
+		return new IWhile(cond, body);
 	}
 
 	public Exp var(String id) {

@@ -5,6 +5,7 @@ import errores.Errors;
 import maquinaP.MaquinaP;
 import procesamientos.generacioncodigo.AsignacionDirecciones;
 import procesamientos.generacioncodigo.GeneracionDeCodigo;
+import procesamientos.generacioncodigo.Tagging;
 import procesamientos.impresion.Impresion;
 import procesamientos.typecheck.TypeCheck;
 import procesamientos.typecheck.Vinculacion;
@@ -36,7 +37,7 @@ public class Prueba extends Program {
 						decvar(tBool(), "mylteq", "linea 10"),
 						decvar(tInt(), "mynum"),
 						},
-				ibloque(new Inst[] { iasig("real", realct(10)),
+				iblock(new Inst[] { iasig("real", realct(10)),
 						iasig("resto", modulus(intct(3), intct(2), "linea 7"), "linea 7"),
 						iasig("char", unicharct('b')),
 						iasig("x", 
@@ -68,6 +69,13 @@ public class Prueba extends Program {
 						iasig("mylteq", lesseq(realct(3), intct(4))),
 						iread("mynum"),
 						iwrite("mynum"),
+						iasig("mynum", intct(0)),
+						iwhile(
+								less(var("mynum"), intct(5)),
+								iblock(new Inst[] {
+										iasig("mynum", add(var("mynum"), intct(1)))
+												})
+								)
 						}));
 	}
 
@@ -76,23 +84,25 @@ public class Prueba extends Program {
 	}
 
 	public static void main(String[] args) {
-		Prueba programa = new Prueba();
+		Prueba program = new Prueba();
 		Errors errores = new Errors();
 		Impresion impresionSimple = new Impresion();
-		programa.root().procesaCon(impresionSimple);
+		program.root().processWith(impresionSimple);
 		Vinculacion vinculacion = new Vinculacion(errores);
-		programa.root().procesaCon(vinculacion);
+		program.root().processWith(vinculacion);
 		if (!vinculacion.error()) {
-			TypeCheck ctipos = new TypeCheck(programa, errores);
-			programa.root().procesaCon(ctipos);
-			Impresion impresionCompleta = new Impresion(true);
-			programa.root().procesaCon(impresionCompleta);
-			if (programa.root().tipo().equals(programa.tOk())) {
+			TypeCheck ctipos = new TypeCheck(program, errores);
+			program.root().processWith(ctipos);
+			if (program.root().tipo().equals(program.tOk())) {
 				AsignacionDirecciones asignaciondirs = new AsignacionDirecciones();
-				programa.root().procesaCon(asignaciondirs);
+				program.root().processWith(asignaciondirs);
+				Tagging tagging = new Tagging();
+				program.root().processWith(tagging);
+				Impresion impresionCompleta = new Impresion(true);
+				program.root().processWith(impresionCompleta);
 				MaquinaP maquina = new MaquinaP(asignaciondirs.tamanioDatos());
-				GeneracionDeCodigo generacioncod = new GeneracionDeCodigo(programa, maquina);
-				programa.root().procesaCon(generacioncod);
+				GeneracionDeCodigo generacioncod = new GeneracionDeCodigo(program, maquina);
+				program.root().processWith(generacioncod);
 				maquina.muestraCodigo();
 				maquina.ejecuta();
 				maquina.muestraEstado();

@@ -4,6 +4,7 @@ import procesamientos.Processing;
 import programa.Program;
 import programa.Program.Division;
 import programa.Program.Equals;
+import programa.Program.IWhile;
 import programa.Program.IntCt;
 import programa.Program.Less;
 import programa.Program.LessEq;
@@ -30,7 +31,7 @@ import programa.Program.Exp;
 import programa.Program.Greater;
 import programa.Program.GreaterEq;
 import programa.Program.IAsig;
-import programa.Program.IBloque;
+import programa.Program.IBlock;
 import programa.Program.IRead;
 import programa.Program.IWrite;
 import programa.Program.Inst;
@@ -54,7 +55,8 @@ public class Impresion extends Processing {
 
 	private void printAttributes(Exp exp) {
 		if (attributes) {
-			System.out.print("@{t:" + exp.tipo() + "}");
+			System.out.print("@{t:" + exp.tipo() + ",");
+			System.out.print("df:" + exp.dirFirst() + ",dn:" + exp.dirNext() + "}");
 		}
 	}
 
@@ -66,7 +68,8 @@ public class Impresion extends Processing {
 
 	private void printAttributes(Inst i) {
 		if (attributes) {
-			System.out.print("@{t:" + i.tipo() + "}");
+			System.out.print("@{t:" + i.tipo() + ",");
+			System.out.print("df:" + i.dirFirst() + ", dn:" + i.dirNext() + "}");
 		}
 	}
 
@@ -287,7 +290,7 @@ public class Impresion extends Processing {
 	public void process(Prog p) {
 		for (Dec d : p.decs())
 			d.procesaCon(this);
-		p.inst().procesaCon(this);
+		p.inst().processWith(this);
 		printAttributes(p);
 		System.out.println();
 	}
@@ -305,12 +308,12 @@ public class Impresion extends Processing {
 		System.out.println();
 	}
 
-	public void process(IBloque b) {
+	public void process(IBlock b) {
 		indent();
 		System.out.println("{");
 		indentation += 3;
 		for (Inst i : b.is())
-			i.procesaCon(this);
+			i.processWith(this);
 		indentation -= 3;
 		indent();
 		System.out.print("}");
@@ -319,12 +322,23 @@ public class Impresion extends Processing {
 	}
 	
 	public void process(IRead r) {
+		indent();
 		System.out.println("read into " + r.var());
 		printAttributes(r);
 	}
 	
 	public void process(IWrite w) {
+		indent();
 		System.out.println("write from " + w.var());
 		printAttributes(w);
+	}
+	
+	public void process(IWhile wh) {
+		indent();
+		System.out.print("while(");
+		wh.getCond().processWith(this);
+		System.out.print(")");
+		wh.getBody().processWith(this);
+		printAttributes(wh);
 	}
 }
