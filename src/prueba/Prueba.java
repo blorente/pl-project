@@ -74,7 +74,28 @@ public class Prueba extends Program {
 								iblock(new Inst[] {
 										iasig("mynum", add(var("mynum"), intct(1)))
 												})
-								)
+								),
+						iifthen(
+								less(var("mynum"), intct(6)),
+								iblock(new Inst[] {
+										iasig("mynum", add(var("mynum"), intct(1)))
+								})
+						),
+						iifthenelse(
+								less(var("mynum"), intct(6)),
+								iblock(new Inst[] {
+										iasig("mynum", add(var("mynum"), intct(1)))
+								}),
+								iblock(new Inst[] {
+										iasig("mynum", subtract(var("mynum"), intct(1)))
+								})
+						),
+						dowhile(
+								iblock(new Inst[] {
+										iasig("mynum", add(var("mynum"), intct(1)))
+								}),
+								less(var("mynum"), intct(10))
+						)
 						}));
 	}
 

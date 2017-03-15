@@ -9,6 +9,9 @@ import programa.Program.Equals;
 import programa.Program.Greater;
 import programa.Program.GreaterEq;
 import programa.Program.IWhile;
+import programa.Program.IDoWhile;
+import programa.Program.IIfThen;
+import programa.Program.IIfThenElse;
 import programa.Program.Multiplication;
 import programa.Program.Negative;
 import programa.Program.Not;
@@ -337,11 +340,43 @@ public class TypeCheck extends Processing {
     public void process(IWhile wh) {
     	wh.getCond().processWith(this);
     	wh.getBody().processWith(this);
-    	if (wh.getCond().tipo().equals(program.tError()) ||
+    	if (!wh.getCond().tipo().equals(program.tBool()) ||
     			wh.getBody().tipo().equals(program.tError()))
     		wh.ponTipo(program.tError());
     	else
     		wh.ponTipo(program.tOk());
+    }
+
+    public void process(IDoWhile wh) {
+        wh.getBody().processWith(this);
+        wh.getCond().processWith(this);
+        if (!wh.getCond().tipo().equals(program.tBool()) ||
+                wh.getBody().tipo().equals(program.tError()))
+            wh.ponTipo(program.tError());
+        else
+            wh.ponTipo(program.tOk());
+    }
+
+    public void process(IIfThen i) {
+        i.getCond().processWith(this);
+        i.getThen().processWith(this);
+        if (!i.getCond().tipo().equals(program.tBool()) ||
+                i.getThen().tipo().equals(program.tError()))
+            i.ponTipo(program.tError());
+        else
+            i.ponTipo(program.tOk());
+    }
+
+    public void process(IIfThenElse i) {
+        i.getCond().processWith(this);
+        i.getThen().processWith(this);
+        i.getElse().processWith(this);
+        if (!i.getCond().tipo().equals(program.tBool()) ||
+                i.getThen().tipo().equals(program.tError()) ||
+                i.getElse().tipo().equals(program.tError()))
+            i.ponTipo(program.tError());
+        else
+            i.ponTipo(program.tOk());
     }
 
 }

@@ -5,6 +5,9 @@ import programa.Program.BinaryExp;
 import programa.Program.Division;
 import programa.Program.Equals;
 import programa.Program.IWhile;
+import programa.Program.IDoWhile;
+import programa.Program.IIfThen;
+import programa.Program.IIfThenElse;
 import programa.Program.IntCt;
 import programa.Program.Less;
 import programa.Program.LessEq;
@@ -94,4 +97,7 @@ public class Processing {
    public void process(IRead i) {}
    public void process(IWrite i) {}
    public void process(IWhile i) {}
+   public void process(IDoWhile i) {}
+   public void process(IIfThen i) {}
+   public void process(IIfThenElse i) {}
 }

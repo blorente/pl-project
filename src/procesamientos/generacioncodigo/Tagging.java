@@ -14,6 +14,9 @@ import programa.Program.IAsig;
 import programa.Program.IBlock;
 import programa.Program.IRead;
 import programa.Program.IWhile;
+import programa.Program.IDoWhile;
+import programa.Program.IIfThen;
+import programa.Program.IIfThenElse;
 import programa.Program.IWrite;
 import programa.Program.Inst;
 import programa.Program.IntCast;
@@ -198,6 +201,38 @@ public class Tagging extends Processing {
 		i.getBody().processWith(this);
 		// ir_a(...)
 		etq++;
+		i.putDirNext(etq);
+	}
+
+	public void process(IDoWhile i) {
+		i.putDirFirst(etq);
+		i.getBody().processWith(this);
+		i.getCond().processWith(this);
+		// ir_f(...)
+		etq++;
+		// ir_a(...)
+		etq++;
+		i.putDirNext(etq);
+	}
+
+	public void process(IIfThen i) {
+		i.putDirFirst(etq);
+		i.getCond().processWith(this);
+		// ir_f(...)
+		etq++;
+		i.getThen().processWith(this);
+		i.putDirNext(etq);
+	}
+
+	public void process(IIfThenElse i) {
+		i.putDirFirst(etq);
+		i.getCond().processWith(this);
+		// ir_f(...)
+		etq++;
+		i.getThen().processWith(this);
+		// ir_a(...)
+		etq++;
+		i.getElse().processWith(this);
 		i.putDirNext(etq);
 	}
 

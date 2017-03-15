@@ -12,6 +12,9 @@ import programa.Program.Equals;
 import programa.Program.Greater;
 import programa.Program.GreaterEq;
 import programa.Program.IWhile;
+import programa.Program.IDoWhile;
+import programa.Program.IIfThen;
+import programa.Program.IIfThenElse;
 import programa.Program.Multiplication;
 import programa.Program.Negative;
 import programa.Program.Not;
@@ -105,6 +108,22 @@ public class Vinculacion extends Processing {
 	public void process(IWhile wh) {
 		wh.getCond().processWith(this);
 		wh.getBody().processWith(this);
+	}
+
+	public void process(IDoWhile i) {
+		i.getCond().processWith(this);
+		i.getBody().processWith(this);
+	}
+
+	public void process(IIfThen i) {
+		i.getCond().processWith(this);
+		i.getThen().processWith(this);
+	}
+
+	public void process(IIfThenElse i) {
+		i.getCond().processWith(this);
+		i.getThen().processWith(this);
+		i.getElse().processWith(this);
 	}
 
 	public boolean error() {

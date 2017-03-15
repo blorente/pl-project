@@ -341,6 +341,86 @@ public abstract class Program {
 
 	}
 
+	public class IIfThen extends Inst {
+
+		private Exp cond;
+		private Inst body;
+
+		public IIfThen(Exp cond, Inst body) {
+			this.cond = cond;
+			this.body = body;
+		}
+
+		public Exp getCond() {
+			return cond;
+		}
+
+		public Inst getThen() {
+			return body;
+		}
+
+		@Override
+		public void processWith(Processing p) {
+			p.process(this);
+		}
+
+	}
+
+	public class IIfThenElse extends Inst {
+
+		private Exp cond;
+		private Inst thenBlock;
+		private Inst elseBlock;
+
+		public IIfThenElse(Exp cond, Inst thenBlock, Inst elseBlock) {
+			this.cond = cond;
+			this.thenBlock = thenBlock;
+			this.elseBlock = elseBlock;
+		}
+
+		public Exp getCond() {
+			return cond;
+		}
+
+		public Inst getThen() {
+			return thenBlock;
+		}
+		public Inst getElse() {
+			return elseBlock;
+		}
+
+		@Override
+		public void processWith(Processing p) {
+			p.process(this);
+		}
+
+	}
+
+	public class IDoWhile extends Inst {
+
+		private Exp cond;
+		private Inst body;
+
+		public IDoWhile(Exp cond, Inst body) {
+			this.cond = cond;
+			this.body = body;
+		}
+
+		public Exp getCond() {
+			return cond;
+		}
+
+		public Inst getBody() {
+			return body;
+		}
+
+		@Override
+		public void processWith(Processing p) {
+			p.process(this);
+		}
+
+	}
+
 	public abstract class Exp {
 		private Type tipo;
 		protected int firstInstDir;
@@ -871,6 +951,18 @@ public abstract class Program {
 
 	public Inst iwhile(Exp cond, Inst body) {
 		return new IWhile(cond, body);
+	}
+
+	public Inst iifthen(Exp cond, Inst body) {
+		return new IIfThen(cond, body);
+	}
+
+	public Inst iifthenelse(Exp cond, Inst thenBl, Inst elseBl) {
+		return new IIfThenElse(cond, thenBl, elseBl);
+	}
+
+	public Inst dowhile(Inst body, Exp cond) {
+		return new IDoWhile(cond, body);
 	}
 
 	public Exp var(String id) {

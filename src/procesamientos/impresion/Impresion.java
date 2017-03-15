@@ -5,6 +5,9 @@ import programa.Program;
 import programa.Program.Division;
 import programa.Program.Equals;
 import programa.Program.IWhile;
+import programa.Program.IDoWhile;
+import programa.Program.IIfThen;
+import programa.Program.IIfThenElse;
 import programa.Program.IntCt;
 import programa.Program.Less;
 import programa.Program.LessEq;
@@ -340,5 +343,35 @@ public class Impresion extends Processing {
 		System.out.print(")");
 		wh.getBody().processWith(this);
 		printAttributes(wh);
+	}
+
+	public void process(IDoWhile i) {
+		indent();
+		System.out.print("do");
+		i.getBody().processWith(this);
+		indent();System.out.print("while (");
+		i.getCond().processWith(this);
+		System.out.print(")\n");
+		printAttributes(i);
+	}
+
+	public void process(IIfThen i) {
+		indent();
+		System.out.print("if (");
+		i.getCond().processWith(this);
+		System.out.print(") then ");
+		i.getThen().processWith(this);
+		printAttributes(i);
+	}
+
+	public void process(IIfThenElse i) {
+		indent();
+		System.out.print("if (");
+		i.getCond().processWith(this);
+		System.out.print(") then");
+		i.getThen().processWith(this);
+		indent(); System.out.print("else");
+		i.getElse().processWith(this);
+		printAttributes(i);
 	}
 }

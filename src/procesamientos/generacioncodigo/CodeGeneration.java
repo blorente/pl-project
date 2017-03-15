@@ -37,6 +37,9 @@ import programa.Program.UniStrCast;
 import programa.Program.UniStringCt;
 import programa.Program.Var;
 import programa.Program.IWhile;
+import programa.Program.IDoWhile;
+import programa.Program.IIfThen;
+import programa.Program.IIfThenElse;
 
 public class CodeGeneration extends Processing {
 	private MaquinaP maquina;
@@ -434,5 +437,26 @@ public class CodeGeneration extends Processing {
 		maquina.addInstruction(maquina.branchIfFalse(wh.dirNext()));
 		wh.getBody().processWith(this);
 		maquina.addInstruction(maquina.branch(wh.dirFirst()));
+	}
+
+	public void process(IDoWhile i) {
+		i.getBody().processWith(this);
+		i.getCond().processWith(this);
+		maquina.addInstruction(maquina.branchIfFalse(i.dirNext()));
+		maquina.addInstruction(maquina.branch(i.dirFirst()));
+	}
+
+	public void process(IIfThen i) {
+		i.getCond().processWith(this);
+		maquina.addInstruction(maquina.branchIfFalse(i.dirNext()));
+		i.getThen().processWith(this);
+	}
+
+	public void process(IIfThenElse i) {
+		i.getCond().processWith(this);
+		maquina.addInstruction(maquina.branchIfFalse(i.getElse().dirFirst()));
+		i.getThen().processWith(this);
+		maquina.addInstruction(maquina.branch(i.dirNext()));
+		i.getElse().processWith(this);
 	}
 }
