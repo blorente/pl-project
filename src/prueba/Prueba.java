@@ -4,7 +4,7 @@ package prueba;
 import errores.Errors;
 import maquinaP.MaquinaP;
 import procesamientos.generacioncodigo.AsignacionDirecciones;
-import procesamientos.generacioncodigo.GeneracionDeCodigo;
+import procesamientos.generacioncodigo.CodeGeneration;
 import procesamientos.generacioncodigo.Tagging;
 import procesamientos.impresion.Impresion;
 import procesamientos.typecheck.TypeCheck;
@@ -37,7 +37,7 @@ public class Prueba extends Program {
 						decvar(tBool(), "mylteq", "linea 10"),
 						decvar(tInt(), "mynum"),
 						},
-				iblock(new Inst[] { iasig("real", realct(10)),
+				iblock(new Inst[] { iasig("real", add(intct(1),realct(10))),
 						iasig("resto", modulus(intct(3), intct(2), "linea 7"), "linea 7"),
 						iasig("char", unicharct('b')),
 						iasig("x", 
@@ -67,8 +67,7 @@ public class Prueba extends Program {
 						iasig("mygteq", greatereq(unicharct('a'), unicharct('b'))),
 						iasig("myless", less(unistringct("aaa"), unistringct("ab"))),
 						iasig("mylteq", lesseq(realct(3), intct(4))),
-						iread("mynum"),
-						iwrite("mynum"),
+						iwrite("ichar"),
 						iasig("mynum", intct(0)),
 						iwhile(
 								less(var("mynum"), intct(5)),
@@ -96,12 +95,12 @@ public class Prueba extends Program {
 			if (program.root().tipo().equals(program.tOk())) {
 				AsignacionDirecciones asignaciondirs = new AsignacionDirecciones();
 				program.root().processWith(asignaciondirs);
-				Tagging tagging = new Tagging();
+				Tagging tagging = new Tagging(program);
 				program.root().processWith(tagging);
 				Impresion impresionCompleta = new Impresion(true);
 				program.root().processWith(impresionCompleta);
 				MaquinaP maquina = new MaquinaP(asignaciondirs.tamanioDatos());
-				GeneracionDeCodigo generacioncod = new GeneracionDeCodigo(program, maquina);
+				CodeGeneration generacioncod = new CodeGeneration(program, maquina);
 				program.root().processWith(generacioncod);
 				maquina.muestraCodigo();
 				maquina.ejecuta();

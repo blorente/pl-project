@@ -731,7 +731,7 @@ public abstract class Program {
 		}
 	}
 
-	private abstract class UnaryExp extends Exp {
+	public abstract class UnaryExp extends Exp {
 		private Exp op;
 		private String enlaceFuente;
 

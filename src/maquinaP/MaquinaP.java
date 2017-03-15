@@ -1567,6 +1567,45 @@ public class MaquinaP {
 		}
 	}
 
+	private class IBranchIfFalse implements Instruction {
+
+		int target;
+
+		public IBranchIfFalse(int target) {
+			this.target = target;
+		}
+
+		public void execute() {
+			Valor value = pilaEvaluacion.pop();
+			if (!value.boolValue()) {
+				pc = target;
+			} else {
+				pc++;
+			}
+		}
+
+		public String toString() {
+			return "branchIfFalse(" + target + ")";
+		}
+	}
+
+	private class IBranch implements Instruction {
+
+		int target;
+
+		public IBranch(int target) {
+			this.target = target;
+		}
+
+		public void execute() {
+			pc = target;
+		}
+
+		public String toString() {
+			return "branch(" + target + ")";
+		}
+	}
+
 	public Instruction addInt() {
 		return IADDINT;
 	}
@@ -1834,7 +1873,14 @@ public class MaquinaP {
 	public Instruction writeString() {
 		return IWRITESTRING;
 	}
-	
+
+	public Instruction branchIfFalse(int dir) {
+		return new IBranchIfFalse(dir);
+	}
+
+	public Instruction branch(int dir) {
+		return new IBranch(dir);
+	}
 
 	public void addInstruction(Instruction i) {
 		codigoP.add(i);

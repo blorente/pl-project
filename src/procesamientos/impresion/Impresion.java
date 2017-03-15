@@ -303,8 +303,8 @@ public class Impresion extends Processing {
 	public void process(IAsig i) {
 		indent();
 		System.out.print(i.var() + "=");
-		i.exp().processWith(this);
 		printAttributes(i);
+		i.exp().processWith(this);
 		System.out.println();
 	}
 

@@ -36,12 +36,13 @@ import programa.Program.UniCharCt;
 import programa.Program.UniStrCast;
 import programa.Program.UniStringCt;
 import programa.Program.Var;
+import programa.Program.IWhile;
 
-public class GeneracionDeCodigo extends Processing {
+public class CodeGeneration extends Processing {
 	private MaquinaP maquina;
 	private Program program;
 
-	public GeneracionDeCodigo(Program program, MaquinaP maquina) {
+	public CodeGeneration(Program program, MaquinaP maquina) {
 		this.program = program;
 		this.maquina = maquina;
 	}
@@ -426,5 +427,12 @@ public class GeneracionDeCodigo extends Processing {
 		}  else if (w.declaration().tipoDec().equals(program.tUniString())) {
 			maquina.addInstruction(maquina.writeString());
 		}
+	}
+
+	public void process(IWhile wh) {
+		wh.getCond().processWith(this);
+		maquina.addInstruction(maquina.branchIfFalse(wh.dirNext()));
+		wh.getBody().processWith(this);
+		maquina.addInstruction(maquina.branch(wh.dirFirst()));
 	}
 }

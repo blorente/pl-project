@@ -1,6 +1,7 @@
 package procesamientos.generacioncodigo;
 
 import procesamientos.Processing;
+import programa.Program;
 import programa.Program.Addition;
 import programa.Program.And;
 import programa.Program.BoolCast;
@@ -35,11 +36,16 @@ import programa.Program.UniCharCt;
 import programa.Program.UniStrCast;
 import programa.Program.UniStringCt;
 import programa.Program.Var;
+import programa.Program.Type;
+import programa.Program.BinaryExp;
+import programa.Program.UnaryExp;
 
 public class Tagging extends Processing {
 	private int etq;
+	private Program program;
 
-	public Tagging() {
+	public Tagging(Program program) {
+		this.program = program;
 		etq = 0;
 	}
 	
@@ -79,35 +85,21 @@ public class Tagging extends Processing {
 	}
 
 	public void process(Addition exp) {
-		exp.putDirFirst(etq);
-		exp.opnd1().processWith(this);
-		exp.opnd2().processWith(this);
-		exp.putDirNext(++etq);
+		tagBinaryNumericExpression(exp);
 	}
 	public void process(Subtraction exp) {
-		exp.putDirFirst(etq);
-		exp.opnd1().processWith(this);
-		exp.opnd2().processWith(this);
-		exp.putDirNext(++etq);
+		tagBinaryNumericExpression(exp);
 	}
+
 	public void process(Multiplication exp) {
-		exp.putDirFirst(etq);
-		exp.opnd1().processWith(this);
-		exp.opnd2().processWith(this);
-		exp.putDirNext(++etq);
+		tagBinaryNumericExpression(exp);
 	}
 	public void process(Division exp) {
-		exp.putDirFirst(etq);
-		exp.opnd1().processWith(this);
-		exp.opnd2().processWith(this);
-		exp.putDirNext(++etq);
+		tagBinaryNumericExpression(exp);
 	}
 	
 	public void process(Modulus exp) {
-		exp.putDirFirst(etq);
-		exp.opnd1().processWith(this);
-		exp.opnd2().processWith(this);
-		exp.putDirNext(++etq);
+		tagBinaryNumericExpression(exp);
 	}	
 
 	public void process(And exp) {
@@ -131,44 +123,26 @@ public class Tagging extends Processing {
 	}
 	
 	public void process(Equals exp) {
-		exp.putDirFirst(etq);
-		exp.opnd1().processWith(this);
-		exp.opnd2().processWith(this);
-		exp.putDirNext(++etq);
+		tagBinaryNumericExpression(exp);
 	}
 	
 	public void process(NotEquals exp) {
-		exp.putDirFirst(etq);
-		exp.opnd1().processWith(this);
-		exp.opnd2().processWith(this);
-		exp.putDirNext(++etq);
+		tagBinaryNumericExpression(exp);
 	}
 	
 	public void process(Greater exp) {
-		exp.putDirFirst(etq);
-		exp.opnd1().processWith(this);
-		exp.opnd2().processWith(this);
-		exp.putDirNext(++etq);
+		tagBinaryNumericExpression(exp);
 	}
 	
 	public void process(GreaterEq exp) {
-		exp.putDirFirst(etq);
-		exp.opnd1().processWith(this);
-		exp.opnd2().processWith(this);
-		exp.putDirNext(++etq);
+		tagBinaryNumericExpression(exp);
 	}
 	
 	public void process(Less exp) {
-		exp.putDirFirst(etq);
-		exp.opnd1().processWith(this);
-		exp.opnd2().processWith(this);
-		exp.putDirNext(++etq);
+		tagBinaryNumericExpression(exp);
 	}
 	public void process(LessEq exp) {
-		exp.putDirFirst(etq);
-		exp.opnd1().processWith(this);
-		exp.opnd2().processWith(this);
-		exp.putDirNext(++etq);
+		tagBinaryNumericExpression(exp);
 	}
 	
 	public void process(StrElem exp) {
@@ -184,30 +158,21 @@ public class Tagging extends Processing {
 		exp.putDirNext(++etq);
 	}
 	public void process(IntCast exp) {
-		exp.putDirFirst(etq);
-		exp.op().processWith(this);
-		exp.putDirNext(++etq);
+		tagCastExpression(exp);
 	}
+
 	public void process(RealCast exp) {
-		exp.putDirFirst(etq);
-		exp.op().processWith(this);
-		exp.putDirNext(++etq);
+		tagCastExpression(exp);
 	}
 	public void process(BoolCast exp) {
-		exp.putDirFirst(etq);
-		exp.op().processWith(this);
-		exp.putDirNext(++etq);
+		tagCastExpression(exp);
 	}
 	public void process(UniCharCast exp) {
-		exp.putDirFirst(etq);
-		exp.op().processWith(this);
-		exp.putDirNext(++etq);
+		tagCastExpression(exp);
 	}
 
 	public void process(UniStrCast exp) {
-		exp.putDirFirst(etq);
-		exp.op().processWith(this);
-		exp.putDirNext(++etq);
+		tagCastExpression(exp);
 	}
 
 	public void process(IAsig i) {
@@ -219,8 +184,9 @@ public class Tagging extends Processing {
 
 	public void process(IBlock b) {
 		b.putDirFirst(etq);
-		for (Inst i : b.is())
+		for (Inst i : b.is()) {
 			i.processWith(this);
+		}
 		b.putDirNext(etq);
 	}
 
@@ -237,11 +203,35 @@ public class Tagging extends Processing {
 
 	public void process(IRead i){
 		i.putDirFirst(etq);
+		etq++;
 		i.putDirNext(++etq);
 	}
 	
 	public void process(IWrite i){
 		i.putDirFirst(etq);
+		etq++;
 		i.putDirNext(++etq);
+	}
+
+	private void tagBinaryNumericExpression(BinaryExp exp) {
+		Type t1 = exp.opnd1().tipo();
+		Type t2 = exp.opnd2().tipo();
+		exp.putDirFirst(etq);
+		exp.opnd1().processWith(this);
+		if (t1.equals(program.tInt()) && t2.equals(program.tReal())) {
+			etq++;
+		}
+		exp.opnd2().processWith(this);
+		if (t1.equals(program.tReal()) && t2.equals(program.tInt())) {
+			etq++;
+		}
+		exp.putDirNext(++etq);
+	}
+
+	private void tagCastExpression(UnaryExp exp) {
+		exp.putDirFirst(etq);
+		exp.op().processWith(this);
+		if (!exp.op().tipo().equals(exp.tipo()))
+			exp.putDirNext(++etq);
 	}
 }
