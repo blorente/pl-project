@@ -40,6 +40,8 @@ import programa.Program.IWhile;
 import programa.Program.IDoWhile;
 import programa.Program.IIfThen;
 import programa.Program.IIfThenElse;
+import programa.Program.ISwitch;
+import programa.Program.ICase;
 
 public class CodeGeneration extends Processing {
 	private MaquinaP maquina;
@@ -458,5 +460,33 @@ public class CodeGeneration extends Processing {
 		i.getThen().processWith(this);
 		maquina.addInstruction(maquina.branch(i.dirNext()));
 		i.getElse().processWith(this);
+	}
+
+	public void process(ISwitch i) {
+		i.getCond().processWith(this);
+		for (ICase c : i.getCases()) {
+			maquina.addInstruction(maquina.dup());
+			c.processWith(this);
+			maquina.addInstruction(maquina.branch(i.dirNext()));
+		}
+		maquina.addInstruction(maquina.pop());
+		if (i.hasDefault()) {
+			i.getDefault().processWith(this);
+		}
+	}
+
+	public void process(ICase i) {
+		i.getExp().processWith(this);
+		if (i.getExp().tipo().equals(program.tReal())) {
+			maquina.addInstruction(maquina.equalsReal());
+		} else if (i.getExp().tipo().equals(program.tInt())) {
+			maquina.addInstruction(maquina.equalsInt());
+		} else if (i.getExp().tipo().equals(program.tBool())) {
+			maquina.addInstruction(maquina.equalsBool());
+		} else if (i.getExp().tipo().equals(program.tUniChar())) {
+			maquina.addInstruction(maquina.equalsChar());
+		}
+		maquina.addInstruction(maquina.branchIfFalse(i.dirNext() + 1));
+		i.getBody().processWith(this);
 	}
 }

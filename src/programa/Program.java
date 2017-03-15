@@ -2,6 +2,9 @@ package programa;
 
 import procesamientos.Processing;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Program {
 	private final Type TINT;
 	private final Type TBOOL;
@@ -175,7 +178,7 @@ public abstract class Program {
 	public abstract class Inst {
 		private Type tipo;
 		protected int firstInstDir;
-		protected int nextInstDir;		
+		protected int nextInstDir;
 
 		public Inst() {
 			tipo = null;
@@ -187,12 +190,12 @@ public abstract class Program {
 
 		public void ponTipo(Type tipo) {
 			this.tipo = tipo;
-		}		
+		}
 
 		public int dirFirst() {
 			return firstInstDir;
 		}
-		
+
 		public void putDirFirst(int dir) {
 			firstInstDir = dir;
 		}
@@ -409,7 +412,6 @@ public abstract class Program {
 		public Exp getCond() {
 			return cond;
 		}
-
 		public Inst getBody() {
 			return body;
 		}
@@ -420,6 +422,78 @@ public abstract class Program {
 		}
 
 	}
+
+	public class ISwitch extends Inst {
+
+	    private List<ICase> cases;
+	    private Exp cond;
+	    private Inst defaul;
+        private boolean hasDefault;
+
+        public ISwitch(Exp cond, Inst defaul, ICase[] cases) {
+            this.cond = cond;
+            this.defaul = defaul;
+            hasDefault = true;
+            this.cases = new ArrayList<>();
+            for (ICase c : cases) {
+                this.cases.add(c);
+            }
+        }
+
+        public ISwitch(Exp cond, ICase[] cases) {
+            this.cond = cond;
+            this.defaul = null;
+            hasDefault = false;
+            this.cases = new ArrayList<>();
+            for (ICase c : cases) {
+                this.cases.add(c);
+            }
+        }
+
+        public List<ICase> getCases() {
+            return cases;
+        }
+
+        public Exp getCond() {
+            return cond;
+        }
+
+        public Inst getDefault() {
+            return defaul;
+        }
+
+        @Override
+        public void processWith(Processing p) {
+            p.process(this);
+        }
+
+        public boolean hasDefault() {
+            return hasDefault;
+        }
+    }
+
+	public class ICase extends Inst {
+
+        private Exp exp;
+        private Inst body;
+
+        public ICase(Exp cond, Inst body) {
+            this.exp = cond;
+            this.body = body;
+        }
+
+        public Exp getExp() {
+            return exp;
+        }
+        public Inst getBody() {
+            return body;
+        }
+
+        @Override
+        public void processWith(Processing p) {
+            p.process(this);
+        }
+    }
 
 	public abstract class Exp {
 		private Type tipo;
@@ -961,9 +1035,21 @@ public abstract class Program {
 		return new IIfThenElse(cond, thenBl, elseBl);
 	}
 
-	public Inst dowhile(Inst body, Exp cond) {
+	public Inst idowhile(Inst body, Exp cond) {
 		return new IDoWhile(cond, body);
 	}
+
+	public Inst iswitch(Exp exp, Inst defaul, ICase...cases) {
+	    return new ISwitch(exp, defaul, cases);
+    }
+
+    public Inst iswitch(Exp exp, ICase...cases) {
+        return new ISwitch(exp, cases);
+    }
+
+    public ICase icase(Exp exp, Inst body) {
+	    return new ICase(exp, body);
+    }
 
 	public Exp var(String id) {
 		return new Var(id);

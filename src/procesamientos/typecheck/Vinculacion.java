@@ -40,6 +40,8 @@ import programa.Program.Subtraction;
 import programa.Program.UniCharCast;
 import programa.Program.UniStrCast;
 import programa.Program.Var;
+import programa.Program.ISwitch;
+import programa.Program.ICase;
 
 public class Vinculacion extends Processing {
 	private final static String ERROR_ID_DUPLICADO = "Identificador ya declarado";
@@ -124,6 +126,20 @@ public class Vinculacion extends Processing {
 		i.getCond().processWith(this);
 		i.getThen().processWith(this);
 		i.getElse().processWith(this);
+	}
+
+	public void process(ISwitch i) {
+		i.getCond().processWith(this);
+		for (Inst c : i.getCases())
+			c.processWith(this);
+		if (i.hasDefault()) {
+			i.getDefault().processWith(this);
+		}
+	}
+
+	public void process(ICase i) {
+		i.getExp().processWith(this);
+		i.getBody().processWith(this);
 	}
 
 	public boolean error() {

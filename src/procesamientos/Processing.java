@@ -46,6 +46,8 @@ import programa.Program.Greater;
 import programa.Program.GreaterEq;
 import programa.Program.Ok;
 import programa.Program.Or;
+import programa.Program.ISwitch;
+import programa.Program.ICase;
 
 public class Processing {
    public void process(IntCt exp) {}
@@ -100,4 +102,6 @@ public class Processing {
    public void process(IDoWhile i) {}
    public void process(IIfThen i) {}
    public void process(IIfThenElse i) {}
+   public void process(ISwitch i) {}
+   public void process(ICase i) {}
 }

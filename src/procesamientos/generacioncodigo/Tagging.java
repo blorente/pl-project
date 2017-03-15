@@ -42,6 +42,8 @@ import programa.Program.Var;
 import programa.Program.Type;
 import programa.Program.BinaryExp;
 import programa.Program.UnaryExp;
+import programa.Program.ISwitch;
+import programa.Program.ICase;
 
 public class Tagging extends Processing {
 	private int etq;
@@ -233,6 +235,35 @@ public class Tagging extends Processing {
 		// ir_a(...)
 		etq++;
 		i.getElse().processWith(this);
+		i.putDirNext(etq);
+	}
+
+	public void process(ISwitch i) {
+		i.putDirFirst(etq);
+		i.getCond().processWith(this);
+		for (ICase c : i.getCases()) {
+			// dup
+			etq++;
+			c.processWith(this);
+			// branch
+			etq++;
+		}
+		// pop
+		etq++;
+		if (i.hasDefault()) {
+			i.getDefault().processWith(this);
+		}
+		i.putDirNext(etq);
+	}
+
+	public void process(ICase i) {
+		i.putDirFirst(etq);
+		i.getExp().processWith(this);
+		// equals
+		etq++;
+		// branch if false
+		etq++;
+		i.getBody().processWith(this);
 		i.putDirNext(etq);
 	}
 

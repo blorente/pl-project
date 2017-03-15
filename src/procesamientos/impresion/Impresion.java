@@ -42,6 +42,8 @@ import programa.Program.IntCast;
 import programa.Program.Prog;
 import programa.Program.RealCast;
 import programa.Program.Var;
+import programa.Program.ISwitch;
+import programa.Program.ICase;
 
 public class Impresion extends Processing {
 	private boolean attributes;
@@ -372,6 +374,32 @@ public class Impresion extends Processing {
 		i.getThen().processWith(this);
 		indent(); System.out.print("else");
 		i.getElse().processWith(this);
+		printAttributes(i);
+	}
+
+	public void process(ISwitch i) {
+		indent();
+		System.out.print("switch (");
+		i.getCond().processWith(this);
+		System.out.print(") {\n");
+		for (Inst c : i.getCases())
+			c.processWith(this);
+		if (i.hasDefault()) {
+			indent();
+			System.out.print("default:");
+			i.getDefault().processWith(this);
+		}
+		indent();
+		System.out.print("}\n");
+		printAttributes(i);
+	}
+
+	public void process(ICase i) {
+		indent();
+		System.out.print("case ");
+		i.getExp().processWith(this);
+		System.out.print(": ");
+		i.getBody().processWith(this);
 		printAttributes(i);
 	}
 }

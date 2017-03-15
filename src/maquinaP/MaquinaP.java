@@ -1,5 +1,7 @@
 package maquinaP;
 
+import programa.Program;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -1606,6 +1608,37 @@ public class MaquinaP {
 		}
 	}
 
+
+	private IDup IDUP;
+	private class IDup implements Instruction {
+		@Override
+		public void execute() {
+			Valor v = pilaEvaluacion.pop();
+			pilaEvaluacion.push(v);
+			pilaEvaluacion.push(v);
+			pc++;
+		}
+
+		@Override
+		public String toString() {
+			return "dup";
+		}
+	}
+
+	private IPop IPOP;
+	private class IPop implements Instruction {
+		@Override
+		public void execute() {
+			pilaEvaluacion.pop();
+			pc++;
+		}
+
+		@Override
+		public String toString() {
+			return "pop";
+		}
+	}
+
 	public Instruction addInt() {
 		return IADDINT;
 	}
@@ -1882,6 +1915,14 @@ public class MaquinaP {
 		return new IBranch(dir);
 	}
 
+	public Instruction dup() {
+		return IDUP;
+	}
+
+	public Instruction pop() {
+		return IPOP;
+	}
+
 	public void addInstruction(Instruction i) {
 		codigoP.add(i);
 	}
@@ -1962,6 +2003,9 @@ public class MaquinaP {
 		IWRITEBOOL = new IWriteBool();
 		IWRITECHAR = new IWriteChar();
 		IWRITESTRING = new IWriteString();
+
+		IDUP = new IDup();
+		IPOP = new IPop();
 
 		UNKNOWN = new UnknownValue();
 	}

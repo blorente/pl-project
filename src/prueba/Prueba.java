@@ -90,12 +90,36 @@ public class Prueba extends Program {
 										iasig("mynum", subtract(var("mynum"), intct(1)))
 								})
 						),
-						dowhile(
+						idowhile(
 								iblock(new Inst[] {
 										iasig("mynum", add(var("mynum"), intct(1)))
 								}),
 								less(var("mynum"), intct(10))
-						)
+						),
+						iswitch( // with default
+								var("mynum"),
+								iblock(new Inst[] {
+										iwrite("y")
+								}),
+								icase(
+										intct(9),
+										iblock(new Inst[]{
+												iwrite("mynum")
+										})),
+								icase(
+										intct(8),
+										iblock(new Inst[]{
+												iwrite("mynum")
+										}))
+						),
+						iswitch( // without default
+								var("mynum"),
+								icase(
+										intct(10),
+										iblock(new Inst[]{
+												iwrite("mynum")
+										}))
+						),
 						}));
 	}
 

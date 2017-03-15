@@ -42,7 +42,8 @@ import programa.Program.IntCast;
 import programa.Program.Prog;
 import programa.Program.RealCast;
 import programa.Program.Var;
-
+import programa.Program.ISwitch;
+import programa.Program.ICase;
 
 public class TypeCheck extends Processing {
     private final static String ERROR_OPERAND_TYPES = "Los tipos de los operandos no son correctos";
@@ -377,6 +378,31 @@ public class TypeCheck extends Processing {
             i.ponTipo(program.tError());
         else
             i.ponTipo(program.tOk());
+    }
+
+    public void process(ISwitch i) {
+        i.getCond().processWith(this);
+        Type condT = i.getCond().tipo();
+        Type blockT = program.tOk();
+        for (ICase c : i.getCases()) {
+            c.processWith(this);
+            if (!condT.equals(c.getExp().tipo()) ||
+                    c.tipo().equals(program.tError()))
+                blockT = program.tError();
+        }
+        if (i.hasDefault()) {
+            i.getDefault().processWith(this);
+            if (i.getDefault().tipo().equals(program.tError())) {
+                blockT = program.tError();
+            }
+        }
+        i.ponTipo(blockT);
+    }
+
+    public void process(ICase i) {
+        i.getExp().processWith(this);
+        i.getBody().processWith(this);
+        i.ponTipo(i.getBody().tipo());
     }
 
 }
