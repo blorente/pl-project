@@ -27,8 +27,17 @@ public abstract class Program {
 	public interface Type {
 		void accept(Processing p);
 	}
+	
+	public abstract class DeclaredType implements Type {
+		private int size;
+		public DeclaredType() {
+			size=0;  
+		}
+		public int size() {return size;}
+		public void putSize(int tam) {this.size = tam;}
+	}
 
-	public class Int implements Type {
+	public class Int extends DeclaredType {
 		public void accept(Processing p) {
 			p.process(this);
 		}
@@ -38,7 +47,7 @@ public abstract class Program {
 		}
 	}
 
-	public class Bool implements Type {
+	public class Bool extends DeclaredType {
 		public void accept(Processing p) {
 			p.process(this);
 		}
@@ -48,7 +57,7 @@ public abstract class Program {
 		}
 	}
 
-	public class Real implements Type {
+	public class Real extends DeclaredType {
 		public void accept(Processing p) {
 			p.process(this);
 		}
@@ -58,7 +67,7 @@ public abstract class Program {
 		}
 	}
 
-	public class UniChar implements Type {
+	public class UniChar extends DeclaredType {
 		public void accept(Processing p) {
 			p.process(this);
 		}
@@ -68,7 +77,7 @@ public abstract class Program {
 		}
 	}
 
-	public class UniString implements Type {
+	public class UniString extends DeclaredType {
 		public void accept(Processing p) {
 			p.process(this);
 		}
