@@ -467,12 +467,12 @@ public class CodeGeneration extends Processing {
 		for (ICase c : i.getCases()) {
 			maquina.addInstruction(maquina.dup());
 			c.processWith(this);
-			maquina.addInstruction(maquina.branch(i.dirNext()));
+			maquina.addInstruction(maquina.branch(i.dirNext() - 1));
 		}
-		maquina.addInstruction(maquina.pop());
 		if (i.hasDefault()) {
 			i.getDefault().processWith(this);
 		}
+		maquina.addInstruction(maquina.pop());
 	}
 
 	public void process(ICase i) {
