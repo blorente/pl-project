@@ -88,7 +88,7 @@ public class TypeCheck extends Processing {
 
         Type inferredType = this.inferrer.inferSum(exp.opnd1().tipo(), exp.opnd2().tipo());
         if (inferredType.equals(program.tError())) {
-            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+            errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
         exp.ponTipo(inferredType);
     }
@@ -99,7 +99,7 @@ public class TypeCheck extends Processing {
 
         Type inferredType = this.inferrer.inferArith(exp.opnd1().tipo(), exp.opnd2().tipo());
         if (inferredType.equals(program.tError())) {
-            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+            errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
         exp.ponTipo(inferredType);
     }
@@ -110,7 +110,7 @@ public class TypeCheck extends Processing {
 
         Type inferredType = this.inferrer.inferArith(exp.opnd1().tipo(), exp.opnd2().tipo());
         if (inferredType.equals(program.tError())) {
-            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+            errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
         exp.ponTipo(inferredType);
     }
@@ -121,7 +121,7 @@ public class TypeCheck extends Processing {
 
         Type inferredType = this.inferrer.inferArith(exp.opnd1().tipo(), exp.opnd2().tipo());
         if (inferredType.equals(program.tError())) {
-            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+            errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
         exp.ponTipo(inferredType);
     }
@@ -133,7 +133,7 @@ public class TypeCheck extends Processing {
 
         Type inferredType = this.inferrer.inferModulus(exp.opnd1().tipo(), exp.opnd2().tipo());
         if (inferredType.equals(program.tError())) {
-            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+            errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
         exp.ponTipo(inferredType);
     }
@@ -144,7 +144,7 @@ public class TypeCheck extends Processing {
 
         Type inferredType = inferrer.inferBoolBinExp(exp.opnd1().tipo(), exp.opnd2().tipo());
         if (inferredType.equals(program.tError())) {
-            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+            errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
         exp.ponTipo(inferredType);
     }
@@ -155,7 +155,7 @@ public class TypeCheck extends Processing {
 
         Type inferredType = inferrer.inferBoolBinExp(exp.opnd1().tipo(), exp.opnd2().tipo());
         if (inferredType.equals(program.tError())) {
-            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+            errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
         exp.ponTipo(inferredType);
     }
@@ -165,7 +165,7 @@ public class TypeCheck extends Processing {
 
         Type inferredType = inferrer.inferBoolUnExp(exp.op().tipo());
         if (inferredType.equals(program.tError())) {
-            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+            errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
         exp.ponTipo(inferredType);
     }
@@ -176,7 +176,7 @@ public class TypeCheck extends Processing {
 
         Type inferredType = inferrer.inferComparator(exp.opnd1().tipo(), exp.opnd2().tipo());
         if (inferredType.equals(program.tError())) {
-            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+            errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
         exp.ponTipo(inferredType);
     }
@@ -186,7 +186,7 @@ public class TypeCheck extends Processing {
 
         Type inferredType = inferrer.inferComparator(exp.opnd1().tipo(), exp.opnd2().tipo());
         if (inferredType.equals(program.tError())) {
-            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+            errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
         exp.ponTipo(inferredType);
     }
@@ -196,7 +196,7 @@ public class TypeCheck extends Processing {
 
         Type inferredType = inferrer.inferComparator(exp.opnd1().tipo(), exp.opnd2().tipo());
         if (inferredType.equals(program.tError())) {
-            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+            errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
         exp.ponTipo(inferredType);
     }
@@ -206,7 +206,7 @@ public class TypeCheck extends Processing {
 
         Type inferredType = inferrer.inferComparator(exp.opnd1().tipo(), exp.opnd2().tipo());
         if (inferredType.equals(program.tError())) {
-            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+            errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
         exp.ponTipo(inferredType);
     }
@@ -216,7 +216,7 @@ public class TypeCheck extends Processing {
 
         Type inferredType = inferrer.inferComparator(exp.opnd1().tipo(), exp.opnd2().tipo());
         if (inferredType.equals(program.tError())) {
-            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+            errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
         exp.ponTipo(inferredType);
     }
@@ -226,7 +226,7 @@ public class TypeCheck extends Processing {
 
         Type inferredType = inferrer.inferComparator(exp.opnd1().tipo(), exp.opnd2().tipo());
         if (inferredType.equals(program.tError())) {
-            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+            errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
         exp.ponTipo(inferredType);
     }
@@ -237,7 +237,7 @@ public class TypeCheck extends Processing {
 
         Type inferredType = inferrer.inferStrElem(exp.opnd1().tipo(), exp.opnd2().tipo());
         if (inferredType.equals(program.tError())) {
-            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+            errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
         exp.ponTipo(inferredType);
     }
@@ -247,7 +247,7 @@ public class TypeCheck extends Processing {
 
         Type inferredType = inferrer.inferNegative(exp.op().tipo());
         if (inferredType.equals(program.tError())) {
-            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+            errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
         exp.ponTipo(inferredType);
     }
@@ -257,7 +257,7 @@ public class TypeCheck extends Processing {
 
         Type inferredType = inferrer.inferIntCast(exp.op().tipo());
         if (inferredType.equals(program.tError())) {
-            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+            errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
         exp.ponTipo(inferredType);
     }
@@ -267,7 +267,7 @@ public class TypeCheck extends Processing {
 
         Type inferredType = inferrer.inferRealCast(exp.op().tipo());
         if (inferredType.equals(program.tError())) {
-            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+            errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
         exp.ponTipo(inferredType);
     }
@@ -277,7 +277,7 @@ public class TypeCheck extends Processing {
 
         Type inferredType = inferrer.inferBoolCast(exp.op().tipo());
         if (inferredType.equals(program.tError())) {
-            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+            errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
         exp.ponTipo(inferredType);
     }
@@ -287,7 +287,7 @@ public class TypeCheck extends Processing {
 
         Type inferredType = inferrer.inferUniCharCast(exp.op().tipo());
         if (inferredType.equals(program.tError())) {
-            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+            errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
         exp.ponTipo(inferredType);
     }
@@ -297,7 +297,7 @@ public class TypeCheck extends Processing {
 
         Type inferredType = inferrer.inferUniStrCast(exp.op().tipo());
         if (inferredType.equals(program.tError())) {
-            errors.msg(exp.enlaceFuente() + ":" + ERROR_OPERAND_TYPES);
+            errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
         exp.ponTipo(inferredType);
     }
@@ -311,7 +311,7 @@ public class TypeCheck extends Processing {
         i.exp().processWith(this);
         if (!i.declaracion().tipoDec().equals(i.exp().tipo())) {
             if (!i.exp().tipo().equals(program.tError()))
-                errors.msg(i.enlaceFuente() + ":" + ERROR_ASSIGNMENT);
+                errors.msg(i.sourceLink() + ":" + ERROR_ASSIGNMENT);
             i.ponTipo(program.tError());
         } else {
             i.ponTipo(program.tOk());

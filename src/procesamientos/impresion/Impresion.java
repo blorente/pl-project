@@ -294,7 +294,7 @@ public class Impresion extends Processing {
 
 	public void process(Prog p) {
 		for (Dec d : p.decs())
-			d.procesaCon(this);
+			d.processWith(this);
 		p.inst().processWith(this);
 		printAttributes(p);
 		System.out.println();

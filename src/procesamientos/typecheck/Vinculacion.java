@@ -58,14 +58,14 @@ public class Vinculacion extends Processing {
 
 	public void process(Prog p) {
 		for (Dec d : p.decs())
-			d.procesaCon(this);
+			d.processWith(this);
 		p.inst().processWith(this);
 	}
 
 	public void process(DecVar d) {
 		if (tablaDeSimbolos.containsKey(d.var())) {
 			error = true;
-			errores.msg(d.enlaceFuente() + ":" + ERROR_ID_DUPLICADO + "(" + d.var() + ")");
+			errores.msg(d.sourceLink() + ":" + ERROR_ID_DUPLICADO + "(" + d.var() + ")");
 		} else {
 			tablaDeSimbolos.put(d.var(), d);
 		}
@@ -75,7 +75,7 @@ public class Vinculacion extends Processing {
 		DecVar decVar = tablaDeSimbolos.get(i.var());
 		if (decVar == null) {
 			error = true;
-			errores.msg(i.enlaceFuente() + ":" + ERROR_ID_NO_DECLARADO + "(" + i.var() + ")");
+			errores.msg(i.sourceLink() + ":" + ERROR_ID_NO_DECLARADO + "(" + i.var() + ")");
 		} else {
 			i.ponDeclaracion(decVar);
 		}
@@ -248,7 +248,7 @@ public class Vinculacion extends Processing {
 		DecVar decVar = tablaDeSimbolos.get(exp.var());
 		if (decVar == null) {
 			error = true;
-			errores.msg(exp.enlaceFuente() + ":" + ERROR_ID_NO_DECLARADO + "(" + exp.var() + ")");
+			errores.msg(exp.sourceLink() + ":" + ERROR_ID_NO_DECLARADO + "(" + exp.var() + ")");
 		} else {
 			exp.ponDeclaracion(decVar);
 		}

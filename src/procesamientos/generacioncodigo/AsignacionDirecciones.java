@@ -13,7 +13,7 @@ public class AsignacionDirecciones extends Processing {
    }
    public void process(Prog p) {
       for(Program.Dec d: p.decs())
-          d.procesaCon(this);
+          d.processWith(this);
    }     
    public void process(DecVar d) {
        d.ponDir(dir++);

@@ -27,14 +27,21 @@ public abstract class Program {
 	public interface Type {
 		void accept(Processing p);
 	}
-	
+
 	public abstract class DeclaredType implements Type {
 		private int size;
+
 		public DeclaredType() {
-			size=0;  
+			size = 0;
 		}
-		public int size() {return size;}
-		public void putSize(int tam) {this.size = tam;}
+
+		public int size() {
+			return size;
+		}
+
+		public void putSize(int tam) {
+			this.size = tam;
+		}
 	}
 
 	public class Int extends DeclaredType {
@@ -84,6 +91,57 @@ public abstract class Program {
 
 		public String toString() {
 			return "UNISTRING";
+		}
+	}
+
+	public class TPointer extends DeclaredType {
+		private DeclaredType tbase;
+
+		public TPointer(DeclaredType tbase) {
+			this.tbase = tbase;
+		}
+
+		public DeclaredType tbase() {
+			return tbase;
+		}
+
+		public void accept(Processing p) {
+			p.process(this);
+		}
+	}
+
+	public class TRef extends DeclaredType {
+		private String typeId;
+		private DecType vinculo;
+		private String sourceLink;
+
+		public TRef(String typeId) {
+			this(typeId, null);
+		}
+
+		public TRef(String typeId, String sourceLink) {
+			this.typeId = typeId;
+			this.sourceLink = sourceLink;
+		}
+
+		public DecType declaracion() {
+			return vinculo;
+		}
+
+		public void ponDeclaracion(DecType decTipo) {
+			this.vinculo = decTipo;
+		}
+
+		public String typeId() {
+			return typeId;
+		}
+
+		public String sourceLink() {
+			return sourceLink;
+		}
+
+		public void accept(Processing p) {
+			p.process(this);
 		}
 	}
 
@@ -140,11 +198,43 @@ public abstract class Program {
 	}
 
 	public abstract class Dec {
-		public abstract void procesaCon(Processing p);
+		public abstract void processWith(Processing p);
+	}
+
+	public class DecType extends Dec {
+		private String sourceLink;
+		private String typeId;
+		private DeclaredType decType;
+
+		public DecType(DeclaredType type, String typeId) {
+			this(type, typeId, null);
+		}
+
+		public DecType(DeclaredType tipo, String typeId, String sourceLink) {
+			this.decType = tipo;
+			this.sourceLink = sourceLink;
+			this.typeId = typeId;
+		}
+
+		public DeclaredType decType() {
+			return decType;
+		}
+
+		public String typeId() {
+			return typeId;
+		}
+
+		public String sourceLink() {
+			return sourceLink;
+		}
+
+		public void processWith(Processing p) {
+			p.process(this);
+		}
 	}
 
 	public class DecVar extends Dec {
-		private String enlaceFuente;
+		private String sourceLink;
 		private String var;
 		private Type tipoDec;
 		private int dir;
@@ -153,9 +243,9 @@ public abstract class Program {
 			this(tipo, var, null);
 		}
 
-		public DecVar(Type tipo, String var, String enlaceFuente) {
+		public DecVar(Type tipo, String var, String sourceLink) {
 			this.tipoDec = tipo;
-			this.enlaceFuente = enlaceFuente;
+			this.sourceLink = sourceLink;
 			this.var = var;
 		}
 
@@ -175,11 +265,11 @@ public abstract class Program {
 			this.dir = dir;
 		}
 
-		public String enlaceFuente() {
-			return enlaceFuente;
+		public String sourceLink() {
+			return sourceLink;
 		}
 
-		public void procesaCon(Processing p) {
+		public void processWith(Processing p) {
 			p.process(this);
 		}
 	}
@@ -223,14 +313,14 @@ public abstract class Program {
 	public class IAsig extends Inst {
 		private String var;
 		private Exp exp;
-		private String enlaceFuente;
+		private String sourceLink;
 		private DecVar declaracion;
 
-		public IAsig(String var, Exp exp, String enlaceFuente) {
+		public IAsig(String var, Exp exp, String sourceLink) {
 			this.var = var;
 			this.exp = exp;
 			this.declaracion = null;
-			this.enlaceFuente = enlaceFuente;
+			this.sourceLink = sourceLink;
 		}
 
 		public IAsig(String var, Exp exp) {
@@ -249,8 +339,8 @@ public abstract class Program {
 			return declaracion;
 		}
 
-		public String enlaceFuente() {
-			return enlaceFuente;
+		public String sourceLink() {
+			return sourceLink;
 		}
 
 		public void ponDeclaracion(DecVar d) {
@@ -397,6 +487,7 @@ public abstract class Program {
 		public Inst getThen() {
 			return thenBlock;
 		}
+
 		public Inst getElse() {
 			return elseBlock;
 		}
@@ -421,6 +512,7 @@ public abstract class Program {
 		public Exp getCond() {
 			return cond;
 		}
+
 		public Inst getBody() {
 			return body;
 		}
@@ -434,75 +526,76 @@ public abstract class Program {
 
 	public class ISwitch extends Inst {
 
-	    private List<ICase> cases;
-	    private Exp cond;
-	    private Inst defaul;
-        private boolean hasDefault;
+		private List<ICase> cases;
+		private Exp cond;
+		private Inst defaul;
+		private boolean hasDefault;
 
-        public ISwitch(Exp cond, Inst defaul, ICase[] cases) {
-            this.cond = cond;
-            this.defaul = defaul;
-            hasDefault = true;
-            this.cases = new ArrayList<>();
-            for (ICase c : cases) {
-                this.cases.add(c);
-            }
-        }
+		public ISwitch(Exp cond, Inst defaul, ICase[] cases) {
+			this.cond = cond;
+			this.defaul = defaul;
+			hasDefault = true;
+			this.cases = new ArrayList<>();
+			for (ICase c : cases) {
+				this.cases.add(c);
+			}
+		}
 
-        public ISwitch(Exp cond, ICase[] cases) {
-            this.cond = cond;
-            this.defaul = null;
-            hasDefault = false;
-            this.cases = new ArrayList<>();
-            for (ICase c : cases) {
-                this.cases.add(c);
-            }
-        }
+		public ISwitch(Exp cond, ICase[] cases) {
+			this.cond = cond;
+			this.defaul = null;
+			hasDefault = false;
+			this.cases = new ArrayList<>();
+			for (ICase c : cases) {
+				this.cases.add(c);
+			}
+		}
 
-        public List<ICase> getCases() {
-            return cases;
-        }
+		public List<ICase> getCases() {
+			return cases;
+		}
 
-        public Exp getCond() {
-            return cond;
-        }
+		public Exp getCond() {
+			return cond;
+		}
 
-        public Inst getDefault() {
-            return defaul;
-        }
+		public Inst getDefault() {
+			return defaul;
+		}
 
-        @Override
-        public void processWith(Processing p) {
-            p.process(this);
-        }
+		@Override
+		public void processWith(Processing p) {
+			p.process(this);
+		}
 
-        public boolean hasDefault() {
-            return hasDefault;
-        }
-    }
+		public boolean hasDefault() {
+			return hasDefault;
+		}
+	}
 
 	public class ICase extends Inst {
 
-        private Exp exp;
-        private Inst body;
+		private Exp exp;
+		private Inst body;
 
-        public ICase(Exp cond, Inst body) {
-            this.exp = cond;
-            this.body = body;
-        }
+		public ICase(Exp cond, Inst body) {
+			this.exp = cond;
+			this.body = body;
+		}
 
-        public Exp getExp() {
-            return exp;
-        }
-        public Inst getBody() {
-            return body;
-        }
+		public Exp getExp() {
+			return exp;
+		}
 
-        @Override
-        public void processWith(Processing p) {
-            p.process(this);
-        }
-    }
+		public Inst getBody() {
+			return body;
+		}
+
+		@Override
+		public void processWith(Processing p) {
+			p.process(this);
+		}
+	}
 
 	public abstract class Exp {
 		private Type tipo;
@@ -543,16 +636,16 @@ public abstract class Program {
 	public class Var extends Exp {
 		private String var;
 		private DecVar declaracion;
-		private String enlaceFuente;
+		private String sourceLink;
 
 		public Var(String var) {
 			this(var, null);
 		}
 
-		public Var(String var, String enlaceFuente) {
+		public Var(String var, String sourceLink) {
 			this.var = var;
 			declaracion = null;
-			this.enlaceFuente = enlaceFuente;
+			this.sourceLink = sourceLink;
 		}
 
 		public String var() {
@@ -567,8 +660,8 @@ public abstract class Program {
 			declaracion = dec;
 		}
 
-		public String enlaceFuente() {
-			return enlaceFuente;
+		public String sourceLink() {
+			return sourceLink;
 		}
 
 		public void processWith(Processing p) {
@@ -659,14 +752,14 @@ public abstract class Program {
 	public abstract class BinaryExp extends Exp {
 		private Exp opnd1;
 		private Exp opnd2;
-		private String enlaceFuente;
+		private String sourceLink;
 
 		public BinaryExp(Exp opnd1, Exp opnd2) {
 			this(opnd1, opnd2, null);
 		}
 
-		public BinaryExp(Exp opnd1, Exp opnd2, String enlaceFuente) {
-			this.enlaceFuente = enlaceFuente;
+		public BinaryExp(Exp opnd1, Exp opnd2, String sourceLink) {
+			this.sourceLink = sourceLink;
 			this.opnd1 = opnd1;
 			this.opnd2 = opnd2;
 		}
@@ -679,8 +772,8 @@ public abstract class Program {
 			return opnd2;
 		}
 
-		public String enlaceFuente() {
-			return enlaceFuente;
+		public String sourceLink() {
+			return sourceLink;
 		}
 	}
 
@@ -689,8 +782,8 @@ public abstract class Program {
 			this(opnd1, opnd2, null);
 		}
 
-		public Addition(Exp opnd1, Exp opnd2, String enlaceFuente) {
-			super(opnd1, opnd2, enlaceFuente);
+		public Addition(Exp opnd1, Exp opnd2, String sourceLink) {
+			super(opnd1, opnd2, sourceLink);
 		}
 
 		public void processWith(Processing p) {
@@ -703,8 +796,8 @@ public abstract class Program {
 			this(opnd1, opnd2, null);
 		}
 
-		public Subtraction(Exp opnd1, Exp opnd2, String enlaceFuente) {
-			super(opnd1, opnd2, enlaceFuente);
+		public Subtraction(Exp opnd1, Exp opnd2, String sourceLink) {
+			super(opnd1, opnd2, sourceLink);
 		}
 
 		public void processWith(Processing p) {
@@ -717,8 +810,8 @@ public abstract class Program {
 			this(opnd1, opnd2, null);
 		}
 
-		public Multiplication(Exp opnd1, Exp opnd2, String enlaceFuente) {
-			super(opnd1, opnd2, enlaceFuente);
+		public Multiplication(Exp opnd1, Exp opnd2, String sourceLink) {
+			super(opnd1, opnd2, sourceLink);
 		}
 
 		public void processWith(Processing p) {
@@ -731,8 +824,8 @@ public abstract class Program {
 			this(opnd1, opnd2, null);
 		}
 
-		public Division(Exp opnd1, Exp opnd2, String enlaceFuente) {
-			super(opnd1, opnd2, enlaceFuente);
+		public Division(Exp opnd1, Exp opnd2, String sourceLink) {
+			super(opnd1, opnd2, sourceLink);
 		}
 
 		public void processWith(Processing p) {
@@ -745,8 +838,8 @@ public abstract class Program {
 			this(opnd1, opnd2, null);
 		}
 
-		public Modulus(Exp opnd1, Exp opnd2, String enlaceFuente) {
-			super(opnd1, opnd2, enlaceFuente);
+		public Modulus(Exp opnd1, Exp opnd2, String sourceLink) {
+			super(opnd1, opnd2, sourceLink);
 		}
 
 		public void processWith(Processing p) {
@@ -759,8 +852,8 @@ public abstract class Program {
 			this(opnd1, opnd2, null);
 		}
 
-		public And(Exp opnd1, Exp opnd2, String enlaceFuente) {
-			super(opnd1, opnd2, enlaceFuente);
+		public And(Exp opnd1, Exp opnd2, String sourceLink) {
+			super(opnd1, opnd2, sourceLink);
 		}
 
 		public void processWith(Processing p) {
@@ -773,8 +866,8 @@ public abstract class Program {
 			this(opnd1, opnd2, null);
 		}
 
-		public Or(Exp opnd1, Exp opnd2, String enlaceFuente) {
-			super(opnd1, opnd2, enlaceFuente);
+		public Or(Exp opnd1, Exp opnd2, String sourceLink) {
+			super(opnd1, opnd2, sourceLink);
 		}
 
 		public void processWith(Processing p) {
@@ -787,8 +880,8 @@ public abstract class Program {
 			this(opnd1, null);
 		}
 
-		public Not(Exp opnd1, String enlaceFuente) {
-			super(opnd1, enlaceFuente);
+		public Not(Exp opnd1, String sourceLink) {
+			super(opnd1, sourceLink);
 		}
 
 		public void processWith(Processing p) {
@@ -801,8 +894,8 @@ public abstract class Program {
 			this(opnd1, opnd2, null);
 		}
 
-		public Equals(Exp opnd1, Exp opnd2, String enlaceFuente) {
-			super(opnd1, opnd2, enlaceFuente);
+		public Equals(Exp opnd1, Exp opnd2, String sourceLink) {
+			super(opnd1, opnd2, sourceLink);
 		}
 
 		public void processWith(Processing p) {
@@ -815,8 +908,8 @@ public abstract class Program {
 			this(opnd1, opnd2, null);
 		}
 
-		public NotEquals(Exp opnd1, Exp opnd2, String enlaceFuente) {
-			super(opnd1, opnd2, enlaceFuente);
+		public NotEquals(Exp opnd1, Exp opnd2, String sourceLink) {
+			super(opnd1, opnd2, sourceLink);
 		}
 
 		public void processWith(Processing p) {
@@ -829,8 +922,8 @@ public abstract class Program {
 			this(opnd1, opnd2, null);
 		}
 
-		public Greater(Exp opnd1, Exp opnd2, String enlaceFuente) {
-			super(opnd1, opnd2, enlaceFuente);
+		public Greater(Exp opnd1, Exp opnd2, String sourceLink) {
+			super(opnd1, opnd2, sourceLink);
 		}
 
 		public void processWith(Processing p) {
@@ -843,8 +936,8 @@ public abstract class Program {
 			this(opnd1, opnd2, null);
 		}
 
-		public GreaterEq(Exp opnd1, Exp opnd2, String enlaceFuente) {
-			super(opnd1, opnd2, enlaceFuente);
+		public GreaterEq(Exp opnd1, Exp opnd2, String sourceLink) {
+			super(opnd1, opnd2, sourceLink);
 		}
 
 		public void processWith(Processing p) {
@@ -857,8 +950,8 @@ public abstract class Program {
 			this(opnd1, opnd2, null);
 		}
 
-		public Less(Exp opnd1, Exp opnd2, String enlaceFuente) {
-			super(opnd1, opnd2, enlaceFuente);
+		public Less(Exp opnd1, Exp opnd2, String sourceLink) {
+			super(opnd1, opnd2, sourceLink);
 		}
 
 		public void processWith(Processing p) {
@@ -871,8 +964,8 @@ public abstract class Program {
 			this(opnd1, opnd2, null);
 		}
 
-		public LessEq(Exp opnd1, Exp opnd2, String enlaceFuente) {
-			super(opnd1, opnd2, enlaceFuente);
+		public LessEq(Exp opnd1, Exp opnd2, String sourceLink) {
+			super(opnd1, opnd2, sourceLink);
 		}
 
 		public void processWith(Processing p) {
@@ -885,8 +978,8 @@ public abstract class Program {
 			this(source, index, null);
 		}
 
-		public StrElem(Exp source, Exp index, String enlaceFuente) {
-			super(source, index, enlaceFuente);
+		public StrElem(Exp source, Exp index, String sourceLink) {
+			super(source, index, sourceLink);
 		}
 
 		public void processWith(Processing p) {
@@ -896,14 +989,14 @@ public abstract class Program {
 
 	public abstract class UnaryExp extends Exp {
 		private Exp op;
-		private String enlaceFuente;
+		private String sourceLink;
 
 		public UnaryExp(Exp op) {
 			this(op, null);
 		}
 
-		public UnaryExp(Exp op, String enlaceFuente) {
-			this.enlaceFuente = enlaceFuente;
+		public UnaryExp(Exp op, String sourceLink) {
+			this.sourceLink = sourceLink;
 			this.op = op;
 		}
 
@@ -911,8 +1004,8 @@ public abstract class Program {
 			return op;
 		}
 
-		public String enlaceFuente() {
-			return enlaceFuente;
+		public String sourceLink() {
+			return sourceLink;
 		}
 	}
 
@@ -921,8 +1014,8 @@ public abstract class Program {
 			this(op, null);
 		}
 
-		public Negative(Exp op, String enlaceFuente) {
-			super(op, enlaceFuente);
+		public Negative(Exp op, String sourceLink) {
+			super(op, sourceLink);
 		}
 
 		public void processWith(Processing p) {
@@ -1008,16 +1101,16 @@ public abstract class Program {
 		return new DecVar(t, v);
 	}
 
-	public Dec decvar(Type t, String v, String enlaceFuente) {
-		return new DecVar(t, v, enlaceFuente);
+	public Dec decvar(Type t, String v, String sourceLink) {
+		return new DecVar(t, v, sourceLink);
 	}
 
 	public Inst iasig(String v, Exp e) {
 		return new IAsig(v, e);
 	}
 
-	public Inst iasig(String v, Exp e, String enlaceFuente) {
-		return new IAsig(v, e, enlaceFuente);
+	public Inst iasig(String v, Exp e, String sourceLink) {
+		return new IAsig(v, e, sourceLink);
 	}
 
 	public Inst iblock(Inst[] is) {
@@ -1048,24 +1141,24 @@ public abstract class Program {
 		return new IDoWhile(cond, body);
 	}
 
-	public Inst iswitch(Exp exp, Inst defaul, ICase...cases) {
-	    return new ISwitch(exp, defaul, cases);
-    }
+	public Inst iswitch(Exp exp, Inst defaul, ICase... cases) {
+		return new ISwitch(exp, defaul, cases);
+	}
 
-    public Inst iswitch(Exp exp, ICase...cases) {
-        return new ISwitch(exp, cases);
-    }
+	public Inst iswitch(Exp exp, ICase... cases) {
+		return new ISwitch(exp, cases);
+	}
 
-    public ICase icase(Exp exp, Inst body) {
-	    return new ICase(exp, body);
-    }
+	public ICase icase(Exp exp, Inst body) {
+		return new ICase(exp, body);
+	}
 
 	public Exp var(String id) {
 		return new Var(id);
 	}
 
-	public Exp var(String id, String enlaceFuente) {
-		return new Var(id, enlaceFuente);
+	public Exp var(String id, String sourceLink) {
+		return new Var(id, sourceLink);
 	}
 
 	public Exp intct(int val) {
@@ -1108,28 +1201,28 @@ public abstract class Program {
 		return new And(exp1, exp2);
 	}
 
-	public Exp add(Exp exp1, Exp exp2, String enlaceFuente) {
-		return new Addition(exp1, exp2, enlaceFuente);
+	public Exp add(Exp exp1, Exp exp2, String sourceLink) {
+		return new Addition(exp1, exp2, sourceLink);
 	}
 
-	public Exp subtract(Exp exp1, Exp exp2, String enlaceFuente) {
-		return new Subtraction(exp1, exp2, enlaceFuente);
+	public Exp subtract(Exp exp1, Exp exp2, String sourceLink) {
+		return new Subtraction(exp1, exp2, sourceLink);
 	}
 
-	public Exp multiply(Exp exp1, Exp exp2, String enlaceFuente) {
-		return new Multiplication(exp1, exp2, enlaceFuente);
+	public Exp multiply(Exp exp1, Exp exp2, String sourceLink) {
+		return new Multiplication(exp1, exp2, sourceLink);
 	}
 
-	public Exp divide(Exp exp1, Exp exp2, String enlaceFuente) {
-		return new Division(exp1, exp2, enlaceFuente);
+	public Exp divide(Exp exp1, Exp exp2, String sourceLink) {
+		return new Division(exp1, exp2, sourceLink);
 	}
 
-	public Exp modulus(Exp exp1, Exp exp2, String enlaceFuente) {
-		return new Modulus(exp1, exp2, enlaceFuente);
+	public Exp modulus(Exp exp1, Exp exp2, String sourceLink) {
+		return new Modulus(exp1, exp2, sourceLink);
 	}
 
-	public Exp and(Exp exp1, Exp exp2, String enlaceFuente) {
-		return new And(exp1, exp2, enlaceFuente);
+	public Exp and(Exp exp1, Exp exp2, String sourceLink) {
+		return new And(exp1, exp2, sourceLink);
 	}
 
 	public Exp or(Exp exp1, Exp exp2) {
@@ -1164,12 +1257,12 @@ public abstract class Program {
 		return new LessEq(exp1, exp2);
 	}
 
-	public Exp strElem(Exp string, Exp index, String enlaceFuente) {
+	public Exp strElem(Exp string, Exp index, String sourceLink) {
 		return new StrElem(string, index);
 	}
 
-	public Exp negative(Exp exp1, String enlaceFuente) {
-		return new Negative(exp1, enlaceFuente);
+	public Exp negative(Exp exp1, String sourceLink) {
+		return new Negative(exp1, sourceLink);
 	}
 
 	public Exp intcast(Exp exp) {

@@ -6,6 +6,8 @@ import programa.Program.Division;
 import programa.Program.Equals;
 import programa.Program.IWhile;
 import programa.Program.IDoWhile;
+import programa.Program.TRef;
+import programa.Program.TPointer;
 import programa.Program.IIfThen;
 import programa.Program.IIfThenElse;
 import programa.Program.IntCt;
@@ -27,6 +29,7 @@ import programa.Program.Addition;
 import programa.Program.Modulus;
 import programa.Program.Prog;
 import programa.Program.DecVar;
+import programa.Program.DecType;
 import programa.Program.IAsig;
 import programa.Program.IBlock;
 import programa.Program.IRead;
@@ -88,10 +91,13 @@ public class Processing {
    public void process(Real t) {}
    public void process(UniChar t) {}
    public void process(UniString t) {}
+   public void process(TRef t) {}
+   public void process(TPointer t) {}
    public void process(Ok t) {}
    public void process(Error t) {}
 
    public void process(Prog p) {}
+   public void process(DecType d) {}
    public void process(DecVar d) {}
 
    public void process(IAsig i) {}
