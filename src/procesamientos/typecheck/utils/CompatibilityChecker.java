@@ -1,6 +1,8 @@
 package procesamientos.typecheck.utils;
 
 import programa.Program;
+import programa.Program.TPointer;
+import programa.Program.TRef;
 import programa.Program.Type;
 
 public class CompatibilityChecker {
@@ -88,5 +90,29 @@ public class CompatibilityChecker {
 
 	public boolean strCompatible(Type tipo) {
 		return isString(tipo) || isChar(tipo);
+	}
+
+	public static boolean esPointer(Type t) {
+
+		return t instanceof TPointer;
+	}
+
+	public TPointer pointer(Type t) {
+		return (TPointer) t;
+	}
+
+	public boolean isRef(Type t) {
+		return t instanceof TRef;
+	}
+
+	public TRef asRef(Type t) {
+		return (TRef) t;
+	}
+
+	public Type baseType(Type t) {
+		while (isRef(t)) {
+			t = asRef(t).declaration().decType();
+		}
+		return t;
 	}
 }

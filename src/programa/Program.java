@@ -124,7 +124,7 @@ public abstract class Program {
 			this.sourceLink = sourceLink;
 		}
 
-		public DecType declaracion() {
+		public DecType declaration() {
 			return vinculo;
 		}
 
@@ -1312,6 +1312,10 @@ public abstract class Program {
 	public Type tError() {
 		return TERROR;
 	}
+	
+	public DeclaredType tipoPointer(DeclaredType tbase) {return new TPointer(tbase);}
+	public DeclaredType tipoRef(String typeId) {return new TRef(typeId);}
+	public DeclaredType tipoRef(String typeId, String sourceLink) {return new TRef(typeId,sourceLink);}
 
 	public abstract Prog root();
 
