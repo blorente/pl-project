@@ -250,7 +250,7 @@ public class Vinculacion extends Processing {
 			error = true;
 			errores.msg(exp.sourceLink() + ":" + ERROR_ID_NO_DECLARADO + "(" + exp.var() + ")");
 		} else {
-			exp.ponDeclaracion(decVar);
+			exp.putDeclaration(decVar);
 		}
 
 	}

@@ -53,7 +53,7 @@ public class CodeGeneration extends Processing {
 	}
 
 	public void process(Var exp) {
-		maquina.addInstruction(maquina.apilaDir(exp.declaracion().dir(), exp.sourceLink()));
+		maquina.addInstruction(maquina.apilaDir(exp.declaration().dir(), exp.sourceLink()));
 	}
 
 	public void process(IntCt exp) {

@@ -311,42 +311,63 @@ public abstract class Program {
 	}
 
 	public class IAsig extends Inst {
-		private String var;
+		private Mem mem;
 		private Exp exp;
 		private String sourceLink;
-		private DecVar declaracion;
 
-		public IAsig(String var, Exp exp, String sourceLink) {
-			this.var = var;
+		public IAsig(Mem mem, Exp exp, String sourceLink) {
+			this.mem = mem;
 			this.exp = exp;
-			this.declaracion = null;
 			this.sourceLink = sourceLink;
 		}
-
-		public IAsig(String var, Exp exp) {
-			this(var, exp, null);
+		public IAsig(Mem mem, Exp exp) {
+			this(mem, exp, null);
 		}
-
-		public String var() {
-			return var;
+		public Mem mem() {
+			return mem;
 		}
-
 		public Exp exp() {
 			return exp;
 		}
-
-		public DecVar declaracion() {
-			return declaracion;
-		}
-
 		public String sourceLink() {
 			return sourceLink;
 		}
-
-		public void ponDeclaracion(DecVar d) {
-			declaracion = d;
+		public void processWith(Processing p) {
+			p.process(this);
 		}
+	}
 
+	public class INew extends Inst {
+		private Mem mem;
+		private String sourceLink;
+		public INew(Mem mem) {
+			this(mem,null);
+		}
+		public INew(Mem mem, String sourceLink) {
+			this.mem = mem;
+			this.sourceLink = sourceLink;
+		}
+		public Mem mem() {return mem;}
+		public String sourceLink() {return sourceLink;}
+		public void sourceLink(String sourceLink) {this.sourceLink = sourceLink;}
+		public void processWith(Processing p) {
+			p.process(this);
+		}
+	}
+
+	public class IFree extends Inst {
+		private Mem mem;
+		private String sourceLink;
+		public IFree(Mem mem) {
+			this(mem,null);
+		}
+		public IFree(Mem mem, String sourceLink) {
+			this.mem = mem;
+			this.sourceLink = sourceLink;
+		}
+		public Mem mem() {return mem;}
+		public String sourceLink() {return sourceLink;}
+		public void sourceLink(String sourceLink) {this.sourceLink = sourceLink;}
 		public void processWith(Processing p) {
 			p.process(this);
 		}
@@ -631,9 +652,39 @@ public abstract class Program {
 		}
 
 		public abstract void processWith(Processing p);
+
+		public boolean isMem() {return false;}
 	}
 
-	public class Var extends Exp {
+	public abstract class Mem extends Exp {
+		private String sourcelink;
+		public Mem(String sourcelink) {
+			this.sourcelink = sourcelink;
+		}
+		public String sourcelink() {
+			return sourcelink;
+		}
+		public boolean isMem() {return true;}
+	}
+
+	public class DRef extends Mem {
+		private Mem mem;
+		public DRef(Mem mem) {
+			this(mem,null);
+		}
+		public DRef(Mem mem, String sourcelink) {
+			super(sourcelink);
+			this.mem = mem;
+		}
+		public Mem mem() {
+			return mem;
+		}
+		public void processWith(Processing p) {
+			p.process(this);
+		}
+	}
+
+	public class Var extends Mem {
 		private String var;
 		private DecVar declaracion;
 		private String sourceLink;
@@ -643,6 +694,7 @@ public abstract class Program {
 		}
 
 		public Var(String var, String sourceLink) {
+			super(sourceLink);
 			this.var = var;
 			declaracion = null;
 			this.sourceLink = sourceLink;
@@ -652,11 +704,11 @@ public abstract class Program {
 			return var;
 		}
 
-		public DecVar declaracion() {
+		public DecVar declaration() {
 			return declaracion;
 		}
 
-		public void ponDeclaracion(DecVar dec) {
+		public void putDeclaration(DecVar dec) {
 			declaracion = dec;
 		}
 
@@ -1105,12 +1157,12 @@ public abstract class Program {
 		return new DecVar(t, v, sourceLink);
 	}
 
-	public Inst iasig(String v, Exp e) {
-		return new IAsig(v, e);
+	public Inst iasig(Mem m, Exp e) {
+		return new IAsig(m, e);
 	}
 
-	public Inst iasig(String v, Exp e, String sourceLink) {
-		return new IAsig(v, e, sourceLink);
+	public Inst iasig(Mem m, Exp e, String sourceLink) {
+		return new IAsig(m, e, sourceLink);
 	}
 
 	public Inst iblock(Inst[] is) {
@@ -1153,13 +1205,15 @@ public abstract class Program {
 		return new ICase(exp, body);
 	}
 
-	public Exp var(String id) {
-		return new Var(id);
-	}
+	public Inst inew(Mem mem) {return new INew(mem);}
+	public Inst inew(Mem mem, String sourceLink) {return new INew(mem,sourceLink);}
+	public Inst ifree(Mem mem) {return new IFree(mem);}
+	public Inst ifree(Mem mem, String sourceLink) {return new IFree(mem,sourceLink);}
 
-	public Exp var(String id, String sourceLink) {
-		return new Var(id, sourceLink);
-	}
+	public Mem var(String id) {return new Var(id);}
+	public Mem var(String id, String sourceLink) {return new Var(id, sourceLink);}
+	public Mem dref(Mem m) {return new DRef(m);}
+	public Mem dref(Mem m, String sourceLink) {return new DRef(m,sourceLink);}
 
 	public Exp intct(int val) {
 		return new IntCt(val);

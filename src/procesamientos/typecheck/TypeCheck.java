@@ -59,7 +59,7 @@ public class TypeCheck extends Processing {
     }
 
     public void process(Var exp) {
-        exp.ponTipo(exp.declaracion().tipoDec());
+        exp.ponTipo(exp.declaration().tipoDec());
     }
 
     public void process(IntCt exp) {
