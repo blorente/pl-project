@@ -667,12 +667,12 @@ public abstract class Program {
 		public boolean isMem() {return true;}
 	}
 
-	public class DRef extends Mem {
+	public class DecRef extends Mem {
 		private Mem mem;
-		public DRef(Mem mem) {
+		public DecRef(Mem mem) {
 			this(mem,null);
 		}
-		public DRef(Mem mem, String sourcelink) {
+		public DecRef(Mem mem, String sourcelink) {
 			super(sourcelink);
 			this.mem = mem;
 		}
@@ -1212,8 +1212,8 @@ public abstract class Program {
 
 	public Mem var(String id) {return new Var(id);}
 	public Mem var(String id, String sourceLink) {return new Var(id, sourceLink);}
-	public Mem dref(Mem m) {return new DRef(m);}
-	public Mem dref(Mem m, String sourceLink) {return new DRef(m,sourceLink);}
+	public Mem dref(Mem m) {return new DecRef(m);}
+	public Mem dref(Mem m, String sourceLink) {return new DecRef(m,sourceLink);}
 
 	public Exp intct(int val) {
 		return new IntCt(val);

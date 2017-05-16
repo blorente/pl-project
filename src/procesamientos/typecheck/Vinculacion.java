@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import procesamientos.Processing;
+import procesamientos.typecheck.utils.CompatibilityChecker;
+import programa.Program;
 import programa.Program.Addition;
 import programa.Program.Division;
 import programa.Program.Equals;
@@ -42,44 +44,105 @@ import programa.Program.UniStrCast;
 import programa.Program.Var;
 import programa.Program.ISwitch;
 import programa.Program.ICase;
+import programa.Program.IFree;
+import programa.Program.INew;
+import programa.Program.DecType;
+import programa.Program.TPointer;
+import programa.Program.TRef;
 
 public class Vinculacion extends Processing {
-	private final static String ERROR_ID_DUPLICADO = "Identificador ya declarado";
-	private final static String ERROR_ID_NO_DECLARADO = "Identificador no declarado";
-	private Map<String, DecVar> tablaDeSimbolos;
+	private final static String ERROR_DUPLICATED_ID = "Duplicated identifier";
+	private final static String ERROR_UNDECLARED_ID = "Undeclared identifier";
+	private final static String ERROR_DUPLICATED_TYPE_ID = "Duplicated type ID";
+	private static final String ERROR_UNDECLARED_TYPE_ID = "Undeclared type ID";
+	private Map<String,DecVar> variables;
+	private Map<String,DecType> types;
 	private boolean error;
-	private Errors errores;
+	private Errors errors;
+	private CompatibilityChecker compat;
 
-	public Vinculacion(Errors errores) {
-		tablaDeSimbolos = new HashMap<>();
-		this.errores = errores;
+	public Vinculacion(Program p, Errors errors) {
+		variables = new HashMap<>();
+		types = new HashMap<>();
+		compat = new CompatibilityChecker(p);
+		this.errors = errors;
 		error = false;
+	}
+
+	private class RefCompletion extends Processing {
+		public void process(DecType d) {
+			d.decType().accept(this);
+		}
+		public void process(DecVar d) {
+			d.tipoDec().accept(this);
+		}
+		public void process(TPointer p) {
+			p.tbase().accept(this);
+		}
+		public void process(TRef r) {
+			DecType d = types.get(r.typeId());
+			if (d == null) {
+				error = true;
+				errors.msg(r.sourceLink()+":"+ERROR_UNDECLARED_TYPE_ID+"("+r.typeId()+")");
+			}
+			else {
+				r.ponDeclaracion(d);
+			}
+		}
 	}
 
 	public void process(Prog p) {
 		for (Dec d : p.decs())
 			d.processWith(this);
+		RefCompletion crefs = new RefCompletion();
+		for (Dec d: p.decs())
+			d.processWith(crefs);
 		p.inst().processWith(this);
 	}
-
-	public void process(DecVar d) {
-		if (tablaDeSimbolos.containsKey(d.var())) {
+	public void process(DecType d) {
+		if(types.containsKey(d.typeId())) {
 			error = true;
-			errores.msg(d.sourceLink() + ":" + ERROR_ID_DUPLICADO + "(" + d.var() + ")");
+			errors.msg(d.sourceLink()+":"+ERROR_DUPLICATED_TYPE_ID+"("+d.typeId()+")");
+		}
+		else {
+			types.put(d.typeId(),d);
+			d.decType().accept(this);
+		}
+	}
+	public void process(DecVar d) {
+		if(variables.containsKey(d.var())) {
+			error = true;
+			errors.msg(d.sourceLink()+":"+ERROR_DUPLICATED_ID+"("+d.var()+")");
 		} else {
-			tablaDeSimbolos.put(d.var(), d);
+			variables.put(d.var(), d);
+			d.tipoDec().accept(this);
+		}
+	}
+	public void process(TPointer p) {
+		if (!compat.isRef(p.tbase())) {
+			p.tbase().accept(this);
+		}
+	}
+	public void process(TRef r) {
+		DecType d = types.get(r.typeId());
+		if (d == null) {
+			error = true;
+			errors.msg(r.sourceLink()+":"+ERROR_UNDECLARED_TYPE_ID+"("+r.typeId()+")");
+		}
+		else {
+			r.ponDeclaracion(d);
 		}
 	}
 
 	public void process(IAsig i) {
-		DecVar decVar = tablaDeSimbolos.get(i.var());
-		if (decVar == null) {
-			error = true;
-			errores.msg(i.sourceLink() + ":" + ERROR_ID_NO_DECLARADO + "(" + i.var() + ")");
-		} else {
-			i.ponDeclaracion(decVar);
-		}
+		i.mem().processWith(this);
 		i.exp().processWith(this);
+	}
+	public void process(INew i) {
+		i.mem().processWith(this);
+	}
+	public void process(IFree i) {
+		i.mem().processWith(this);
 	}
 
 	public void process(IBlock b) {
@@ -88,20 +151,20 @@ public class Vinculacion extends Processing {
 	}
 	
 	public void process(IRead i) {
-		DecVar decVar = tablaDeSimbolos.get(i.var());
+		DecVar decVar = variables.get(i.var());
 		if (decVar == null) {
 			error = true;
-			errores.msg(ERROR_ID_NO_DECLARADO + "(" + i.var() + ")");
+			errors.msg(ERROR_UNDECLARED_ID + "(" + i.var() + ")");
 		} else {
 			i.ponDeclaracion(decVar);
 		}
 	}
 	
 	public void process(IWrite i) {
-		DecVar decVar = tablaDeSimbolos.get(i.var());
+		DecVar decVar = variables.get(i.var());
 		if (decVar == null) {
 			error = true;
-			errores.msg(ERROR_ID_NO_DECLARADO + "(" + i.var() + ")");
+			errors.msg(ERROR_UNDECLARED_ID + "(" + i.var() + ")");
 		} else {
 			i.putDeclaration(decVar);
 		}
@@ -245,14 +308,13 @@ public class Vinculacion extends Processing {
 	}
 
 	public void process(Var exp) {
-		DecVar decVar = tablaDeSimbolos.get(exp.var());
+		DecVar decVar = variables.get(exp.var());
 		if (decVar == null) {
 			error = true;
-			errores.msg(exp.sourceLink() + ":" + ERROR_ID_NO_DECLARADO + "(" + exp.var() + ")");
+			errors.msg(exp.sourceLink() + ":" + ERROR_UNDECLARED_ID + "(" + exp.var() + ")");
 		} else {
 			exp.putDeclaration(decVar);
 		}
-
 	}
 
 }

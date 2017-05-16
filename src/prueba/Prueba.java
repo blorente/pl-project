@@ -132,7 +132,7 @@ public class Prueba extends Program {
 		Errors errores = new Errors();
 		Impresion impresionSimple = new Impresion();
 		program.root().processWith(impresionSimple);
-		Vinculacion vinculacion = new Vinculacion(errores);
+		Vinculacion vinculacion = new Vinculacion(program, errores);
 		program.root().processWith(vinculacion);
 		if (!vinculacion.error()) {
 			TypeCheck ctipos = new TypeCheck(program, errores);

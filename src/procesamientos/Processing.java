@@ -1,7 +1,5 @@
 package procesamientos;
 
-import programa.Program;
-import programa.Program.BinaryExp;
 import programa.Program.Division;
 import programa.Program.Equals;
 import programa.Program.IWhile;
@@ -51,6 +49,9 @@ import programa.Program.Ok;
 import programa.Program.Or;
 import programa.Program.ISwitch;
 import programa.Program.ICase;
+import programa.Program.DecRef;
+import programa.Program.IFree;
+import programa.Program.INew;
 
 public class Processing {
    public void process(IntCt exp) {}
@@ -97,6 +98,7 @@ public class Processing {
    public void process(Error t) {}
 
    public void process(Prog p) {}
+   public void process(DecRef d) {}
    public void process(DecType d) {}
    public void process(DecVar d) {}
 
@@ -110,4 +112,7 @@ public class Processing {
    public void process(IIfThenElse i) {}
    public void process(ISwitch i) {}
    public void process(ICase i) {}
+   public void process(IFree i) {}
+
+   public void process(INew i) {}
 }
