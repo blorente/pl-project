@@ -53,7 +53,6 @@ public abstract class Program {
 			return "INT";
 		}
 	}
-
 	public class Bool extends DeclaredType {
 		public void accept(Processing p) {
 			p.process(this);
@@ -63,7 +62,6 @@ public abstract class Program {
 			return "BOOL";
 		}
 	}
-
 	public class Real extends DeclaredType {
 		public void accept(Processing p) {
 			p.process(this);
@@ -73,7 +71,6 @@ public abstract class Program {
 			return "REAL";
 		}
 	}
-
 	public class UniChar extends DeclaredType {
 		public void accept(Processing p) {
 			p.process(this);
@@ -83,7 +80,6 @@ public abstract class Program {
 			return "UNICHAR";
 		}
 	}
-
 	public class UniString extends DeclaredType {
 		public void accept(Processing p) {
 			p.process(this);
@@ -93,7 +89,6 @@ public abstract class Program {
 			return "UNISTRING";
 		}
 	}
-
 	public class TPointer extends DeclaredType {
 		private DeclaredType tbase;
 
@@ -109,7 +104,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class TRef extends DeclaredType {
 		private String typeId;
 		private DecType vinculo;

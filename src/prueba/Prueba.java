@@ -3,7 +3,7 @@ package prueba;
 
 import errores.Errors;
 import maquinaP.MaquinaP;
-import procesamientos.generacioncodigo.AsignacionDirecciones;
+import procesamientos.generacioncodigo.SpaceAssignment;
 import procesamientos.generacioncodigo.CodeGeneration;
 import procesamientos.generacioncodigo.Tagging;
 import procesamientos.impresion.Impresion;
@@ -138,13 +138,13 @@ public class Prueba extends Program {
 			TypeCheck ctipos = new TypeCheck(program, errores);
 			program.root().processWith(ctipos);
 			if (program.root().tipo().equals(program.tOk())) {
-				AsignacionDirecciones asignaciondirs = new AsignacionDirecciones();
+				SpaceAssignment asignaciondirs = new SpaceAssignment();
 				program.root().processWith(asignaciondirs);
 				Tagging tagging = new Tagging(program);
 				program.root().processWith(tagging);
 				Impresion impresionCompleta = new Impresion(true);
 				program.root().processWith(impresionCompleta);
-				MaquinaP maquina = new MaquinaP(asignaciondirs.tamanioDatos());
+				MaquinaP maquina = new MaquinaP(asignaciondirs.dataSize());
 				CodeGeneration generacioncod = new CodeGeneration(program, maquina);
 				program.root().processWith(generacioncod);
 				maquina.muestraCodigo();

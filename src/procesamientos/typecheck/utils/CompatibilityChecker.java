@@ -5,6 +5,9 @@ import programa.Program.TPointer;
 import programa.Program.TRef;
 import programa.Program.Type;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class CompatibilityChecker {
 	private Program program;
 
@@ -92,27 +95,61 @@ public class CompatibilityChecker {
 		return isString(tipo) || isChar(tipo);
 	}
 
-	public static boolean esPointer(Type t) {
+	public static boolean isPointer(Type t) {
 
 		return t instanceof TPointer;
 	}
 
-	public TPointer pointer(Type t) {
+	public static TPointer pointer(Type t) {
 		return (TPointer) t;
 	}
 
-	public boolean isRef(Type t) {
+	public static boolean isRef(Type t) {
 		return t instanceof TRef;
 	}
 
-	public TRef asRef(Type t) {
+	public static TRef asRef(Type t) {
 		return (TRef) t;
 	}
 
-	public Type baseType(Type t) {
-		while (isRef(t)) {
-			t = asRef(t).declaration().decType();
+	public static Type baseType(Type t) {
+		while (CompatibilityChecker.isRef(t)) {
+			t = CompatibilityChecker.asRef(t).declaration().decType();
 		}
 		return t;
+	}
+
+	private static class Tipox2 {
+		private Type t1;
+		private Type t2;
+		public Tipox2 (Type t1, Type t2) {
+			this.t1 = t1;
+			this.t2 = t2;
+		}
+		public boolean equals(Object o) {
+			return (o instanceof Tipox2) &&
+					t1.equals(((Tipox2)o).t1) &&
+					t2.equals(((Tipox2)o).t2);
+		}
+		public int hashCode() {
+			return t1.hashCode()+t2.hashCode();
+		}
+	}
+
+	public static boolean areCompatible(Type t1, Type t2) {
+		return areCompatible(t1,t2,new HashSet<Tipox2>());
+	}
+	public static boolean areCompatible(Type t1, Type t2, Set<Tipox2> considered) {
+		t1 = CompatibilityChecker.baseType(t1);
+		t2 = CompatibilityChecker.baseType(t2);
+		if(considered.add(new Tipox2(t1,t2))) {
+			if(t1.equals(t2)) return true;
+			else if (CompatibilityChecker.isPointer(t1) && CompatibilityChecker.isPointer(t2)) {
+				return areCompatible(CompatibilityChecker.pointer(t1).tbase(),CompatibilityChecker.pointer(t2).tbase(),considered);
+			} else
+				return false;
+		} else {
+			return true;
+		}
 	}
 }
