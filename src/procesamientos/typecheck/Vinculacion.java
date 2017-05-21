@@ -49,6 +49,7 @@ import programa.Program.INew;
 import programa.Program.DecType;
 import programa.Program.TPointer;
 import programa.Program.TRef;
+import programa.Program.DecRef;
 
 public class Vinculacion extends Processing {
 	private final static String ERROR_DUPLICATED_ID = "Duplicated identifier";
@@ -74,7 +75,7 @@ public class Vinculacion extends Processing {
 			d.decType().accept(this);
 		}
 		public void process(DecVar d) {
-			d.tipoDec().accept(this);
+			d.decType().accept(this);
 		}
 		public void process(TPointer p) {
 			p.tbase().accept(this);
@@ -103,8 +104,7 @@ public class Vinculacion extends Processing {
 		if(types.containsKey(d.typeId())) {
 			error = true;
 			errors.msg(d.sourceLink()+":"+ERROR_DUPLICATED_TYPE_ID+"("+d.typeId()+")");
-		}
-		else {
+		} else {
 			types.put(d.typeId(),d);
 			d.decType().accept(this);
 		}
@@ -115,11 +115,11 @@ public class Vinculacion extends Processing {
 			errors.msg(d.sourceLink()+":"+ERROR_DUPLICATED_ID+"("+d.var()+")");
 		} else {
 			variables.put(d.var(), d);
-			d.tipoDec().accept(this);
+			d.decType().accept(this);
 		}
 	}
 	public void process(TPointer p) {
-		if (!compat.isRef(p.tbase())) {
+		if (!CompatibilityChecker.isRef(p.tbase())) {
 			p.tbase().accept(this);
 		}
 	}
@@ -133,7 +133,6 @@ public class Vinculacion extends Processing {
 			r.ponDeclaracion(d);
 		}
 	}
-
 	public void process(IAsig i) {
 		i.mem().processWith(this);
 		i.exp().processWith(this);
@@ -144,12 +143,10 @@ public class Vinculacion extends Processing {
 	public void process(IFree i) {
 		i.mem().processWith(this);
 	}
-
 	public void process(IBlock b) {
 		for (Inst i : b.is())
 			i.processWith(this);
 	}
-	
 	public void process(IRead i) {
 		DecVar decVar = variables.get(i.var());
 		if (decVar == null) {
@@ -159,7 +156,6 @@ public class Vinculacion extends Processing {
 			i.ponDeclaracion(decVar);
 		}
 	}
-	
 	public void process(IWrite i) {
 		DecVar decVar = variables.get(i.var());
 		if (decVar == null) {
@@ -169,28 +165,23 @@ public class Vinculacion extends Processing {
 			i.putDeclaration(decVar);
 		}
 	}
-	
 	public void process(IWhile wh) {
 		wh.getCond().processWith(this);
 		wh.getBody().processWith(this);
 	}
-
 	public void process(IDoWhile i) {
 		i.getCond().processWith(this);
 		i.getBody().processWith(this);
 	}
-
 	public void process(IIfThen i) {
 		i.getCond().processWith(this);
 		i.getThen().processWith(this);
 	}
-
 	public void process(IIfThenElse i) {
 		i.getCond().processWith(this);
 		i.getThen().processWith(this);
 		i.getElse().processWith(this);
 	}
-
 	public void process(ISwitch i) {
 		i.getCond().processWith(this);
 		for (Inst c : i.getCases())
@@ -199,114 +190,90 @@ public class Vinculacion extends Processing {
 			i.getDefault().processWith(this);
 		}
 	}
-
 	public void process(ICase i) {
 		i.getExp().processWith(this);
 		i.getBody().processWith(this);
 	}
-
 	public boolean error() {
 		return error;
 	}
-
 	public void process(And exp) {
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
 	}
-
 	public void process(Or exp) {
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
 	}
-
 	public void process(Equals exp) {
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
 	}
-
 	public void process(NotEquals exp) {
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
 	}
-
 	public void process(Greater exp) {
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
 	}
-
 	public void process(GreaterEq exp) {
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
 	}
-
 	public void process(Less exp) {
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
 	}
-
 	public void process(LessEq exp) {
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
 	}
-
 	public void process(Not exp) {
 		exp.op().processWith(this);
 	}
-
 	public void process(Addition exp) {
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
 	}
-
 	public void process(Subtraction exp) {
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
 	}
-
 	public void process(Multiplication exp) {
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
 	}
-
 	public void process(Division exp) {
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
 	}
-
 	public void process(Modulus exp) {
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
 	}
-
 	public void process(StrElem exp) {
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
 	}
-
 	public void process(Negative exp) {
 		exp.op().processWith(this);
 	}
-
 	public void process(IntCast exp) {
 		exp.op().processWith(this);
 	}
-
 	public void process(RealCast exp) {
 		exp.op().processWith(this);
 	}
-
 	public void process(BoolCast exp) {
 		exp.op().processWith(this);
 	}
-
 	public void process(UniCharCast exp) {
 		exp.op().processWith(this);
 	}
-
 	public void process(UniStrCast exp) {
 		exp.op().processWith(this);
 	}
-
 	public void process(Var exp) {
 		DecVar decVar = variables.get(exp.var());
 		if (decVar == null) {
@@ -315,6 +282,9 @@ public class Vinculacion extends Processing {
 		} else {
 			exp.putDeclaration(decVar);
 		}
+	}
+	public void process(DecRef d) {
+		d.mem().processWith(this);
 	}
 
 }

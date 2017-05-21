@@ -30,13 +30,13 @@ public class SpaceAssignment extends Processing {
     }
 
     public void process(DecVar d) {
-        d.tipoDec().accept(this);
-        d.ponDir(dir);
-        dir += d.tipoDec().size();
+        d.decType().accept(this);
+        d.assignAddr(dir);
+        dir += d.decType().size();
     }
     public void process(DecType d) {
-        if (d.tipoDec().size() == 0) {
-            d.tipoDec().processCon(this);
+        if (d.decType().size() == 0) {
+            d.decType().accept(this);
         }
     }
 

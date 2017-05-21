@@ -99,7 +99,6 @@ public class CompatibilityChecker {
 
 		return t instanceof TPointer;
 	}
-
 	public static TPointer pointer(Type t) {
 		return (TPointer) t;
 	}

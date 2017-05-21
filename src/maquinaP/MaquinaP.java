@@ -1,7 +1,5 @@
 package maquinaP;
 
-import programa.Program;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -9,25 +7,25 @@ import java.util.Stack;
 
 public class MaquinaP {
 	private final static String W_ACCESO = "**** WARNING: Acceso a memoria sin inicializar";
+	private class EOutOfRangeAccess extends RuntimeException{}
+	private class EUninitializedMemoryAccess extends RuntimeException{}
 	private final Valor UNKNOWN;
+
+	private GestorMemoriaDinamica gestorMemoriaDinamica;
 
 	private class Valor {
 		public int intValue() {
 			throw new UnsupportedOperationException();
 		}
-
 		public boolean boolValue() {
 			throw new UnsupportedOperationException();
 		}
-
 		public double realValue() {
 			throw new UnsupportedOperationException();
 		}
-
 		public char uniCharValue() {
 			throw new UnsupportedOperationException();
 		}
-
 		public String uniStringValue() {
 			throw new UnsupportedOperationException();
 		}
@@ -48,7 +46,6 @@ public class MaquinaP {
 			return String.valueOf(valor);
 		}
 	}
-
 	private class BoolValue extends Valor {
 		private boolean valor;
 
@@ -64,7 +61,6 @@ public class MaquinaP {
 			return String.valueOf(valor);
 		}
 	}
-
 	private class RealValue extends Valor {
 		private double valor;
 
@@ -80,7 +76,6 @@ public class MaquinaP {
 			return String.valueOf(valor);
 		}
 	}
-
 	private class UniCharValue extends Valor {
 		private char valor;
 
@@ -96,7 +91,6 @@ public class MaquinaP {
 			return "" + valor;
 		}
 	}
-
 	private class UniStringValue extends Valor {
 		private String valor;
 
@@ -112,7 +106,6 @@ public class MaquinaP {
 			return valor;
 		}
 	}
-
 	private class UnknownValue extends Valor {
 		public String toString() {
 			return "?";
@@ -127,9 +120,7 @@ public class MaquinaP {
 	public interface Instruction {
 		void execute();
 	}
-
 	private IAddInt IADDINT;
-
 	private class IAddInt implements Instruction {
 		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
@@ -147,9 +138,7 @@ public class MaquinaP {
 			return "addInt";
 		};
 	}
-
 	private IAddReal IADDREAL;
-
 	private class IAddReal implements Instruction {
 		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
@@ -167,9 +156,7 @@ public class MaquinaP {
 			return "addReal";
 		};
 	}
-
 	private IConcat ICONCAT;
-
 	private class IConcat implements Instruction {
 		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
@@ -187,9 +174,7 @@ public class MaquinaP {
 			return "concat";
 		};
 	}
-
 	private ISubInt ISUBINT;
-
 	private class ISubInt implements Instruction {
 		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
@@ -207,9 +192,7 @@ public class MaquinaP {
 			return "subInt";
 		};
 	}
-
 	private ISubReal ISUBREAL;
-
 	private class ISubReal implements Instruction {
 		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
@@ -227,9 +210,7 @@ public class MaquinaP {
 			return "subReal";
 		};
 	}
-
 	private IMulInt IMULINT;
-
 	private class IMulInt implements Instruction {
 		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
@@ -247,9 +228,7 @@ public class MaquinaP {
 			return "mulInt";
 		};
 	}
-
 	private IMulReal IMULREAL;
-
 	private class IMulReal implements Instruction {
 		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
@@ -267,9 +246,7 @@ public class MaquinaP {
 			return "mulReal";
 		};
 	}
-
 	private IDivInt IDIVINT;
-
 	private class IDivInt implements Instruction {
 		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
@@ -287,9 +264,7 @@ public class MaquinaP {
 			return "divInt";
 		};
 	}
-
 	private IDivReal IDIVREAL;
-
 	private class IDivReal implements Instruction {
 		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
@@ -307,9 +282,7 @@ public class MaquinaP {
 			return "divReal";
 		};
 	}
-
 	private IMod IMOD;
-
 	private class IMod implements Instruction {
 		public void execute() {
 			Valor resul;
@@ -327,9 +300,7 @@ public class MaquinaP {
 			return "mod";
 		}
 	}
-
 	private IAnd IAND;
-
 	private class IAnd implements Instruction {
 		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
@@ -347,9 +318,7 @@ public class MaquinaP {
 			return "and";
 		};
 	}
-
 	private IOr IOR;
-
 	private class IOr implements Instruction {
 		public void execute() {
 			Valor opnd2 = pilaEvaluacion.pop();
@@ -367,9 +336,7 @@ public class MaquinaP {
 			return "or";
 		};
 	}
-
 	private INot INOT;
-
 	private class INot implements Instruction {
 		public void execute() {
 			Valor resul;
@@ -386,7 +353,6 @@ public class MaquinaP {
 			return "not";
 		};
 	}
-	
 	private IEqualsInt IEQUALSINT;
 	private class IEqualsInt implements Instruction {
 		public void execute() {
@@ -405,7 +371,6 @@ public class MaquinaP {
 			return "equalsInt";
 		};
 	}
-	
 	private IEqualsReal IEQUALSREAL;
 	private class IEqualsReal implements Instruction {
 		public void execute() {
@@ -424,7 +389,6 @@ public class MaquinaP {
 			return "equalsReal";
 		};
 	}
-	
 	private IEqualsBool IEQUALSBOOL;
 	private class IEqualsBool implements Instruction {
 		public void execute() {
@@ -443,7 +407,6 @@ public class MaquinaP {
 			return "equalsBool";
 		};
 	}
-	
 	private IEqualsChar IEQUALSCHAR;
 	private class IEqualsChar implements Instruction {
 		public void execute() {
@@ -462,7 +425,6 @@ public class MaquinaP {
 			return "equalsChar";
 		};
 	}
-	
 	private IEqualsString IEQUALSSTRING;
 	private class IEqualsString implements Instruction {
 		public void execute() {
@@ -481,7 +443,6 @@ public class MaquinaP {
 			return "equalsString";
 		};
 	}
-	
 	private INotEqualsInt INOTEQUALSINT;
 	private class INotEqualsInt implements Instruction {
 		public void execute() {
@@ -500,7 +461,6 @@ public class MaquinaP {
 			return "notEqualsInt";
 		};
 	}
-	
 	private INotEqualsReal INOTEQUALSREAL;
 	private class INotEqualsReal implements Instruction {
 		public void execute() {
@@ -519,7 +479,6 @@ public class MaquinaP {
 			return "notEqualsReal";
 		};
 	}
-	
 	private INotEqualsBool INOTEQUALSBOOL;
 	private class INotEqualsBool implements Instruction {
 		public void execute() {
@@ -538,7 +497,6 @@ public class MaquinaP {
 			return "notEqualsBool";
 		};
 	}
-	
 	private INotEqualsChar INOTEQUALSCHAR;
 	private class INotEqualsChar implements Instruction {
 		public void execute() {
@@ -557,7 +515,6 @@ public class MaquinaP {
 			return "notEqualsChar";
 		};
 	}
-	
 	private INotEqualsString INOTEQUALSSTRING;
 	private class INotEqualsString implements Instruction {
 		public void execute() {
@@ -576,7 +533,6 @@ public class MaquinaP {
 			return "notEqualsString";
 		};
 	}
-	
 	private IGreaterInt IGREATERINT;
 	private class IGreaterInt implements Instruction {
 		public void execute() {
@@ -595,7 +551,6 @@ public class MaquinaP {
 			return "greaterInt";
 		};
 	}
-	
 	private IGreaterReal IGREATERREAL;
 	private class IGreaterReal implements Instruction {
 		public void execute() {
@@ -614,7 +569,6 @@ public class MaquinaP {
 			return "greaterReal";
 		};
 	}
-	
 	private IGreaterBool IGREATERBOOL;
 	private class IGreaterBool implements Instruction {
 		public void execute() {
@@ -634,7 +588,6 @@ public class MaquinaP {
 			return "greaterBool";
 		};
 	}
-	
 	private IGreaterChar IGREATERCHAR;
 	private class IGreaterChar implements Instruction {
 		public void execute() {
@@ -653,7 +606,6 @@ public class MaquinaP {
 			return "greaterChar";
 		};
 	}
-	
 	private IGreaterString IGREATERSTRING;
 	private class IGreaterString implements Instruction {
 		public void execute() {
@@ -672,7 +624,6 @@ public class MaquinaP {
 			return "greaterString";
 		};
 	}
-	
 	private IGreaterEqInt IGREATEREQINT;
 	private class IGreaterEqInt implements Instruction {
 		public void execute() {
@@ -691,7 +642,6 @@ public class MaquinaP {
 			return "greaterEqsInt";
 		};
 	}
-	
 	private IGreaterEqReal IGREATEREQREAL;
 	private class IGreaterEqReal implements Instruction {
 		public void execute() {
@@ -710,7 +660,6 @@ public class MaquinaP {
 			return "greaterEqReal";
 		};
 	}
-	
 	private IGreaterEqBool IGREATEREQBOOL;
 	private class IGreaterEqBool implements Instruction {
 		public void execute() {
@@ -731,7 +680,6 @@ public class MaquinaP {
 			return "greaterEqBool";
 		};
 	}
-	
 	private IGreaterEqChar IGREATEREQCHAR;
 	private class IGreaterEqChar implements Instruction {
 		public void execute() {
@@ -750,7 +698,6 @@ public class MaquinaP {
 			return "greaterEqChar";
 		};
 	}
-	
 	private IGreaterEqString IGREATEREQSTRING;
 	private class IGreaterEqString implements Instruction {
 		public void execute() {
@@ -769,7 +716,6 @@ public class MaquinaP {
 			return "greaterEqString";
 		};
 	}
-	
 	private ILessInt ILESSINT;
 	private class ILessInt implements Instruction {
 		public void execute() {
@@ -788,7 +734,6 @@ public class MaquinaP {
 			return "lessInt";
 		};
 	}
-	
 	private ILessReal ILESSREAL;
 	private class ILessReal implements Instruction {
 		public void execute() {
@@ -807,7 +752,6 @@ public class MaquinaP {
 			return "lessReal";
 		};
 	}
-	
 	private ILessBool ILESSBOOL;
 	private class ILessBool implements Instruction {
 		public void execute() {
@@ -827,7 +771,6 @@ public class MaquinaP {
 			return "lessBool";
 		};
 	}
-	
 	private ILessChar ILESSCHAR;
 	private class ILessChar implements Instruction {
 		public void execute() {
@@ -846,7 +789,6 @@ public class MaquinaP {
 			return "lessChar";
 		};
 	}
-	
 	private ILessString ILESSSTRING;
 	private class ILessString implements Instruction {
 		public void execute() {
@@ -865,7 +807,6 @@ public class MaquinaP {
 			return "lessString";
 		};
 	}
-	
 	private ILessEqInt ILESSEQINT;
 	private class ILessEqInt implements Instruction {
 		public void execute() {
@@ -884,7 +825,6 @@ public class MaquinaP {
 			return "lessEqInt";
 		};
 	}
-	
 	private ILessEqReal ILESSEQREAL;
 	private class ILessEqReal implements Instruction {
 		public void execute() {
@@ -903,7 +843,6 @@ public class MaquinaP {
 			return "lessEqReal";
 		};
 	}
-	
 	private ILessEqBool ILESSEQBOOL;
 	private class ILessEqBool implements Instruction {
 		public void execute() {
@@ -924,7 +863,6 @@ public class MaquinaP {
 			return "lessEqBool";
 		};
 	}
-	
 	private ILessEqChar ILESSEQCHAR;
 	private class ILessEqChar implements Instruction {
 		public void execute() {
@@ -943,7 +881,6 @@ public class MaquinaP {
 			return "lessEqChar";
 		};
 	}
-	
 	private ILessEqString ILESSEQSTRING;
 	private class ILessEqString implements Instruction {
 		public void execute() {
@@ -962,9 +899,7 @@ public class MaquinaP {
 			return "lessEqString";
 		};
 	}
-	
 	private IStrElem ISTRELEM;
-
 	private class IStrElem implements Instruction {
 
 		public void execute() {
@@ -991,9 +926,7 @@ public class MaquinaP {
 		}
 
 	}
-
 	private INegInt INEGINT;
-
 	private class INegInt implements Instruction {
 		public void execute() {
 			Valor operand = pilaEvaluacion.pop();
@@ -1009,9 +942,7 @@ public class MaquinaP {
 			return "negInt";
 		}
 	}
-
 	private INegReal INEGREAL;
-
 	private class INegReal implements Instruction {
 		public void execute() {
 			Valor operand = pilaEvaluacion.pop();
@@ -1027,7 +958,6 @@ public class MaquinaP {
 			return "negReal";
 		}
 	}
-
 	private class IPushInt implements Instruction {
 		private int value;
 
@@ -1044,7 +974,6 @@ public class MaquinaP {
 			return "pushInt(" + value + ")";
 		};
 	}
-
 	private class IPushReal implements Instruction {
 		private double valor;
 
@@ -1061,7 +990,6 @@ public class MaquinaP {
 			return "pushReal(" + valor + ")";
 		};
 	}
-
 	private class IPushUniChar implements Instruction {
 		private char value;
 
@@ -1078,7 +1006,6 @@ public class MaquinaP {
 			return "pushUniChar(" + value + ")";
 		};
 	}
-
 	private class IPushUniString implements Instruction {
 		private String value;
 
@@ -1095,7 +1022,6 @@ public class MaquinaP {
 			return "pushUniString(" + value + ")";
 		};
 	}
-
 	private class IDesapilaDir implements Instruction {
 		private int dir;
 
@@ -1112,7 +1038,6 @@ public class MaquinaP {
 			return "desapilaDir(" + dir + ")";
 		};
 	}
-
 	private class IApilaDir implements Instruction {
 		private int dir;
 		private String enlaceFuente;
@@ -1139,7 +1064,6 @@ public class MaquinaP {
 			return "pushDir(" + dir + ")";
 		}
 	}
-
 	private class IPushBool implements Instruction {
 		private boolean valor;
 
@@ -1156,9 +1080,7 @@ public class MaquinaP {
 			return "apilaBool(" + valor + ")";
 		}
 	}
-
 	private IIntToReal IINTTOREAL;
-
 	private class IIntToReal implements Instruction {
 		private String enlaceFuente;
 
@@ -1184,9 +1106,7 @@ public class MaquinaP {
 			return "intToReal";
 		}
 	}
-
 	private IIntToBool IINTTOBOOL;
-
 	private class IIntToBool implements Instruction {
 		private String enlaceFuente;
 
@@ -1212,9 +1132,7 @@ public class MaquinaP {
 			return "intToReal";
 		}
 	}
-
 	private ICharToReal ICHARTOREAL;
-
 	private class ICharToReal implements Instruction {
 		private String enlaceFuente;
 
@@ -1240,9 +1158,7 @@ public class MaquinaP {
 			return "charToReal";
 		}
 	}
-
 	private IBoolToReal IBOOLTOREAL;
-
 	private class IBoolToReal implements Instruction {
 		private String enlaceFuente;
 
@@ -1268,9 +1184,7 @@ public class MaquinaP {
 			return "boolToReal";
 		}
 	}
-
 	private IRealToInt IREALTOINT;
-
 	private class IRealToInt implements Instruction {
 		private String enlaceFuente;
 
@@ -1296,9 +1210,7 @@ public class MaquinaP {
 			return "realToInt";
 		}
 	}
-
 	private IBoolToInt IBOOLTOINT;
-
 	private class IBoolToInt implements Instruction {
 		private String enlaceFuente;
 
@@ -1324,9 +1236,7 @@ public class MaquinaP {
 			return "boolToInt";
 		}
 	}
-
 	private ICharToInt ICHARTOINT;
-
 	private class ICharToInt implements Instruction {
 		private String enlaceFuente;
 
@@ -1352,9 +1262,7 @@ public class MaquinaP {
 			return "charToInt";
 		}
 	}
-
 	private IIntToChar IINTTOCHAR;
-
 	private class IIntToChar implements Instruction {
 		private String enlaceFuente;
 
@@ -1380,9 +1288,7 @@ public class MaquinaP {
 			return "intToChar";
 		}
 	}
-
 	private ICharToString ICHARTOSTRING;
-
 	private class ICharToString implements Instruction {
 		private String enlaceFuente;
 
@@ -1408,7 +1314,6 @@ public class MaquinaP {
 			return "charToString";
 		}
 	}
-	
 	private IReadInt IREADINT;
 	private class IReadInt implements Instruction {
 		private Scanner in;
@@ -1427,7 +1332,6 @@ public class MaquinaP {
 			return "readInt";
 		}
  	}
-	
 	private IReadReal IREADREAL;
 	private class IReadReal implements Instruction {
 		private Scanner in;
@@ -1446,7 +1350,6 @@ public class MaquinaP {
 			return "readDouble";
 		}
  	}
-	
 	private IReadBool IREADBOOL;
 	private class IReadBool implements Instruction {
 		private Scanner in;
@@ -1465,7 +1368,6 @@ public class MaquinaP {
 			return "readBool";
 		}
  	}
-	
 	private IReadChar IREADCHAR;
 	private class IReadChar implements Instruction {
 		private Scanner in;
@@ -1484,7 +1386,6 @@ public class MaquinaP {
 			return "readIntChar";
 		}
  	}
-	
 	private IReadString IREADSTRING;
 	private class IReadString implements Instruction {
 		private Scanner in;
@@ -1503,7 +1404,6 @@ public class MaquinaP {
 			return "readString";
 		}
  	}
-	
 	private IWriteString IWRITESTRING;
 	private class IWriteString implements Instruction {
 		public void execute() {
@@ -1516,7 +1416,6 @@ public class MaquinaP {
 			return "writeString";
 		}
 	}
-	
 	private IWriteInt IWRITEINT;
 	private class IWriteInt implements Instruction {
 		public void execute() {
@@ -1529,7 +1428,6 @@ public class MaquinaP {
 			return "writeInt";
 		}
 	}
-	
 	private IWriteReal IWRITEREAL;
 	private class IWriteReal implements Instruction {
 		public void execute() {
@@ -1542,7 +1440,6 @@ public class MaquinaP {
 			return "writeReal";
 		}
 	}
-	
 	private IWriteBool IWRITEBOOL;
 	private class IWriteBool implements Instruction {
 		public void execute() {
@@ -1555,7 +1452,6 @@ public class MaquinaP {
 			return "writeBool";
 		}
 	}
-	
 	private IWriteChar IWRITECHAR;
 	private class IWriteChar implements Instruction {
 		public void execute() {
@@ -1568,7 +1464,6 @@ public class MaquinaP {
 			return "writeChar";
 		}
 	}
-
 	private class IBranchIfFalse implements Instruction {
 
 		int target;
@@ -1590,7 +1485,6 @@ public class MaquinaP {
 			return "branchIfFalse(" + target + ")";
 		}
 	}
-
 	private class IBranch implements Instruction {
 
 		int target;
@@ -1607,8 +1501,6 @@ public class MaquinaP {
 			return "branch(" + target + ")";
 		}
 	}
-
-
 	private IDup IDUP;
 	private class IDup implements Instruction {
 		@Override
@@ -1624,7 +1516,6 @@ public class MaquinaP {
 			return "dup";
 		}
 	}
-
 	private IPop IPOP;
 	private class IPop implements Instruction {
 		@Override
@@ -1638,67 +1529,117 @@ public class MaquinaP {
 			return "pop";
 		}
 	}
+	private class IMove implements Instruction {
+		private int size;
+		public IMove(int size) {
+			this.size = size;
+		}
+		public void execute() {
+			int dirOrigen = pilaEvaluacion.pop().intValue();
+			int dirDestino = pilaEvaluacion.pop().intValue();
+			if ((dirOrigen + (size -1)) >= datos.length)
+				throw new EOutOfRangeAccess();
+			if ((dirDestino + (size -1)) >= datos.length)
+				throw new EOutOfRangeAccess();
+			for (int i = 0; i < size; i++)
+				datos[dirDestino+i] = datos[dirOrigen+i];
+			pc++;
+		}
+		public String toString() {return "move("+ size +")";}
+	}
+	private IPushInd IPUSHIND;
+	private class IPushInd implements Instruction {
+		public void execute() {
+			int dir = pilaEvaluacion.pop().intValue();
+			if (dir >= datos.length) throw new EOutOfRangeAccess();
+			if (datos[dir] == null) throw new EUninitializedMemoryAccess();
+			pilaEvaluacion.push(datos[dir]);
+			pc++;
+		}
+		public String toString() {return "pushInd";};
+	}
+
+	private IPopInd IPOPIND;
+	private class IPopInd implements Instruction {
+		public void execute() {
+			Valor valor = pilaEvaluacion.pop();
+			int dir = pilaEvaluacion.pop().intValue();
+			if (dir >= datos.length) throw new EOutOfRangeAccess();
+			datos[dir] = valor;
+			pc++;
+		}
+		public String toString() {return "popInd";};
+	}
+	private class IAlloc implements Instruction {
+		private int tam;
+		public IAlloc(int tam) {
+			this.tam = tam;
+		}
+		public void execute() {
+			int inicio = gestorMemoriaDinamica.alloc(tam);
+			pilaEvaluacion.push(new IntValue(inicio));
+			pc++;
+		}
+		public String toString() {return "alloc("+tam+")";};
+	}
+	private class IDealloc implements Instruction {
+		private int tam;
+		public IDealloc(int tam) {
+			this.tam = tam;
+		}
+		public void execute() {
+			int inicio = pilaEvaluacion.pop().intValue();
+			gestorMemoriaDinamica.free(inicio,tam);
+			pc++;
+		}
+		public String toString() {return "dealloc("+tam+")";};
+	}
 
 	public Instruction addInt() {
 		return IADDINT;
 	}
-
 	public Instruction addReal() {
 		return IADDREAL;
 	}
-
 	public Instruction concat() {
 		return ICONCAT;
 	}
-
 	public Instruction subInt() {
 		return ISUBINT;
 	}
-
 	public Instruction subReal() {
 		return ISUBREAL;
 	}
-
 	public Instruction mulInt() {
 		return IMULINT;
 	}
-
 	public Instruction mulReal() {
 		return IMULREAL;
 	}
-
 	public Instruction divInt() {
 		return IDIVINT;
 	}
-
 	public Instruction divReal() {
 		return IDIVREAL;
 	}
-
 	public Instruction mod() {
 		return IMOD;
 	}
-
 	public Instruction negInt() {
 		return INEGINT;
 	}
-
 	public Instruction negReal() {
 		return INEGREAL;
 	}
-
 	public Instruction and() {
 		return IAND;
 	}
-
 	public Instruction or() {
 		return IOR;
 	}
-
 	public Instruction not() {
 		return INOT;
-	}
-	
+	}	
 	public Instruction equalsInt() {
 		return IEQUALSINT;
 	}
@@ -1713,8 +1654,7 @@ public class MaquinaP {
 	}
 	public Instruction equalsString() {
 		return IEQUALSSTRING;
-	}
-	
+	}	
 	public Instruction notEqualsInt() {
 		return INOTEQUALSINT;
 	}
@@ -1729,8 +1669,7 @@ public class MaquinaP {
 	}
 	public Instruction notEqualsString() {
 		return INOTEQUALSSTRING;
-	}
-	
+	}	
 	public Instruction greaterInt() {
 		return IGREATERINT;
 	}
@@ -1745,8 +1684,7 @@ public class MaquinaP {
 	}
 	public Instruction greaterString() {
 		return IGREATERSTRING;
-	}
-	
+	}	
 	public Instruction greaterEqInt() {
 		return IGREATEREQINT;
 	}
@@ -1761,8 +1699,7 @@ public class MaquinaP {
 	}
 	public Instruction greaterEqString() {
 		return IGREATEREQSTRING;
-	}
-	
+	}	
 	public Instruction lessInt() {
 		return ILESSINT;
 	}
@@ -1777,8 +1714,7 @@ public class MaquinaP {
 	}
 	public Instruction lessString() {
 		return ILESSSTRING;
-	}
-	
+	}	
 	public Instruction lessEqInt() {
 		return ILESSEQINT;
 	}	
@@ -1794,143 +1730,126 @@ public class MaquinaP {
 	public Instruction lessEqString() {
 		return ILESSEQSTRING;
 	}
-
 	public Instruction strElem() {
 		return ISTRELEM;
 	}
-
 	public Instruction pushInt(int val) {
 		return new IPushInt(val);
 	}
-
 	public Instruction pushReal(double val) {
 		return new IPushReal(val);
 	}
-
 	public Instruction pushUniChar(char val) {
 		return new IPushUniChar(val);
 	}
-
 	public Instruction pushUniString(String val) {
 		return new IPushUniString(val);
 	}
-
 	public Instruction pushBool(boolean val) {
 		return new IPushBool(val);
 	}
-
 	public Instruction desapilaDir(int dir) {
 		return new IDesapilaDir(dir);
 	}
-
 	public Instruction apilaDir(int dir) {
 		return new IApilaDir(dir);
 	}
-
 	public Instruction apilaDir(int dir, String dinfo) {
 		return new IApilaDir(dir, dinfo);
 	}
-
 	public Instruction intToReal() {
 		return IINTTOREAL;
 	}
-
 	public Instruction intToBool() {
 		return IINTTOBOOL;
 	}
-
 	public Instruction intToChar() {
 		return IINTTOCHAR;
 	}
-
 	public Instruction realToInt() {
 		return IREALTOINT;
 	}
-
 	public Instruction boolToInt() {
 		return IBOOLTOINT;
 	}
-
 	public Instruction boolToReal() {
 		return IBOOLTOREAL;
 	}
-
 	public Instruction charToInt() {
 		return ICHARTOINT;
 	}
-
 	public Instruction charToReal() {
 		return ICHARTOREAL;
 	}
-
 	public Instruction charToString() {
 		return ICHARTOSTRING;
-	}
-	
+	}	
 	public Instruction readInt() {
 		return IREADINT;
-	}
-	
+	}	
 	public Instruction readReal() {
 		return IREADREAL;
-	}
-	
+	}	
 	public Instruction readBool() {
 		return IREADBOOL;
-	}
-	
+	}	
 	public Instruction readChar() {
 		return IREADCHAR;
-	}
-	
+	}	
 	public Instruction readString() {
 		return IREADSTRING;
-	}
-	
+	}	
 	public Instruction writeInt() {
 		return IWRITEINT;
-	}
-	
+	}	
 	public Instruction writeReal() {
 		return IWRITEREAL;
 	}
-
 	public Instruction writeBool() {
 		return IWRITEBOOL;
-	}
-		
+	}		
 	public Instruction writeChar() {
 		return IWRITECHAR;
-	}
-	
+	}	
 	public Instruction writeString() {
 		return IWRITESTRING;
 	}
-
 	public Instruction branchIfFalse(int dir) {
 		return new IBranchIfFalse(dir);
 	}
-
 	public Instruction branch(int dir) {
 		return new IBranch(dir);
 	}
-
 	public Instruction dup() {
 		return IDUP;
 	}
-
 	public Instruction pop() {
 		return IPOP;
+	}
+	public Instruction pushInd() {
+		return IPUSHIND;
+	}
+	public Instruction popInd() {
+		return IPOPIND;
+	}
+	public Instruction move(int size) {
+		return new IMove(size);
+	}
+	public Instruction alloc(int size) {
+		return new IAlloc(size);
+	}
+	public Instruction dealloc(int addr) {
+		return new IDealloc(addr);
 	}
 
 	public void addInstruction(Instruction i) {
 		codigoP.add(i);
 	}
 
-	public MaquinaP(int tamdatos) {
+	public MaquinaP(int dataSize, int heapSize) {
 		this.codigoP = new ArrayList<>();
 		pilaEvaluacion = new Stack<>();
-		datos = new Valor[tamdatos];
+		datos = new Valor[dataSize + heapSize];
 		this.pc = 0;
 		IADDINT = new IAddInt();
 		IADDREAL = new IAddReal();
@@ -2007,10 +1926,15 @@ public class MaquinaP {
 		IDUP = new IDup();
 		IPOP = new IPop();
 
+		IPUSHIND = new IPushInd();
+		IPOPIND = new IPopInd();
+
 		UNKNOWN = new UnknownValue();
+
+		gestorMemoriaDinamica = new GestorMemoriaDinamica(dataSize,(dataSize+heapSize)-1);
 	}
 
-	public void ejecuta() {
+	public void execute() {
 		while (pc != codigoP.size()) {
 			codigoP.get(pc).execute();
 		}
@@ -2032,6 +1956,8 @@ public class MaquinaP {
 		for (int i = 0; i < datos.length; i++) {
 			System.out.println(" " + i + ":" + datos[i]);
 		}
+		System.out.println("Heap");
+		gestorMemoriaDinamica.muestraHuecos();
 		System.out.println("PC:" + pc);
 	}
 }

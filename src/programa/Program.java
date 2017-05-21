@@ -1,16 +1,17 @@
 package programa;
 
 import procesamientos.Processing;
+import procesamientos.typecheck.utils.CompatibilityChecker;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Program {
-	private final Type TINT;
-	private final Type TBOOL;
-	private final Type TREAL;
-	private final Type TUNICHAR;
-	private final Type TUNISTRING;
+	private final DeclaredType TINT;
+	private final DeclaredType TBOOL;
+	private final DeclaredType TREAL;
+	private final DeclaredType TUNICHAR;
+	private final DeclaredType TUNISTRING;
 	private final Type TOK;
 	private final Type TERROR;
 
@@ -91,15 +92,12 @@ public abstract class Program {
 	}
 	public class TPointer extends DeclaredType {
 		private DeclaredType tbase;
-
 		public TPointer(DeclaredType tbase) {
 			this.tbase = tbase;
 		}
-
 		public DeclaredType tbase() {
 			return tbase;
 		}
-
 		public void accept(Processing p) {
 			p.process(this);
 		}
@@ -112,33 +110,26 @@ public abstract class Program {
 		public TRef(String typeId) {
 			this(typeId, null);
 		}
-
 		public TRef(String typeId, String sourceLink) {
 			this.typeId = typeId;
 			this.sourceLink = sourceLink;
 		}
-
 		public DecType declaration() {
 			return vinculo;
 		}
-
 		public void ponDeclaracion(DecType decTipo) {
 			this.vinculo = decTipo;
 		}
-
 		public String typeId() {
 			return typeId;
 		}
-
 		public String sourceLink() {
 			return sourceLink;
 		}
-
 		public void accept(Processing p) {
 			p.process(this);
 		}
 	}
-
 	public class Ok implements Type {
 		public void accept(Processing p) {
 			p.process(this);
@@ -148,7 +139,6 @@ public abstract class Program {
 			return "OK";
 		}
 	}
-
 	public class Error implements Type {
 		public void accept(Processing p) {
 			p.process(this);
@@ -230,33 +220,33 @@ public abstract class Program {
 	public class DecVar extends Dec {
 		private String sourceLink;
 		private String var;
-		private Type tipoDec;
-		private int dir;
+		private DeclaredType decType;
+		private int addr;
 
-		public DecVar(Type tipo, String var) {
+		public DecVar(DeclaredType tipo, String var) {
 			this(tipo, var, null);
 		}
 
-		public DecVar(Type tipo, String var, String sourceLink) {
-			this.tipoDec = tipo;
+		public DecVar(DeclaredType tipo, String var, String sourceLink) {
+			this.decType = tipo;
 			this.sourceLink = sourceLink;
 			this.var = var;
 		}
 
-		public Type tipoDec() {
-			return tipoDec;
+		public DeclaredType decType() {
+			return decType;
 		}
 
 		public String var() {
 			return var;
 		}
 
-		public int dir() {
-			return dir;
+		public int addr() {
+			return addr;
 		}
 
-		public void ponDir(int dir) {
-			this.dir = dir;
+		public void assignAddr(int addr) {
+			this.addr = addr;
 		}
 
 		public String sourceLink() {
@@ -622,10 +612,10 @@ public abstract class Program {
 		}
 
 		public void ponTipo(Type tipo) {
-			this.tipo = tipo;
+			this.tipo = CompatibilityChecker.baseType(tipo);
 		}
 
-		public Type tipo() {
+		public Type type() {
 			return tipo;
 		}
 
@@ -1143,14 +1133,19 @@ public abstract class Program {
 		return new Prog(decs, i);
 	}
 
-	public Dec decvar(Type t, String v) {
+	public Dec decvar(DeclaredType t, String v) {
 		return new DecVar(t, v);
 	}
 
-	public Dec decvar(Type t, String v, String sourceLink) {
+	public Dec decvar(DeclaredType t, String v, String sourceLink) {
 		return new DecVar(t, v, sourceLink);
 	}
-
+	public Dec dectype(DeclaredType t, String v) {
+		return new DecType(t,v);
+	}
+	public Dec dectype(DeclaredType t, String v, String sourceLink) {
+		return new DecType(t,v,sourceLink);
+	}
 	public Inst iasig(Mem m, Exp e) {
 		return new IAsig(m, e);
 	}
@@ -1333,23 +1328,23 @@ public abstract class Program {
 		return new UniStrCast(exp);
 	}
 
-	public Type tInt() {
+	public DeclaredType tInt() {
 		return TINT;
 	}
 
-	public Type tBool() {
+	public DeclaredType tBool() {
 		return TBOOL;
 	}
 
-	public Type tReal() {
+	public DeclaredType tReal() {
 		return TREAL;
 	}
 
-	public Type tUniChar() {
+	public DeclaredType tUniChar() {
 		return TUNICHAR;
 	}
 
-	public Type tUniString() {
+	public DeclaredType tUniString() {
 		return TUNISTRING;
 	}
 

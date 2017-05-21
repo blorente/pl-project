@@ -1,7 +1,6 @@
 package procesamientos.impresion;
 
 import procesamientos.Processing;
-import programa.Program;
 import programa.Program.Division;
 import programa.Program.Equals;
 import programa.Program.IWhile;
@@ -66,7 +65,7 @@ public class Impresion extends Processing {
 
 	private void printAttributes(Exp exp) {
 		if (attributes) {
-			System.out.print("@{t:" + exp.tipo() + ",");
+			System.out.print("@{t:" + exp.type() + ",");
 			System.out.print("df:" + exp.dirFirst() + ",dn:" + exp.dirNext() + "}");
 		}
 	}
@@ -279,7 +278,8 @@ public class Impresion extends Processing {
 		System.out.println();
 	}
 	public void process(DecVar t) {
-		System.out.print(t.tipoDec() + " " + t.var());
+		t.decType().accept(this);
+		System.out.print(" "+t.var());
 		System.out.println();
 	}
 	public void process(DecRef mem) {

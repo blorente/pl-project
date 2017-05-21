@@ -72,17 +72,17 @@ public class TypeCheck extends Processing {
 
     public void process(DecRef p) {
         p.mem().processWith(this);
-        if(CompatibilityChecker.isPointer(p.mem().tipo())) {
-            p.ponTipo(CompatibilityChecker.pointer(p.mem().tipo()).tbase());
+        if(CompatibilityChecker.isPointer(p.mem().type())) {
+            p.ponTipo(CompatibilityChecker.pointer(p.mem().type()).tbase());
         } else {
-            if(! p.mem().tipo().equals(program.tError())) {
+            if(! p.mem().type().equals(program.tError())) {
                 errors.msg(p.sourcelink()+":"+ERROR_DREF);
             }
             p.ponTipo(program.tError());
         }
     }
     public void process(Var exp) {
-        exp.ponTipo(exp.declaration().tipoDec());
+        exp.ponTipo(exp.declaration().decType());
     }
     public void process(IntCt exp) {
         exp.ponTipo(program.tInt());
@@ -99,12 +99,11 @@ public class TypeCheck extends Processing {
     public void process(UniStringCt exp) {
         exp.ponTipo(program.tUniString());
     }
-
     public void process(Addition exp) {
         exp.opnd1().processWith(this);
         exp.opnd2().processWith(this);
 
-        Type inferredType = this.inferrer.inferSum(exp.opnd1().tipo(), exp.opnd2().tipo());
+        Type inferredType = this.inferrer.inferSum(exp.opnd1().type(), exp.opnd2().type());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
@@ -114,7 +113,7 @@ public class TypeCheck extends Processing {
         exp.opnd1().processWith(this);
         exp.opnd2().processWith(this);
 
-        Type inferredType = this.inferrer.inferArith(exp.opnd1().tipo(), exp.opnd2().tipo());
+        Type inferredType = this.inferrer.inferArith(exp.opnd1().type(), exp.opnd2().type());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
@@ -124,7 +123,7 @@ public class TypeCheck extends Processing {
         exp.opnd1().processWith(this);
         exp.opnd2().processWith(this);
 
-        Type inferredType = this.inferrer.inferArith(exp.opnd1().tipo(), exp.opnd2().tipo());
+        Type inferredType = this.inferrer.inferArith(exp.opnd1().type(), exp.opnd2().type());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
@@ -134,7 +133,7 @@ public class TypeCheck extends Processing {
         exp.opnd1().processWith(this);
         exp.opnd2().processWith(this);
 
-        Type inferredType = this.inferrer.inferArith(exp.opnd1().tipo(), exp.opnd2().tipo());
+        Type inferredType = this.inferrer.inferArith(exp.opnd1().type(), exp.opnd2().type());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
@@ -144,7 +143,7 @@ public class TypeCheck extends Processing {
         exp.opnd1().processWith(this);
         exp.opnd2().processWith(this);
 
-        Type inferredType = this.inferrer.inferModulus(exp.opnd1().tipo(), exp.opnd2().tipo());
+        Type inferredType = this.inferrer.inferModulus(exp.opnd1().type(), exp.opnd2().type());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
@@ -154,7 +153,7 @@ public class TypeCheck extends Processing {
         exp.opnd1().processWith(this);
         exp.opnd2().processWith(this);
 
-        Type inferredType = inferrer.inferBoolBinExp(exp.opnd1().tipo(), exp.opnd2().tipo());
+        Type inferredType = inferrer.inferBoolBinExp(exp.opnd1().type(), exp.opnd2().type());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
@@ -164,7 +163,7 @@ public class TypeCheck extends Processing {
         exp.opnd1().processWith(this);
         exp.opnd2().processWith(this);
 
-        Type inferredType = inferrer.inferBoolBinExp(exp.opnd1().tipo(), exp.opnd2().tipo());
+        Type inferredType = inferrer.inferBoolBinExp(exp.opnd1().type(), exp.opnd2().type());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
@@ -173,7 +172,7 @@ public class TypeCheck extends Processing {
     public void process(Not exp) {
         exp.op().processWith(this);
 
-        Type inferredType = inferrer.inferBoolUnExp(exp.op().tipo());
+        Type inferredType = inferrer.inferBoolUnExp(exp.op().type());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
@@ -183,7 +182,7 @@ public class TypeCheck extends Processing {
         exp.opnd1().processWith(this);
         exp.opnd2().processWith(this);
 
-        Type inferredType = inferrer.inferComparator(exp.opnd1().tipo(), exp.opnd2().tipo());
+        Type inferredType = inferrer.inferComparator(exp.opnd1().type(), exp.opnd2().type());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
@@ -193,7 +192,7 @@ public class TypeCheck extends Processing {
         exp.opnd1().processWith(this);
         exp.opnd2().processWith(this);
 
-        Type inferredType = inferrer.inferComparator(exp.opnd1().tipo(), exp.opnd2().tipo());
+        Type inferredType = inferrer.inferComparator(exp.opnd1().type(), exp.opnd2().type());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
@@ -203,7 +202,7 @@ public class TypeCheck extends Processing {
         exp.opnd1().processWith(this);
         exp.opnd2().processWith(this);
 
-        Type inferredType = inferrer.inferComparator(exp.opnd1().tipo(), exp.opnd2().tipo());
+        Type inferredType = inferrer.inferComparator(exp.opnd1().type(), exp.opnd2().type());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
@@ -213,7 +212,7 @@ public class TypeCheck extends Processing {
         exp.opnd1().processWith(this);
         exp.opnd2().processWith(this);
 
-        Type inferredType = inferrer.inferComparator(exp.opnd1().tipo(), exp.opnd2().tipo());
+        Type inferredType = inferrer.inferComparator(exp.opnd1().type(), exp.opnd2().type());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
@@ -223,7 +222,7 @@ public class TypeCheck extends Processing {
         exp.opnd1().processWith(this);
         exp.opnd2().processWith(this);
 
-        Type inferredType = inferrer.inferComparator(exp.opnd1().tipo(), exp.opnd2().tipo());
+        Type inferredType = inferrer.inferComparator(exp.opnd1().type(), exp.opnd2().type());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
@@ -233,7 +232,7 @@ public class TypeCheck extends Processing {
         exp.opnd1().processWith(this);
         exp.opnd2().processWith(this);
 
-        Type inferredType = inferrer.inferComparator(exp.opnd1().tipo(), exp.opnd2().tipo());
+        Type inferredType = inferrer.inferComparator(exp.opnd1().type(), exp.opnd2().type());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
@@ -243,7 +242,7 @@ public class TypeCheck extends Processing {
         exp.opnd1().processWith(this);
         exp.opnd2().processWith(this);
 
-        Type inferredType = inferrer.inferStrElem(exp.opnd1().tipo(), exp.opnd2().tipo());
+        Type inferredType = inferrer.inferStrElem(exp.opnd1().type(), exp.opnd2().type());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
@@ -252,7 +251,7 @@ public class TypeCheck extends Processing {
     public void process(Negative exp) {
         exp.op().processWith(this);
 
-        Type inferredType = inferrer.inferNegative(exp.op().tipo());
+        Type inferredType = inferrer.inferNegative(exp.op().type());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
@@ -261,7 +260,7 @@ public class TypeCheck extends Processing {
     public void process(IntCast exp) {
         exp.op().processWith(this);
 
-        Type inferredType = inferrer.inferIntCast(exp.op().tipo());
+        Type inferredType = inferrer.inferIntCast(exp.op().type());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
@@ -270,7 +269,7 @@ public class TypeCheck extends Processing {
     public void process(RealCast exp) {
         exp.op().processWith(this);
 
-        Type inferredType = inferrer.inferRealCast(exp.op().tipo());
+        Type inferredType = inferrer.inferRealCast(exp.op().type());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
@@ -279,7 +278,7 @@ public class TypeCheck extends Processing {
     public void process(BoolCast exp) {
         exp.op().processWith(this);
 
-        Type inferredType = inferrer.inferBoolCast(exp.op().tipo());
+        Type inferredType = inferrer.inferBoolCast(exp.op().type());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
@@ -288,7 +287,7 @@ public class TypeCheck extends Processing {
     public void process(UniCharCast exp) {
         exp.op().processWith(this);
 
-        Type inferredType = inferrer.inferUniCharCast(exp.op().tipo());
+        Type inferredType = inferrer.inferUniCharCast(exp.op().type());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
@@ -297,7 +296,7 @@ public class TypeCheck extends Processing {
     public void process(UniStrCast exp) {
         exp.op().processWith(this);
 
-        Type inferredType = inferrer.inferUniStrCast(exp.op().tipo());
+        Type inferredType = inferrer.inferUniStrCast(exp.op().type());
         if (inferredType.equals(program.tError())) {
             errors.msg(exp.sourceLink() + ":" + ERROR_OPERAND_TYPES);
         }
@@ -311,12 +310,12 @@ public class TypeCheck extends Processing {
     public void process(IAsig i) {
         i.mem().processWith(this);
         i.exp().processWith(this);
-        if(CompatibilityChecker.areCompatible(i.mem().tipo(),i.exp().tipo())) {
+        if(CompatibilityChecker.areCompatible(i.mem().type(),i.exp().type())) {
             i.ponTipo(program.tOk());
         }
         else {
-            if (! i.mem().tipo().equals(program.tError()) &&
-                    ! i.exp().tipo().equals(program.tError())) {
+            if (! i.mem().type().equals(program.tError()) &&
+                    ! i.exp().type().equals(program.tError())) {
                 errors.msg(i.sourceLink()+":"+ERROR_ASSIGNMENT);
             }
             i.ponTipo(program.tError());
@@ -324,11 +323,10 @@ public class TypeCheck extends Processing {
     }
     public void process(INew i) {
         i.mem().processWith(this);
-        if (CompatibilityChecker.isPointer(i.mem().tipo())) {
+        if (CompatibilityChecker.isPointer(i.mem().type())) {
             i.ponTipo(program.tOk());
-        }
-        else {
-            if (! i.mem().tipo().equals(program.tError())) {
+        } else {
+            if (!i.mem().type().equals(program.tError())) {
                 errors.msg(i.sourceLink()+":"+ERROR_NEW);
             }
             i.ponTipo(program.tError());
@@ -336,11 +334,11 @@ public class TypeCheck extends Processing {
     }
     public void process(IFree i) {
         i.mem().processWith(this);
-        if (CompatibilityChecker.isPointer(i.mem().tipo())) {
+        if (CompatibilityChecker.isPointer(i.mem().type())) {
             i.ponTipo(program.tOk());
         }
         else {
-            if (!i.mem().tipo().equals(program.tError())) {
+            if (!i.mem().type().equals(program.tError())) {
                 errors.msg(i.sourceLink()+":"+ERROR_FREE);
             }
             i.ponTipo(program.tError());
@@ -366,7 +364,7 @@ public class TypeCheck extends Processing {
     public void process(IWhile wh) {
     	wh.getCond().processWith(this);
     	wh.getBody().processWith(this);
-    	if (!wh.getCond().tipo().equals(program.tBool()) ||
+    	if (!wh.getCond().type().equals(program.tBool()) ||
     			wh.getBody().tipo().equals(program.tError()))
     		wh.ponTipo(program.tError());
     	else
@@ -375,7 +373,7 @@ public class TypeCheck extends Processing {
     public void process(IDoWhile wh) {
         wh.getBody().processWith(this);
         wh.getCond().processWith(this);
-        if (!wh.getCond().tipo().equals(program.tBool()) ||
+        if (!wh.getCond().type().equals(program.tBool()) ||
                 wh.getBody().tipo().equals(program.tError()))
             wh.ponTipo(program.tError());
         else
@@ -384,7 +382,7 @@ public class TypeCheck extends Processing {
     public void process(IIfThen i) {
         i.getCond().processWith(this);
         i.getThen().processWith(this);
-        if (!i.getCond().tipo().equals(program.tBool()) ||
+        if (!i.getCond().type().equals(program.tBool()) ||
                 i.getThen().tipo().equals(program.tError()))
             i.ponTipo(program.tError());
         else
@@ -394,7 +392,7 @@ public class TypeCheck extends Processing {
         i.getCond().processWith(this);
         i.getThen().processWith(this);
         i.getElse().processWith(this);
-        if (!i.getCond().tipo().equals(program.tBool()) ||
+        if (!i.getCond().type().equals(program.tBool()) ||
                 i.getThen().tipo().equals(program.tError()) ||
                 i.getElse().tipo().equals(program.tError()))
             i.ponTipo(program.tError());
@@ -403,11 +401,11 @@ public class TypeCheck extends Processing {
     }
     public void process(ISwitch i) {
         i.getCond().processWith(this);
-        Type condT = i.getCond().tipo();
+        Type condT = i.getCond().type();
         Type blockT = program.tOk();
         for (ICase c : i.getCases()) {
             c.processWith(this);
-            if (!condT.equals(c.getExp().tipo()) ||
+            if (!condT.equals(c.getExp().type()) ||
                     c.tipo().equals(program.tError()))
                 blockT = program.tError();
         }

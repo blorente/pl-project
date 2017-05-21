@@ -44,6 +44,9 @@ import programa.Program.BinaryExp;
 import programa.Program.UnaryExp;
 import programa.Program.ISwitch;
 import programa.Program.ICase;
+import programa.Program.DecRef;
+import programa.Program.INew;
+import programa.Program.IFree;
 
 public class Tagging extends Processing {
 	private int etq;
@@ -63,12 +66,17 @@ public class Tagging extends Processing {
 		// apilaDir(...dir variable...)
 		exp.putDirNext(++etq);
 	}
-
+	public void procesa(DecRef exp) {
+		exp.putDirFirst(etq);
+		exp.mem().processWith(this);
+		// apilaind
+		etq++;
+		exp.putDirNext(etq);
+	}
 	public void process(IntCt exp) {
 		exp.putDirFirst(etq);
 		exp.putDirNext(++etq);
 	}
-
 	public void process(BoolCt exp) {
 		exp.putDirFirst(etq);
 		exp.putDirNext(++etq);
@@ -280,8 +288,8 @@ public class Tagging extends Processing {
 	}
 
 	private void tagBinaryNumericExpression(BinaryExp exp) {
-		Type t1 = exp.opnd1().tipo();
-		Type t2 = exp.opnd2().tipo();
+		Type t1 = exp.opnd1().type();
+		Type t2 = exp.opnd2().type();
 		exp.putDirFirst(etq);
 		exp.opnd1().processWith(this);
 		if (t1.equals(program.tInt()) && t2.equals(program.tReal())) {
@@ -297,7 +305,22 @@ public class Tagging extends Processing {
 	private void tagCastExpression(UnaryExp exp) {
 		exp.putDirFirst(etq);
 		exp.op().processWith(this);
-		if (!exp.op().tipo().equals(exp.tipo()))
+		if (!exp.op().type().equals(exp.type()))
 			exp.putDirNext(++etq);
+	}
+
+	public void procesa(INew i) {
+		i.putDirFirst(etq);
+		i.mem().processWith(this);
+		// alloc desapilaind
+		etq +=2;
+		i.putDirNext(etq);
+	}
+	public void procesa(IFree i) {
+		i.putDirFirst(etq);
+		i.mem().processWith(this);
+		// apilaind dealloc
+		etq +=2;
+		i.putDirNext(etq);
 	}
 }
