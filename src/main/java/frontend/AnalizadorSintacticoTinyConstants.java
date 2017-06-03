@@ -17,33 +17,57 @@ public interface AnalizadorSintacticoTinyConstants {
   /** RegularExpression Id. */
   int digito = 3;
   /** RegularExpression Id. */
-  int TRUE = 6;
+  int validCharNoEscape = 4;
   /** RegularExpression Id. */
-  int FALSE = 7;
+  int validChar = 5;
   /** RegularExpression Id. */
-  int INT = 8;
+  int escapeBody = 6;
   /** RegularExpression Id. */
-  int BOOL = 9;
+  int hexChar = 7;
   /** RegularExpression Id. */
-  int TYPE = 10;
+  int TRUE = 10;
   /** RegularExpression Id. */
-  int VAR = 11;
+  int FALSE = 11;
   /** RegularExpression Id. */
-  int WHILE = 12;
+  int INT = 12;
   /** RegularExpression Id. */
-  int PROC = 13;
+  int BOOL = 13;
   /** RegularExpression Id. */
-  int CALL = 14;
+  int CHAR = 14;
   /** RegularExpression Id. */
-  int WITH = 15;
+  int STRING = 15;
   /** RegularExpression Id. */
-  int NEW = 16;
+  int DOUBLE = 16;
   /** RegularExpression Id. */
-  int DELETE = 17;
+  int TYPE = 17;
   /** RegularExpression Id. */
-  int identificador = 18;
+  int VAR = 18;
   /** RegularExpression Id. */
-  int numeroEntero = 19;
+  int WHILE = 19;
+  /** RegularExpression Id. */
+  int PROC = 20;
+  /** RegularExpression Id. */
+  int CALL = 21;
+  /** RegularExpression Id. */
+  int WITH = 22;
+  /** RegularExpression Id. */
+  int NEW = 23;
+  /** RegularExpression Id. */
+  int DELETE = 24;
+  /** RegularExpression Id. */
+  int identificador = 25;
+  /** RegularExpression Id. */
+  int numeroEntero = 26;
+  /** RegularExpression Id. */
+  int realNumber = 27;
+  /** RegularExpression Id. */
+  int realPart = 28;
+  /** RegularExpression Id. */
+  int exponentialPart = 29;
+  /** RegularExpression Id. */
+  int stringLiteral = 30;
+  /** RegularExpression Id. */
+  int charLiteral = 31;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -54,12 +78,19 @@ public interface AnalizadorSintacticoTinyConstants {
     "<letra>",
     "<digitoPositivo>",
     "<digito>",
-    "<token of kind 4>",
-    "<token of kind 5>",
+    "<validCharNoEscape>",
+    "<validChar>",
+    "<escapeBody>",
+    "<hexChar>",
+    "<token of kind 8>",
+    "<token of kind 9>",
     "<TRUE>",
     "<FALSE>",
     "<INT>",
     "<BOOL>",
+    "<CHAR>",
+    "<STRING>",
+    "<DOUBLE>",
     "<TYPE>",
     "<VAR>",
     "<WHILE>",
@@ -70,6 +101,11 @@ public interface AnalizadorSintacticoTinyConstants {
     "<DELETE>",
     "<identificador>",
     "<numeroEntero>",
+    "<realNumber>",
+    "<realPart>",
+    "<exponentialPart>",
+    "<stringLiteral>",
+    "<charLiteral>",
     "\";\"",
     "\"(\"",
     "\")\"",

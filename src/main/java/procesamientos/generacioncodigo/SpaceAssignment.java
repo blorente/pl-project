@@ -2,16 +2,7 @@ package procesamientos.generacioncodigo;
 
 import procesamientos.Processing;
 import program.Program;
-import program.Program.Prog;
-import program.Program.DecVar;
-import program.Program.Int;
-import program.Program.Real;
-import program.Program.UniChar;
-import program.Program.UniString;
-import program.Program.Bool;
-import program.Program.TPointer;
-import program.Program.TRef;
-import program.Program.DecType;
+import program.Program.*;
 
 public class SpaceAssignment extends Processing {
     private int dir;

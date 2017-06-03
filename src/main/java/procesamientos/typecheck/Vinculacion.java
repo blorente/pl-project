@@ -1,55 +1,13 @@
 package procesamientos.typecheck;
 
 import errores.Errors;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import procesamientos.Processing;
 import procesamientos.typecheck.utils.CompatibilityChecker;
 import program.Program;
-import program.Program.Addition;
-import program.Program.Division;
-import program.Program.Equals;
-import program.Program.Greater;
-import program.Program.GreaterEq;
-import program.Program.IWhile;
-import program.Program.IDoWhile;
-import program.Program.IIfThen;
-import program.Program.IIfThenElse;
-import program.Program.Multiplication;
-import program.Program.Negative;
-import program.Program.Not;
-import program.Program.NotEquals;
-import program.Program.Or;
-import program.Program.Prog;
-import program.Program.RealCast;
-import program.Program.StrElem;
-import program.Program.DecVar;
-import program.Program.IAsig;
-import program.Program.IBlock;
-import program.Program.IRead;
-import program.Program.IWrite;
-import program.Program.And;
-import program.Program.BoolCast;
-import program.Program.Dec;
-import program.Program.Inst;
-import program.Program.IntCast;
-import program.Program.Less;
-import program.Program.LessEq;
-import program.Program.Modulus;
-import program.Program.Subtraction;
-import program.Program.UniCharCast;
-import program.Program.UniStrCast;
-import program.Program.Var;
-import program.Program.ISwitch;
-import program.Program.ICase;
-import program.Program.IFree;
-import program.Program.INew;
-import program.Program.DecType;
-import program.Program.TPointer;
-import program.Program.TRef;
-import program.Program.DecRef;
+import program.Program.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Vinculacion extends Processing {
 	private final static String ERROR_DUPLICATED_ID = "Duplicated identifier";

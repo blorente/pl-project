@@ -1,13 +1,14 @@
 package frontend;
+
 import errores.Errors;
-import java.io.FileReader;
 import maquinaP.MaquinaP;
-import procesamientos.typecheck.TypeCheck;
-import procesamientos.typecheck.Vinculacion;
+import procesamientos.generacioncodigo.CodeGeneration;
 import procesamientos.generacioncodigo.SpaceAssignment;
 import procesamientos.generacioncodigo.Tagging;
-import procesamientos.generacioncodigo.CodeGeneration;
-import procesamientos.impresion.Impresion;
+import procesamientos.typecheck.TypeCheck;
+import procesamientos.typecheck.Vinculacion;
+
+import java.io.FileReader;
 public class Main{
    public static void main(String[] args) throws Exception {
      try{   

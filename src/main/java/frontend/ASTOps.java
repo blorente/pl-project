@@ -1,7 +1,9 @@
 package frontend;
 
 import errores.Errors;
+import org.apache.commons.lang3.StringEscapeUtils;
 import program.Program;
+
 import java.lang.reflect.Array;
 
 public class ASTOps extends Program {
@@ -132,5 +134,35 @@ public class ASTOps extends Program {
     }
     public Exp intFromString(String i) {
         return intct(Integer.valueOf(i).intValue());
-    }    
+    }
+    public Exp realFromString(String i) {
+        return realct(Double.valueOf(i));
+    }
+
+    public Exp charLiteral(String i) {
+        if (i.charAt(1) == '\\') {
+            String escaped = i.substring(1, i.length()-1);
+            switch (escaped) {
+                case "\\n":
+                    return unicharct('\n');
+                case "\\'":
+                    return unicharct('\'');
+                case "\\\\":
+                    return unicharct('\\');
+                default:
+                    String code = escaped.substring(2);
+                    int hexToInt = Integer.parseInt(code, 16);
+                    char res = (char)hexToInt;
+                    return unicharct(res);
+            }
+        } else {
+            return unicharct(i.charAt(1));
+        }
+    }
+
+    public Exp stringLiteral(String i) {
+        String body = i.substring(1, i.length()-1);
+        body = StringEscapeUtils.unescapeJava(body);
+        return unistringct(body);
+    }
 }

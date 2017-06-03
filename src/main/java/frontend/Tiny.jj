@@ -37,6 +37,11 @@ PARSER_END(AnalizadorSintacticoTiny)
   TOKEN:{<#digitoPositivo:["1"-"9"]>}
   TOKEN:{<#digito:<digitoPositivo>|"0">} 
 
+  TOKEN:{<#validCharNoEscape: <letra> | " ">}
+  TOKEN:{<#validChar: <validCharNoEscape> | "\\" <escapeBody>>}
+  TOKEN:{<#escapeBody: "\"" | "n" | "'" | "\\" | "u" <hexChar> <hexChar> <hexChar> <hexChar>>}
+  TOKEN:{<#hexChar: <digito> | ["A"-"F"] >}
+
   SKIP:{<["\t"," ","\r","\b","\n"]>}  
   SKIP:{<"//"(~["\n"])*>}  
 
@@ -44,6 +49,9 @@ PARSER_END(AnalizadorSintacticoTiny)
   TOKEN:{<FALSE:("f"|"F")("a"|"A")("l"|"L")("s"|"S")("e"|"E")>}
   TOKEN:{<INT:("i"|"I")("n"|"N")("t"|"T")>}
   TOKEN:{<BOOL:("b"|"B")("o"|"O")("o"|"O")("l"|"L")>}
+  TOKEN:{<CHAR:("c"|"C")("h"|"H")("a"|"A")("r"|"R")>}
+  TOKEN:{<STRING:("s"|"S")("t"|"T")("r"|"R")("i"|"I")("n"|"N")("g"|"G")>}
+  TOKEN:{<DOUBLE:("f"|"F")("l"|"L")("o"|"O")("a"|"A")("t"|"T")>}
   TOKEN:{<TYPE:("t"|"T")("y"|"Y")("p"|"P")("e"|"E")>}
   TOKEN:{<VAR:("v"|"V")("a"|"A")("r"|"R")>}
   TOKEN:{<WHILE:("w"|"W")("h"|"H")("i"|"I")("l"|"L")("e"|"E")>}
@@ -54,8 +62,15 @@ PARSER_END(AnalizadorSintacticoTiny)
   TOKEN:{<DELETE:("d"|"D")("e"|"E")("l"|"L")("e"|"E")("t"|"T")("e"|"E")>}
   TOKEN:{<identificador:<letra>(<letra>|<digito>)*>}
   TOKEN:{<numeroEntero: <digitoPositivo> (<digito>)* |"0" >}
-  
-  
+
+  TOKEN:{<realNumber: <numeroEntero> (<realPart>|"") (<exponentialPart>|"")>}
+  TOKEN:{<realPart: "." ("0"|(<digito>)*)>}
+  TOKEN:{<exponentialPart: ("e"|"E") ("-"|"") <numeroEntero> >}
+
+  TOKEN:{<stringLiteral: "\"" (<validChar>)* "\"">}
+  TOKEN:{<charLiteral: "'" (<validChar> | "\"") "'" >}
+
+
   void inicio()        : {} {program() <EOF>}
 
   Prog program()      :
@@ -183,7 +198,16 @@ PARSER_END(AnalizadorSintacticoTiny)
         | 
       <BOOL> 
         {return ops.tBool();}
-        | 
+        |
+      <DOUBLE>
+        {return ops.tReal();}
+        |
+      <STRING>
+        {return ops.tUniString();}
+        |
+      <CHAR>
+       {return ops.tUniChar();}
+       |
       id=<identificador> 
         {return ops.tref(id.image,enlaceFuente(id));}
     }
@@ -402,8 +426,19 @@ PARSER_END(AnalizadorSintacticoTiny)
      {
       t=<numeroEntero>
        {return ops.intFromString(t.image);}
-      | 
-      <TRUE> 
+      |
+      t=<realNumber>
+      {return ops.realFromString(t.image);}
+      |
+      t=<charLiteral>
+      {System.out.println("Char literal triggered");
+      return ops.charLiteral(t.image);}
+      |
+      t=<stringLiteral>
+      {System.out.println("String literal triggered");
+      return ops.stringLiteral(t.image);}
+      |
+      <TRUE>
        {return ops.boolct(true);}
       | 
       <FALSE> 

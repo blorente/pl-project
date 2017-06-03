@@ -1319,6 +1319,9 @@ public abstract class Program {
 		throw new RuntimeException("Procedure parameters not implemented");
 	}
 	public Inst iblock(Dec[] decs, Inst[] is) {
-		throw new RuntimeException("Blocks with declarations not implemented");
+		if (decs.length != 0) {
+			throw new RuntimeException("Blocks with declarations not implemented");
+		}
+		return iblock(is);
 	}
 }

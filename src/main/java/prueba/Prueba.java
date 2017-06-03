@@ -3,8 +3,8 @@ package prueba;
 
 import errores.Errors;
 import maquinaP.MaquinaP;
-import procesamientos.generacioncodigo.SpaceAssignment;
 import procesamientos.generacioncodigo.CodeGeneration;
+import procesamientos.generacioncodigo.SpaceAssignment;
 import procesamientos.generacioncodigo.Tagging;
 import procesamientos.impresion.Impresion;
 import procesamientos.typecheck.TypeCheck;
