@@ -60,6 +60,18 @@ PARSER_END(AnalizadorSintacticoTiny)
   TOKEN:{<WITH:("w"|"W")("i"|"I")("t"|"T")("h"|"H")>}
   TOKEN:{<NEW:("n"|"N")("e"|"E")("w"|"W")>}
   TOKEN:{<DELETE:("d"|"D")("e"|"E")("l"|"L")("e"|"E")("t"|"T")("e"|"E")>}
+  TOKEN:{<STRUCT:("s"|"S")("t"|"T")("r"|"R")("u"|"U")("c"|"C")("t"|"T")>}
+  TOKEN:{<DO:("d"|"D")("o"|"O")>}
+  TOKEN:{<IF:("i"|"I")("f"|"F")>}
+  TOKEN:{<THEN:("t"|"T")("h"|"H")("e"|"E")("n"|"N")>}
+  TOKEN:{<ELSE:("e"|"E")("l"|"L")("s"|"S")("e"|"E")>}
+  TOKEN:{<SWITCH:("s"|"S")("w"|"W")("i"|"I")("t"|"T")("c"|"C")("h"|"H")>}
+  TOKEN:{<CASE:("c"|"C")("a"|"A")("s"|"S")("e"|"E")>}
+  TOKEN:{<DEFAULTT:("d"|"D")("e"|"E")("f"|"F")("a"|"A")("u"|"U")("l"|"L")("t"|"T")>}
+  TOKEN:{<NULL:("n"|"N")("u"|"U")("l"|"L")("l"|"L")>}
+  TOKEN:{<READ:("r"|"R")("e"|"E")("a"|"A")("d"|"D")>}
+  TOKEN:{<WRITE:("w"|"W")("r"|"R")("i"|"I")("t"|"T")("e"|"E")>}
+
   TOKEN:{<identificador:<letra>(<letra>|<digito>)*>}
   TOKEN:{<numeroEntero: <digitoPositivo> (<digito>)* |"0" >}
 

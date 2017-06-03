@@ -55,19 +55,41 @@ public interface AnalizadorSintacticoTinyConstants {
   /** RegularExpression Id. */
   int DELETE = 24;
   /** RegularExpression Id. */
-  int identificador = 25;
+  int STRUCT = 25;
   /** RegularExpression Id. */
-  int numeroEntero = 26;
+  int DO = 26;
   /** RegularExpression Id. */
-  int realNumber = 27;
+  int IF = 27;
   /** RegularExpression Id. */
-  int realPart = 28;
+  int THEN = 28;
   /** RegularExpression Id. */
-  int exponentialPart = 29;
+  int ELSE = 29;
   /** RegularExpression Id. */
-  int stringLiteral = 30;
+  int SWITCH = 30;
   /** RegularExpression Id. */
-  int charLiteral = 31;
+  int CASE = 31;
+  /** RegularExpression Id. */
+  int DEFAULTT = 32;
+  /** RegularExpression Id. */
+  int NULL = 33;
+  /** RegularExpression Id. */
+  int READ = 34;
+  /** RegularExpression Id. */
+  int WRITE = 35;
+  /** RegularExpression Id. */
+  int identificador = 36;
+  /** RegularExpression Id. */
+  int numeroEntero = 37;
+  /** RegularExpression Id. */
+  int realNumber = 38;
+  /** RegularExpression Id. */
+  int realPart = 39;
+  /** RegularExpression Id. */
+  int exponentialPart = 40;
+  /** RegularExpression Id. */
+  int stringLiteral = 41;
+  /** RegularExpression Id. */
+  int charLiteral = 42;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -99,6 +121,17 @@ public interface AnalizadorSintacticoTinyConstants {
     "<WITH>",
     "<NEW>",
     "<DELETE>",
+    "<STRUCT>",
+    "<DO>",
+    "<IF>",
+    "<THEN>",
+    "<ELSE>",
+    "<SWITCH>",
+    "<CASE>",
+    "<DEFAULTT>",
+    "<NULL>",
+    "<READ>",
+    "<WRITE>",
     "<identificador>",
     "<numeroEntero>",
     "<realNumber>",

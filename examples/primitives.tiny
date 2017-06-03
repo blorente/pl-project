@@ -1,6 +1,11 @@
 var int i;
+var float r;
+var char c;
+var string s;
 
 {
 i = 1;
-i = 2;
+r = 2.034e2;
+s = "Hello World\n\"\u0068";
+c = '\u0068';
 }
