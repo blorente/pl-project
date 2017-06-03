@@ -1,17 +1,17 @@
 package procesamientos.generacioncodigo;
 
 import procesamientos.Processing;
-import programa.Program;
-import programa.Program.Prog;
-import programa.Program.DecVar;
-import programa.Program.Int;
-import programa.Program.Real;
-import programa.Program.UniChar;
-import programa.Program.UniString;
-import programa.Program.Bool;
-import programa.Program.TPointer;
-import programa.Program.TRef;
-import programa.Program.DecType;
+import program.Program;
+import program.Program.Prog;
+import program.Program.DecVar;
+import program.Program.Int;
+import program.Program.Real;
+import program.Program.UniChar;
+import program.Program.UniString;
+import program.Program.Bool;
+import program.Program.TPointer;
+import program.Program.TRef;
+import program.Program.DecType;
 
 public class SpaceAssignment extends Processing {
     private int dir;
@@ -19,6 +19,7 @@ public class SpaceAssignment extends Processing {
     public SpaceAssignment() {
         dir = 0;
     }
+    public int numDisplays() {return 10;}
 
     public void process(Prog p) {
         for (Program.Dec d : p.decs())

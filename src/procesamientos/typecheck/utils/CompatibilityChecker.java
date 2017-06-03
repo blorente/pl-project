@@ -1,9 +1,9 @@
 package procesamientos.typecheck.utils;
 
-import programa.Program;
-import programa.Program.TPointer;
-import programa.Program.TRef;
-import programa.Program.Type;
+import program.Program;
+import program.Program.TPointer;
+import program.Program.TRef;
+import program.Program.Type;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package programa;
+package program;
 
 import procesamientos.Processing;
 import procesamientos.typecheck.utils.CompatibilityChecker;
@@ -130,6 +130,24 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
+	public class TArray extends DeclaredType {
+		private DeclaredType tbase;
+		private int size;
+		public TArray(DeclaredType tbase, int size) {
+			this.size = size;
+			this.tbase = tbase;
+		}
+		public DeclaredType tbase() {
+			return tbase;
+		}
+		@Override
+		public int size() {
+			return size;
+		}
+		public void accept(Processing p) {
+			p.process(this);
+		}
+	}
 	public class Ok implements Type {
 		public void accept(Processing p) {
 			p.process(this);
@@ -184,7 +202,6 @@ public abstract class Program {
 	public abstract class Dec {
 		public abstract void processWith(Processing p);
 	}
-
 	public class DecType extends Dec {
 		private String sourceLink;
 		private String typeId;
@@ -216,7 +233,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class DecVar extends Dec {
 		private String sourceLink;
 		private String var;
@@ -257,6 +273,17 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
+	public class FParam extends DecVar {
+		private boolean byReference;
+		public FParam(String id, DeclaredType type, boolean byReference) {
+			this(null,id,type,byReference);
+		}
+		public FParam(String sourceLink, String id, DeclaredType type, boolean porReferencia) {
+			super(type,id,sourceLink);
+			this.byReference = byReference;
+		}
+		public boolean esParametroPorReferencia() {return byReference;}
+	}
 
 	public abstract class Inst {
 		private Type tipo;
@@ -293,7 +320,6 @@ public abstract class Program {
 
 		public abstract void processWith(Processing p);
 	}
-
 	public class IAsig extends Inst {
 		private Mem mem;
 		private Exp exp;
@@ -320,7 +346,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class INew extends Inst {
 		private Mem mem;
 		private String sourceLink;
@@ -338,7 +363,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class IFree extends Inst {
 		private Mem mem;
 		private String sourceLink;
@@ -356,7 +380,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class IBlock extends Inst {
 		private Inst[] is;
 
@@ -372,7 +395,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class IRead extends Inst {
 		private String variable;
 		private DecVar declaracion;
@@ -397,7 +419,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class IWrite extends Inst {
 		private String variable;
 		private DecVar declaration;
@@ -422,24 +443,30 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class IWhile extends Inst {
 
 		private Exp cond;
 		private Inst body;
+		private String sourceLink;
 
 		public IWhile(Exp cond, Inst body) {
 			this.cond = cond;
 			this.body = body;
 		}
 
-		public Exp getCond() {
+        public IWhile(Exp cond, Inst body, String sourceLink) {
+            this.cond = cond;
+            this.body = body;
+            this.sourceLink = sourceLink;
+        }
+
+        public Exp getCond() {
 			return cond;
 		}
-
 		public Inst getBody() {
 			return body;
 		}
+		public String sourceLink() {return sourceLink;}
 
 		@Override
 		public void processWith(Processing p) {
@@ -447,7 +474,6 @@ public abstract class Program {
 		}
 
 	}
-
 	public class IIfThen extends Inst {
 
 		private Exp cond;
@@ -472,7 +498,6 @@ public abstract class Program {
 		}
 
 	}
-
 	public class IIfThenElse extends Inst {
 
 		private Exp cond;
@@ -503,7 +528,6 @@ public abstract class Program {
 		}
 
 	}
-
 	public class IDoWhile extends Inst {
 
 		private Exp cond;
@@ -528,7 +552,6 @@ public abstract class Program {
 		}
 
 	}
-
 	public class ISwitch extends Inst {
 
 		private List<ICase> cases;
@@ -577,7 +600,6 @@ public abstract class Program {
 			return hasDefault;
 		}
 	}
-
 	public class ICase extends Inst {
 
 		private Exp exp;
@@ -639,7 +661,6 @@ public abstract class Program {
 
 		public boolean isMem() {return false;}
 	}
-
 	public abstract class Mem extends Exp {
 		private String sourcelink;
 		public Mem(String sourcelink) {
@@ -650,7 +671,6 @@ public abstract class Program {
 		}
 		public boolean isMem() {return true;}
 	}
-
 	public class DecRef extends Mem {
 		private Mem mem;
 		public DecRef(Mem mem) {
@@ -667,7 +687,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class Var extends Mem {
 		private String var;
 		private DecVar declaracion;
@@ -704,7 +723,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class IntCt extends Exp {
 		private int val;
 
@@ -720,7 +738,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class BoolCt extends Exp {
 		private boolean val;
 
@@ -736,7 +753,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class RealCt extends Exp {
 		private double val;
 
@@ -752,7 +768,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class UniCharCt extends Exp {
 		private char val;
 
@@ -768,7 +783,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class UniStringCt extends Exp {
 		private String val;
 
@@ -784,7 +798,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public abstract class BinaryExp extends Exp {
 		private Exp opnd1;
 		private Exp opnd2;
@@ -812,7 +825,6 @@ public abstract class Program {
 			return sourceLink;
 		}
 	}
-
 	public class Addition extends BinaryExp {
 		public Addition(Exp opnd1, Exp opnd2) {
 			this(opnd1, opnd2, null);
@@ -826,7 +838,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class Subtraction extends BinaryExp {
 		public Subtraction(Exp opnd1, Exp opnd2) {
 			this(opnd1, opnd2, null);
@@ -840,7 +851,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class Multiplication extends BinaryExp {
 		public Multiplication(Exp opnd1, Exp opnd2) {
 			this(opnd1, opnd2, null);
@@ -854,7 +864,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class Division extends BinaryExp {
 		public Division(Exp opnd1, Exp opnd2) {
 			this(opnd1, opnd2, null);
@@ -868,7 +877,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class Modulus extends BinaryExp {
 		public Modulus(Exp opnd1, Exp opnd2) {
 			this(opnd1, opnd2, null);
@@ -882,7 +890,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class And extends BinaryExp {
 		public And(Exp opnd1, Exp opnd2) {
 			this(opnd1, opnd2, null);
@@ -896,7 +903,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class Or extends BinaryExp {
 		public Or(Exp opnd1, Exp opnd2) {
 			this(opnd1, opnd2, null);
@@ -910,7 +916,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class Not extends UnaryExp {
 		public Not(Exp opnd1) {
 			this(opnd1, null);
@@ -924,7 +929,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class Equals extends BinaryExp {
 		public Equals(Exp opnd1, Exp opnd2) {
 			this(opnd1, opnd2, null);
@@ -938,7 +942,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class NotEquals extends BinaryExp {
 		public NotEquals(Exp opnd1, Exp opnd2) {
 			this(opnd1, opnd2, null);
@@ -952,7 +955,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class Greater extends BinaryExp {
 		public Greater(Exp opnd1, Exp opnd2) {
 			this(opnd1, opnd2, null);
@@ -966,7 +968,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class GreaterEq extends BinaryExp {
 		public GreaterEq(Exp opnd1, Exp opnd2) {
 			this(opnd1, opnd2, null);
@@ -980,7 +981,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class Less extends BinaryExp {
 		public Less(Exp opnd1, Exp opnd2) {
 			this(opnd1, opnd2, null);
@@ -994,7 +994,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class LessEq extends BinaryExp {
 		public LessEq(Exp opnd1, Exp opnd2) {
 			this(opnd1, opnd2, null);
@@ -1008,7 +1007,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class StrElem extends BinaryExp {
 		public StrElem(Exp source, Exp index) {
 			this(source, index, null);
@@ -1022,7 +1020,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public abstract class UnaryExp extends Exp {
 		private Exp op;
 		private String sourceLink;
@@ -1044,7 +1041,6 @@ public abstract class Program {
 			return sourceLink;
 		}
 	}
-
 	public class Negative extends UnaryExp {
 		public Negative(Exp op) {
 			this(op, null);
@@ -1058,7 +1054,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class IntCast extends UnaryExp {
 		public IntCast(Exp op) {
 			this(op, null);
@@ -1072,7 +1067,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class RealCast extends UnaryExp {
 		public RealCast(Exp op) {
 			this(op, null);
@@ -1086,7 +1080,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class BoolCast extends UnaryExp {
 		public BoolCast(Exp op) {
 			this(op, null);
@@ -1100,7 +1093,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class UniCharCast extends UnaryExp {
 		public UniCharCast(Exp op) {
 			this(op, null);
@@ -1114,7 +1106,6 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
-
 	public class UniStrCast extends UnaryExp {
 		public UniStrCast(Exp op) {
 			this(op, null);
@@ -1136,7 +1127,6 @@ public abstract class Program {
 	public Dec decvar(DeclaredType t, String v) {
 		return new DecVar(t, v);
 	}
-
 	public Dec decvar(DeclaredType t, String v, String sourceLink) {
 		return new DecVar(t, v, sourceLink);
 	}
@@ -1146,54 +1136,46 @@ public abstract class Program {
 	public Dec dectype(DeclaredType t, String v, String sourceLink) {
 		return new DecType(t,v,sourceLink);
 	}
+
 	public Inst iasig(Mem m, Exp e) {
 		return new IAsig(m, e);
 	}
-
 	public Inst iasig(Mem m, Exp e, String sourceLink) {
 		return new IAsig(m, e, sourceLink);
 	}
-
 	public Inst iblock(Inst[] is) {
 		return new IBlock(is);
 	}
-
 	public Inst iread(String v) {
 		return new IRead(v);
 	}
-
 	public Inst iwrite(String v) {
 		return new IWrite(v);
 	}
-
 	public Inst iwhile(Exp cond, Inst body) {
 		return new IWhile(cond, body);
 	}
-
+    public Inst iwhile(Exp cond, Inst body, String sourceLink) {
+        return new IWhile(cond, body, sourceLink);
+    }
 	public Inst iifthen(Exp cond, Inst body) {
 		return new IIfThen(cond, body);
 	}
-
 	public Inst iifthenelse(Exp cond, Inst thenBl, Inst elseBl) {
 		return new IIfThenElse(cond, thenBl, elseBl);
 	}
-
 	public Inst idowhile(Inst body, Exp cond) {
 		return new IDoWhile(cond, body);
 	}
-
 	public Inst iswitch(Exp exp, Inst defaul, ICase... cases) {
 		return new ISwitch(exp, defaul, cases);
 	}
-
 	public Inst iswitch(Exp exp, ICase... cases) {
 		return new ISwitch(exp, cases);
 	}
-
 	public ICase icase(Exp exp, Inst body) {
 		return new ICase(exp, body);
 	}
-
 	public Inst inew(Mem mem) {return new INew(mem);}
 	public Inst inew(Mem mem, String sourceLink) {return new INew(mem,sourceLink);}
 	public Inst ifree(Mem mem) {return new IFree(mem);}
@@ -1203,7 +1185,6 @@ public abstract class Program {
 	public Mem var(String id, String sourceLink) {return new Var(id, sourceLink);}
 	public Mem dref(Mem m) {return new DecRef(m);}
 	public Mem dref(Mem m, String sourceLink) {return new DecRef(m,sourceLink);}
-
 	public Exp intct(int val) {
 		return new IntCt(val);
 	}
@@ -1211,155 +1192,133 @@ public abstract class Program {
 	public Exp boolct(boolean val) {
 		return new BoolCt(val);
 	}
-
 	public Exp realct(double val) {
 		return new RealCt(val);
 	}
-
 	public Exp unicharct(char val) {
 		return new UniCharCt(val);
 	}
-
 	public Exp unistringct(String val) {
 		return new UniStringCt(val);
 	}
-
 	public Exp add(Exp exp1, Exp exp2) {
 		return new Addition(exp1, exp2);
 	}
-
 	public Exp subtract(Exp exp1, Exp exp2) {
 		return new Subtraction(exp1, exp2);
 	}
-
 	public Exp multiply(Exp exp1, Exp exp2) {
 		return new Multiplication(exp1, exp2);
 	}
-
 	public Exp divide(Exp exp1, Exp exp2) {
 		return new Division(exp1, exp2);
 	}
-
 	public Exp and(Exp exp1, Exp exp2) {
 		return new And(exp1, exp2);
 	}
-
 	public Exp add(Exp exp1, Exp exp2, String sourceLink) {
 		return new Addition(exp1, exp2, sourceLink);
 	}
-
 	public Exp subtract(Exp exp1, Exp exp2, String sourceLink) {
 		return new Subtraction(exp1, exp2, sourceLink);
 	}
-
 	public Exp multiply(Exp exp1, Exp exp2, String sourceLink) {
 		return new Multiplication(exp1, exp2, sourceLink);
 	}
-
 	public Exp divide(Exp exp1, Exp exp2, String sourceLink) {
 		return new Division(exp1, exp2, sourceLink);
 	}
-
 	public Exp modulus(Exp exp1, Exp exp2, String sourceLink) {
 		return new Modulus(exp1, exp2, sourceLink);
 	}
-
 	public Exp and(Exp exp1, Exp exp2, String sourceLink) {
 		return new And(exp1, exp2, sourceLink);
 	}
-
 	public Exp or(Exp exp1, Exp exp2) {
 		return new Or(exp1, exp2);
 	}
-
 	public Exp not(Exp exp) {
 		return new Not(exp);
 	}
-
 	public Exp equals(Exp exp1, Exp exp2) {
 		return new Equals(exp1, exp2);
 	}
-
 	public Exp notequals(Exp exp1, Exp exp2) {
 		return new NotEquals(exp1, exp2);
 	}
-
 	public Exp greater(Exp exp1, Exp exp2) {
 		return new Greater(exp1, exp2);
 	}
-
 	public Exp greatereq(Exp exp1, Exp exp2) {
 		return new GreaterEq(exp1, exp2);
 	}
-
 	public Exp less(Exp exp1, Exp exp2) {
 		return new Less(exp1, exp2);
 	}
-
 	public Exp lesseq(Exp exp1, Exp exp2) {
 		return new LessEq(exp1, exp2);
 	}
-
 	public Exp strElem(Exp string, Exp index, String sourceLink) {
 		return new StrElem(string, index);
 	}
-
 	public Exp negative(Exp exp1, String sourceLink) {
 		return new Negative(exp1, sourceLink);
 	}
-
 	public Exp intcast(Exp exp) {
 		return new IntCast(exp);
 	}
-
 	public Exp realcast(Exp exp) {
 		return new RealCast(exp);
 	}
-
 	public Exp boolcast(Exp exp) {
 		return new BoolCast(exp);
 	}
-
 	public Exp charcast(Exp exp) {
 		return new UniCharCast(exp);
 	}
-
 	public Exp strcast(Exp exp) {
 		return new UniStrCast(exp);
 	}
-
 	public DeclaredType tInt() {
 		return TINT;
 	}
-
 	public DeclaredType tBool() {
 		return TBOOL;
 	}
-
 	public DeclaredType tReal() {
 		return TREAL;
 	}
-
 	public DeclaredType tUniChar() {
 		return TUNICHAR;
 	}
-
 	public DeclaredType tUniString() {
 		return TUNISTRING;
 	}
-
 	public Type tOk() {
 		return TOK;
 	}
-
 	public Type tError() {
 		return TERROR;
 	}
-	
 	public DeclaredType tipoPointer(DeclaredType tbase) {return new TPointer(tbase);}
-	public DeclaredType tipoRef(String typeId) {return new TRef(typeId);}
-	public DeclaredType tipoRef(String typeId, String sourceLink) {return new TRef(typeId,sourceLink);}
 
+	public DeclaredType tref(String typeId) {return new TRef(typeId);}
+	public DeclaredType tref(String typeId, String sourceLink) {return new TRef(typeId,sourceLink);}
+	public DeclaredType tarray(DeclaredType tbase, int size) {
+		return new TArray(tbase, size);
+	}
 	public abstract Prog root();
 
+	public Inst icall(String name, Exp[] params, String sourceLink) {
+		throw new RuntimeException("Function calls not implemented");
+	}
+	public Dec decProc(String id, FParam[] fparams, Inst i, String enlaceFuente) {
+		throw new RuntimeException("Procedure declaration not implemented");
+	}
+	public FParam fparam(DeclaredType tipo,boolean porReferencia, String id,String enlaceFuente) {
+		throw new RuntimeException("Procedure parameters not implemented");
+	}
+	public Inst iblock(Dec[] decs, Inst[] is) {
+		throw new RuntimeException("Blocks with declarations not implemented");
+	}
 }

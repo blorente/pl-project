@@ -1,57 +1,58 @@
 package procesamientos;
 
-import programa.Program.Division;
-import programa.Program.Equals;
-import programa.Program.IWhile;
-import programa.Program.IDoWhile;
-import programa.Program.TRef;
-import programa.Program.TPointer;
-import programa.Program.IIfThen;
-import programa.Program.IIfThenElse;
-import programa.Program.IntCt;
-import programa.Program.Less;
-import programa.Program.LessEq;
-import programa.Program.BoolCt;
-import programa.Program.Multiplication;
-import programa.Program.Negative;
-import programa.Program.Not;
-import programa.Program.NotEquals;
-import programa.Program.RealCt;
-import programa.Program.StrElem;
-import programa.Program.Subtraction;
-import programa.Program.UniCharCt;
-import programa.Program.UniStrCast;
-import programa.Program.UniStringCt;
-import programa.Program.Var;
-import programa.Program.Addition;
-import programa.Program.Modulus;
-import programa.Program.Prog;
-import programa.Program.DecVar;
-import programa.Program.DecType;
-import programa.Program.IAsig;
-import programa.Program.IBlock;
-import programa.Program.IRead;
-import programa.Program.IWrite;
-import programa.Program.And;
-import programa.Program.Int;
-import programa.Program.IntCast;
-import programa.Program.Bool;
-import programa.Program.BoolCast;
-import programa.Program.Real;
-import programa.Program.RealCast;
-import programa.Program.UniChar;
-import programa.Program.UniCharCast;
-import programa.Program.UniString;
-import programa.Program.Error;
-import programa.Program.Greater;
-import programa.Program.GreaterEq;
-import programa.Program.Ok;
-import programa.Program.Or;
-import programa.Program.ISwitch;
-import programa.Program.ICase;
-import programa.Program.DecRef;
-import programa.Program.IFree;
-import programa.Program.INew;
+import program.Program.Division;
+import program.Program.Equals;
+import program.Program.IWhile;
+import program.Program.IDoWhile;
+import program.Program.TRef;
+import program.Program.TPointer;
+import program.Program.IIfThen;
+import program.Program.IIfThenElse;
+import program.Program.IntCt;
+import program.Program.Less;
+import program.Program.LessEq;
+import program.Program.BoolCt;
+import program.Program.Multiplication;
+import program.Program.Negative;
+import program.Program.Not;
+import program.Program.NotEquals;
+import program.Program.RealCt;
+import program.Program.StrElem;
+import program.Program.Subtraction;
+import program.Program.UniCharCt;
+import program.Program.UniStrCast;
+import program.Program.UniStringCt;
+import program.Program.Var;
+import program.Program.Addition;
+import program.Program.Modulus;
+import program.Program.Prog;
+import program.Program.DecVar;
+import program.Program.DecType;
+import program.Program.IAsig;
+import program.Program.IBlock;
+import program.Program.IRead;
+import program.Program.IWrite;
+import program.Program.And;
+import program.Program.Int;
+import program.Program.IntCast;
+import program.Program.Bool;
+import program.Program.BoolCast;
+import program.Program.Real;
+import program.Program.RealCast;
+import program.Program.UniChar;
+import program.Program.UniCharCast;
+import program.Program.UniString;
+import program.Program.Error;
+import program.Program.Greater;
+import program.Program.GreaterEq;
+import program.Program.Ok;
+import program.Program.Or;
+import program.Program.ISwitch;
+import program.Program.ICase;
+import program.Program.DecRef;
+import program.Program.IFree;
+import program.Program.INew;
+import program.Program.TArray;
 
 public class Processing {
    public void process(IntCt exp) {}
@@ -94,6 +95,7 @@ public class Processing {
    public void process(UniString t) {}
    public void process(TRef t) {}
    public void process(TPointer t) {}
+   public void process(TArray t) {}
    public void process(Ok t) {}
    public void process(Error t) {}
 

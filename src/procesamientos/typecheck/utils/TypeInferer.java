@@ -1,7 +1,7 @@
 package procesamientos.typecheck.utils;
 
-import programa.Program;
-import programa.Program.Type;
+import program.Program;
+import program.Program.Type;
 
 public class TypeInferer {
     private final CompatibilityChecker compat;

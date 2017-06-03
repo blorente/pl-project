@@ -9,18 +9,19 @@ import procesamientos.generacioncodigo.Tagging;
 import procesamientos.impresion.Impresion;
 import procesamientos.typecheck.TypeCheck;
 import procesamientos.typecheck.Vinculacion;
-import programa.Program;
+import program.Program;
 
 public class Prueba extends Program {
 	private Prog programa;
 
 	public Prueba() {
 		programa = prog(new Dec[] {
-						dectype(tipoPointer(tipoRef("miEntero")),"pMientero"),
+						dectype(tipoPointer(tref("miEntero")),"pMientero"),
 						dectype(tInt(),"miEntero"),
 
-						decvar(tipoRef("miEntero"),"e"),
-						decvar(tipoRef("pMientero"),"pe"),
+						decvar(tref("miEntero"),"e"),
+						decvar(tref("pMientero"),"pe"),
+						decvar(tarray(tref("miEntero"), 6), "arr"),
 				},
 				iblock(new Inst[]{
 						inew(var("pe")),
