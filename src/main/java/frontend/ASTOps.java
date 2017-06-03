@@ -125,13 +125,6 @@ public class ASTOps extends Program {
         }
         throw new UnsupportedOperationException("opUn("+op+"...)");
     }
-    public Exp opBin(String op, Exp opnd0, Exp opnd1,String sourceLink) {
-        switch(op) {
-            case "+": return new Addition(opnd0,opnd1,sourceLink);
-            case "&&": return new And(opnd0,opnd1,sourceLink);
-        }
-        throw new UnsupportedOperationException("opBin("+op+"...)");
-    }
     public Exp intFromString(String i) {
         return intct(Integer.valueOf(i).intValue());
     }

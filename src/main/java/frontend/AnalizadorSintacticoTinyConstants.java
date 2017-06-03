@@ -77,19 +77,75 @@ public interface AnalizadorSintacticoTinyConstants {
   /** RegularExpression Id. */
   int WRITE = 35;
   /** RegularExpression Id. */
-  int identificador = 36;
+  int PLUS = 36;
   /** RegularExpression Id. */
-  int numeroEntero = 37;
+  int MINUS = 37;
   /** RegularExpression Id. */
-  int realNumber = 38;
+  int MUL = 38;
   /** RegularExpression Id. */
-  int realPart = 39;
+  int DIV = 39;
   /** RegularExpression Id. */
-  int exponentialPart = 40;
+  int MOD = 40;
   /** RegularExpression Id. */
-  int stringLiteral = 41;
+  int EQEQ = 41;
   /** RegularExpression Id. */
-  int charLiteral = 42;
+  int NEQ = 42;
+  /** RegularExpression Id. */
+  int LESS = 43;
+  /** RegularExpression Id. */
+  int GREAT = 44;
+  /** RegularExpression Id. */
+  int LESSEQ = 45;
+  /** RegularExpression Id. */
+  int GREATEQ = 46;
+  /** RegularExpression Id. */
+  int OR = 47;
+  /** RegularExpression Id. */
+  int AND = 48;
+  /** RegularExpression Id. */
+  int OPEN_PAREN = 49;
+  /** RegularExpression Id. */
+  int CLOSE_PAREN = 50;
+  /** RegularExpression Id. */
+  int OPEN_BRACKET = 51;
+  /** RegularExpression Id. */
+  int CLOSE_BRACKET = 52;
+  /** RegularExpression Id. */
+  int OPEN_BRACE = 53;
+  /** RegularExpression Id. */
+  int CLOSE_BRACE = 54;
+  /** RegularExpression Id. */
+  int NOT = 55;
+  /** RegularExpression Id. */
+  int COMMA = 56;
+  /** RegularExpression Id. */
+  int SEMICOLON = 57;
+  /** RegularExpression Id. */
+  int DOT = 58;
+  /** RegularExpression Id. */
+  int COLON = 59;
+  /** RegularExpression Id. */
+  int AMPERSAND = 60;
+  /** RegularExpression Id. */
+  int EQUAL = 61;
+  /** RegularExpression Id. */
+  int UNDERSCORE = 62;
+  /** RegularExpression Id. */
+  int ARROW = 63;
+  /** RegularExpression Id. */
+  int identificador = 64;
+  /** RegularExpression Id. */
+  int intNumber = 65;
+  /** RegularExpression Id. */
+  int realNumber = 66;
+  /** RegularExpression Id. */
+  int realPart = 67;
+  /** RegularExpression Id. */
+  int exponentialPart = 68;
+  /** RegularExpression Id. */
+  int stringLiteral = 69;
+  /** RegularExpression Id. */
+  int charLiteral = 70;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -132,24 +188,41 @@ public interface AnalizadorSintacticoTinyConstants {
     "<NULL>",
     "<READ>",
     "<WRITE>",
+    "\"+\"",
+    "\"-\"",
+    "\"*\"",
+    "\"/\"",
+    "\"%\"",
+    "\"==\"",
+    "\"!=\"",
+    "\"<\"",
+    "\">\"",
+    "\"<=\"",
+    "\">=\"",
+    "\"||\"",
+    "\"&&\"",
+    "\"(\"",
+    "\")\"",
+    "\"[\"",
+    "\"]\"",
+    "\"{\"",
+    "\"}\"",
+    "\"!\"",
+    "\",\"",
+    "\";\"",
+    "\".\"",
+    "\":\"",
+    "\"&\"",
+    "\"=\"",
+    "\"_\"",
+    "\"->\"",
     "<identificador>",
-    "<numeroEntero>",
+    "<intNumber>",
     "<realNumber>",
     "<realPart>",
     "<exponentialPart>",
     "<stringLiteral>",
     "<charLiteral>",
-    "\";\"",
-    "\"(\"",
-    "\")\"",
-    "\",\"",
-    "\"&\"",
-    "\"*\"",
-    "\"=\"",
-    "\"{\"",
-    "\"}\"",
-    "\"+\"",
-    "\"&&\"",
   };
 
 }

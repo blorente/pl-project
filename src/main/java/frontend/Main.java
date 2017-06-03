@@ -5,6 +5,7 @@ import maquinaP.MaquinaP;
 import procesamientos.generacioncodigo.CodeGeneration;
 import procesamientos.generacioncodigo.SpaceAssignment;
 import procesamientos.generacioncodigo.Tagging;
+import procesamientos.impresion.Impresion;
 import procesamientos.typecheck.TypeCheck;
 import procesamientos.typecheck.Vinculacion;
 
@@ -17,7 +18,7 @@ public class Main{
       ASTOps ops = new ASTOps(errors);
       asint.setOps(ops);
       asint.inicio();
-      //new Impresion().procesa(ops.raiz());
+      new Impresion().process(ops.root());
       Vinculacion vinculacion = new Vinculacion(ops, errors);
       ops.root().processWith(vinculacion);
       if (vinculacion.error()) System.exit(1);
