@@ -138,14 +138,15 @@ PARSER_END(AnalizadorSintacticoTiny)
 		  {return decs;}
 	}
 
-  Lista<Dec> rListaDeclaraciones(Lista<Dec> decsh) :
-	 {Dec dec; Lista<Dec> decs;}
-	 {
-	   dec=declaracion() decs=rListaDeclaraciones(ops.decs(decsh,dec))
-		   {return decs;}
-			  |
-		   {return decsh;}
-	 }
+    Lista<Dec> rListaDeclaraciones(Lista<Dec> decsh) :
+        {Dec dec; Lista<Dec> decs;}
+        {
+        dec=declaracion()
+        decs=rListaDeclaraciones(ops.decs(decsh,dec))
+        {return decs;}
+        |
+        {return decsh;}
+        }
 
   Dec declaracion() :
 	 {DeclaredType tipo;  Token id; Token proc;
@@ -273,7 +274,7 @@ PARSER_END(AnalizadorSintacticoTiny)
 	  |
 	 ins = idelete()
 	  {return ins;}
-	}
+  }
 
   Inst iasig() :
 	{Exp el,er; Token asig;}
@@ -458,18 +459,14 @@ PARSER_END(AnalizadorSintacticoTiny)
 	}
 
   Exp exp3() :
-	{Exp exp$exp4, exp$rexp3;}
+	{Exp exp, exp$rexp3; Token t;}
 	{
-	exp$exp4=exp4() exp$rexp3=rexp3(exp$exp4)
-	  {return exp$rexp3;}
+	t=<NOT> exp=exp3()
+	    {return ops.not(exp);}
+	|
+	exp=exp4()
+	    {return exp;}
   }
-  Exp rexp3(Exp exph) :
-	{Exp exp; Token t;}
-	{
-	t=<NOT> exp=exp4()
-	  {return ops.not(exp);}
-    {return exph;}
-	}
 
   Exp exp4() :
 	{Exp exp;}
