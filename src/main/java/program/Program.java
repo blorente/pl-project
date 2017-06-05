@@ -1264,20 +1264,20 @@ public abstract class Program {
 	public Exp negative(Exp exp1, String sourceLink) {
 		return new Negative(exp1, sourceLink);
 	}
-	public Exp intcast(Exp exp) {
-		return new IntCast(exp);
+	public Exp intcast(Exp exp, String sourceLink) {
+		return new IntCast(exp, sourceLink);
 	}
-	public Exp realcast(Exp exp) {
-		return new RealCast(exp);
+	public Exp realcast(Exp exp, String sourceLink) {
+		return new RealCast(exp, sourceLink);
 	}
-	public Exp boolcast(Exp exp) {
-		return new BoolCast(exp);
+	public Exp boolcast(Exp exp, String sourceLink) {
+		return new BoolCast(exp, sourceLink);
 	}
-	public Exp charcast(Exp exp) {
-		return new UniCharCast(exp);
+	public Exp charcast(Exp exp, String sourceLink) {
+		return new UniCharCast(exp, sourceLink);
 	}
-	public Exp strcast(Exp exp) {
-		return new UniStrCast(exp);
+	public Exp strcast(Exp exp, String sourceLink) {
+		return new UniStrCast(exp, sourceLink);
 	}
 	public DeclaredType tInt() {
 		return TINT;

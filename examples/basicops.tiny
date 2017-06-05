@@ -6,11 +6,11 @@ var float k;
 {
     i = 0;
     i = i - 1;
+    k = <float>i;
     j = 0.0;
     b = (i >= i) || (i == i);
     b = true;
     b = !b;
-    k = 5.0;
     j = 2.0;
     k = j / 2;
 }

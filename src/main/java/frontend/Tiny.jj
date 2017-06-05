@@ -459,13 +459,38 @@ PARSER_END(AnalizadorSintacticoTiny)
 	}
 
   Exp exp3() :
-	{Exp exp, exp$rexp3; Token t;}
+	{Exp exp, exp$castexp; Token t;}
 	{
 	t=<NOT> exp=exp3()
 	    {return ops.not(exp);}
 	|
+	t=<MINUS> exp=exp3()
+	    {return ops.negative(exp,enlaceFuente(t));}
+	|
+	t=<LESS> exp$castexp=castexp(t)
+	    {return exp$castexp;}
+	|
 	exp=exp4()
 	    {return exp;}
+  }
+
+  Exp castexp(Token t) :
+  {Exp exp;}
+  {
+  t=<INT> <GREAT> exp=exp3()
+    {return ops.intcast(exp, enlaceFuente(t));}
+  |
+  t=<DOUBLE> <GREAT> exp=exp3()
+    {return ops.realcast(exp, enlaceFuente(t));}
+  |
+  t=<BOOL> <GREAT> exp=exp3()
+    {return ops.boolcast(exp, enlaceFuente(t));}
+  |
+  t=<CHAR> <GREAT> exp=exp3()
+    {return ops.charcast(exp, enlaceFuente(t));}
+  |
+  t=<STRING> <GREAT> exp=exp3()
+    {return ops.strcast(exp, enlaceFuente(t));}
   }
 
   Exp exp4() :

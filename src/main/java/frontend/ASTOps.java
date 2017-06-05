@@ -49,9 +49,9 @@ public class ASTOps extends Program {
     }
     private void chequeaDesig(Exp d, String sourceLink) {
         if (! (d.isMem())) {
-             errors.msg(sourceLink+":"+ERROR_DESIG);
-             System.exit(1);
-         }
+            errors.msg(sourceLink + ":" + ERROR_DESIG);
+            System.exit(1);
+        }
     }
     
     private Prog root;
