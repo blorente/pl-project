@@ -1188,7 +1188,6 @@ public abstract class Program {
 	public Exp intct(int val) {
 		return new IntCt(val);
 	}
-
 	public Exp boolct(boolean val) {
 		return new BoolCt(val);
 	}
@@ -1324,4 +1323,14 @@ public abstract class Program {
 		}
 		return iblock(is);
 	}
+
+	public Exp arrayindex(Exp index, String sourceLink) {
+	    throw new RuntimeException("Array indexing unimplemented");
+    }
+    public Exp structfield(String field, String sourceLink) {
+        throw new RuntimeException("Direct struct field access unimplemented");
+    }
+    public Exp structfieldref(String field, String sourceLink) {
+        throw new RuntimeException("Referenced struct field access unimplemented");
+    }
 }

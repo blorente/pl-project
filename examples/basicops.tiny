@@ -2,15 +2,15 @@ var int i;
 var float j;
 var bool b;
 var float k;
+var string s;
+var char ch;
 
 {
+    j = hello[0];
+    s = "Hello";
+    ch = s _ 3;
     i = 0;
     i = i - 1;
     k = <float>i;
     j = 0.0;
-    b = (i >= i) || (i == i);
-    b = true;
-    b = !b;
-    j = 2.0;
-    k = j / 2;
 }

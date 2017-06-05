@@ -494,17 +494,34 @@ PARSER_END(AnalizadorSintacticoTiny)
   }
 
   Exp exp4() :
-	{Exp exp;}
-	{
-	  exp=exp5()
-		{return exp;}
-	}
+	{Exp exp$exp5, exp$rexp4;}
+    {
+     exp$exp5=exp5() exp$rexp4=rexp4(exp$exp5)
+        {return exp$rexp4;}
+    }
+  Exp rexp4(Exp exph):
+  {Exp exp; Token t;}
+  {
+  t=<UNDERSCORE> exp=exp5()
+    {return ops.strElem(exph, exp, enlaceFuente(t));}
+  |
+  {return exph;}
+  }
 
   Exp exp5() :
-	{Exp exp;}
+	{Exp exp; Token t; Token id;}
 	{
-	 exp=exp6()
-	   {return exp;}
+	t=<OPEN_BRACKET> exp=exp0() <CLOSE_BRACKET>
+	    {return ops.arrayindex(exp, enlaceFuente(t));}
+	|
+	t=<DOT> id=<identificador>
+	    {return ops.structfield(id.image, enlaceFuente(t));}
+	|
+    t=<ARROW> id=<identificador>
+        {return ops.structfieldref(id.image, enlaceFuente(t));}
+    |
+	exp=exp6()
+	    {return exp;}
 	}
 
   Exp exp6() :
