@@ -260,6 +260,21 @@ public class TypeCheck extends Processing {
         }
         exp.ponTipo(inferredType);
     }
+    public void process(ArrayIndex exp) {
+        exp.var().processWith(this);
+        Type tarr = CompatibilityChecker.arrType(program, exp.var().type());
+        if (tarr.equals(program.tError())) {
+            errors.msg(exp.sourcelink() + ":" + ERROR_INDEX);
+            exp.ponTipo(program.tError());
+        } else {
+            exp.ponTipo(tarr);
+        }
+        exp.index().processWith(this);
+        if (!exp.index().type().equals(program.tInt())) {
+            errors.msg(exp.sourcelink() + ":" + ERROR_INDEX_INDICE);
+            exp.ponTipo(program.tError());
+        }
+    }
 
     public void process(Prog p) {
         p.inst().processWith(this);

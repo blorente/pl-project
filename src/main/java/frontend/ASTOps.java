@@ -125,8 +125,9 @@ public class ASTOps extends Program {
         }
         throw new UnsupportedOperationException("opUn("+op+"...)");
     }
+    public int parseInt(String i) {return Integer.valueOf(i);}
     public Exp intFromString(String i) {
-        return intct(Integer.valueOf(i).intValue());
+        return intct(parseInt(i));
     }
     public Exp realFromString(String i) {
         return realct(Double.valueOf(i));

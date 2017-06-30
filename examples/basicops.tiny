@@ -1,15 +1,21 @@
+type int[6] myarr;
+
 var int i;
 var float j;
 var bool b;
 var float k;
 var string s;
 var char ch;
+var myarr arr;
 
 {
-    j = hello[0];
     s = "Hello";
     ch = s _ 3;
     i = 0;
+    arr[i] = 4;
+    arr[i + 2] = arr[i];
+    arr[i + 3] = 6;
+    j = 0.6;
     i = i - 1;
     k = <float>i;
     j = 0.0;

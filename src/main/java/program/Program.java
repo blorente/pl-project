@@ -147,6 +147,11 @@ public abstract class Program {
 		public void accept(Processing p) {
 			p.process(this);
 		}
+
+		@Override
+		public String toString() {
+			return "ARR["+tbase.toString()+"]";
+		}
 	}
 	public class Ok implements Type {
 		public void accept(Processing p) {
@@ -1119,6 +1124,23 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
+	public class ArrayIndex extends Mem {
+		private final Exp var;
+		private final Exp index;
+
+		public ArrayIndex(Exp var, Exp index, String sourceLink) {
+			super(sourceLink);
+			this.var = var;
+			this.index = index;
+		}
+		@Override
+		public void processWith(Processing p) {
+			p.process(this);
+		}
+
+		public Exp var() {return this.var;}
+		public Exp index() {return this.index;}
+	}
 
 	public Prog prog(Dec[] decs, Inst i) {
 		return new Prog(decs, i);
@@ -1299,7 +1321,7 @@ public abstract class Program {
 	public Type tError() {
 		return TERROR;
 	}
-	public DeclaredType tipoPointer(DeclaredType tbase) {return new TPointer(tbase);}
+	public DeclaredType tPointer(DeclaredType tbase) {return new TPointer(tbase);}
 
 	public DeclaredType tref(String typeId) {return new TRef(typeId);}
 	public DeclaredType tref(String typeId, String sourceLink) {return new TRef(typeId,sourceLink);}
@@ -1324,13 +1346,13 @@ public abstract class Program {
 		return iblock(is);
 	}
 
-	public Exp arrayindex(Exp index, String sourceLink) {
-	    throw new RuntimeException("Array indexing unimplemented");
+	public Exp arrayindex(Exp var, Exp index, String sourceLink) {
+	    return new ArrayIndex(var, index, sourceLink);
     }
-    public Exp structfield(String field, String sourceLink) {
+    public Exp structfield(Exp var, String field, String sourceLink) {
         throw new RuntimeException("Direct struct field access unimplemented");
     }
-    public Exp structfieldref(String field, String sourceLink) {
+    public Exp structfieldref(Exp var, String field, String sourceLink) {
         throw new RuntimeException("Referenced struct field access unimplemented");
     }
 }

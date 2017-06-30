@@ -3,16 +3,16 @@ package procesamientos.impresion;
 import procesamientos.Processing;
 import program.Program.*;
 
-public class Impresion extends Processing {
+public class Printing extends Processing {
 	private boolean attributes;
 	private int indentation;
 
-	public Impresion(boolean atributos) {
-		this.attributes = atributos;
+	public Printing(boolean attributes) {
+		this.attributes = attributes;
 		indentation = 0;
 	}
 
-	public Impresion() {
+	public Printing() {
 		this(false);
 	}
 
@@ -222,6 +222,13 @@ public class Impresion extends Processing {
 		System.out.print(')');
 		printAttributes(exp);
 		exp.op().processWith(this);
+	}
+	public void process(ArrayIndex exp) {
+		exp.var().processWith(this);
+		System.out.print('[');
+		exp.index().processWith(this);
+		System.out.print(']');
+		printAttributes(exp);
 	}
 	public void process(Prog p) {
 		for (Dec d : p.decs())

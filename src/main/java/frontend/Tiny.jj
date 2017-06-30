@@ -158,7 +158,7 @@ PARSER_END(AnalizadorSintacticoTiny)
 		<VAR> tipo = tipo0() id=<identificador> ";"
 		  {return ops.decvar(tipo,id.image,enlaceFuente(id));}
 			|
-	proc=<PROC> cabezaProc$as = cabezaProc() ins = bloque() pyComa()
+        proc=<PROC> cabezaProc$as = cabezaProc() ins = bloque() pyComa()
 		  {return ops.decProc(cabezaProc$as.proc, cabezaProc$as.fparams, ins,
 							  enlaceFuente(proc));}
 	  }
@@ -223,11 +223,14 @@ PARSER_END(AnalizadorSintacticoTiny)
 	}
 
   DeclaredType rTipo0(DeclaredType tipoh) :
-	{DeclaredType tipo; }
+	{DeclaredType tipo; Token size;}
 	{
-	  <MUL> tipo=rTipo0(ops.tipoPointer(tipoh))
+	  <MUL> tipo=rTipo0(ops.tPointer(tipoh))
 		{return tipo;}
 	   |
+	  <OPEN_BRACKET> size=<intNumber> <CLOSE_BRACKET>
+	    {return ops.tarray(tipoh, ops.parseInt(size.image));}
+	  |
 		{return tipoh;}
 	}
 
@@ -509,19 +512,25 @@ PARSER_END(AnalizadorSintacticoTiny)
   }
 
   Exp exp5() :
-	{Exp exp; Token t; Token id;}
+  {Exp exp$exp6, exp$rexp5;}
+  {
+     exp$exp6=exp6() exp$rexp5=rexp5(exp$exp6)
+        {return exp$rexp5;}
+  }
+
+  Exp rexp5(Exp exph) :
+	{Exp exp; Token field, t;}
 	{
 	t=<OPEN_BRACKET> exp=exp0() <CLOSE_BRACKET>
-	    {return ops.arrayindex(exp, enlaceFuente(t));}
+	    {return ops.arrayindex(exph, exp, enlaceFuente(t));}
 	|
-	t=<DOT> id=<identificador>
-	    {return ops.structfield(id.image, enlaceFuente(t));}
+	t=<DOT> field=<identificador>
+	    {return ops.structfield(exph, field.image, enlaceFuente(t));}
 	|
-    t=<ARROW> id=<identificador>
-        {return ops.structfieldref(id.image, enlaceFuente(t));}
+    t=<ARROW> field=<identificador>
+        {return ops.structfieldref(exph, field.image, enlaceFuente(t));}
     |
-	exp=exp6()
-	    {return exp;}
+	{return exph;}
 	}
 
   Exp exp6() :

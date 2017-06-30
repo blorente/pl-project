@@ -204,12 +204,18 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
   }
 
   final public DeclaredType rTipo0(DeclaredType tipoh) throws ParseException {
-         DeclaredType tipo;
+         DeclaredType tipo; Token size;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case MUL:
       jj_consume_token(MUL);
-      tipo = rTipo0(ops.tipoPointer(tipoh));
+      tipo = rTipo0(ops.tPointer(tipoh));
                  {if (true) return tipo;}
+      break;
+    case OPEN_BRACKET:
+      jj_consume_token(OPEN_BRACKET);
+      size = jj_consume_token(intNumber);
+      jj_consume_token(CLOSE_BRACKET);
+             {if (true) return ops.tarray(tipoh, ops.parseInt(size.image));}
       break;
     default:
       jj_la1[6] = jj_gen;
@@ -262,10 +268,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
     case MUL:
     case LESS:
     case OPEN_PAREN:
-    case OPEN_BRACKET:
     case NOT:
-    case DOT:
-    case ARROW:
     case identificador:
     case intNumber:
     case realNumber:
@@ -420,11 +423,8 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
     case MUL:
     case LESS:
     case OPEN_PAREN:
-    case OPEN_BRACKET:
     case OPEN_BRACE:
     case NOT:
-    case DOT:
-    case ARROW:
     case identificador:
     case intNumber:
     case realNumber:
@@ -461,11 +461,8 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
     case MUL:
     case LESS:
     case OPEN_PAREN:
-    case OPEN_BRACKET:
     case OPEN_BRACE:
     case NOT:
-    case DOT:
-    case ARROW:
     case identificador:
     case intNumber:
     case realNumber:
@@ -643,9 +640,6 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
     case FALSE:
     case MUL:
     case OPEN_PAREN:
-    case OPEN_BRACKET:
-    case DOT:
-    case ARROW:
     case identificador:
     case intNumber:
     case realNumber:
@@ -727,40 +721,35 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
   }
 
   final public Exp exp5() throws ParseException {
-         Exp exp; Token t; Token id;
+   Exp exp$exp6, exp$rexp5;
+    exp$exp6 = exp6();
+    exp$rexp5 = rexp5(exp$exp6);
+         {if (true) return exp$rexp5;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public Exp rexp5(Exp exph) throws ParseException {
+         Exp exp; Token field, t;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case OPEN_BRACKET:
       t = jj_consume_token(OPEN_BRACKET);
       exp = exp0();
       jj_consume_token(CLOSE_BRACKET);
-             {if (true) return ops.arrayindex(exp, enlaceFuente(t));}
+             {if (true) return ops.arrayindex(exph, exp, enlaceFuente(t));}
       break;
     case DOT:
       t = jj_consume_token(DOT);
-      id = jj_consume_token(identificador);
-             {if (true) return ops.structfield(id.image, enlaceFuente(t));}
+      field = jj_consume_token(identificador);
+             {if (true) return ops.structfield(exph, field.image, enlaceFuente(t));}
       break;
     case ARROW:
       t = jj_consume_token(ARROW);
-      id = jj_consume_token(identificador);
-         {if (true) return ops.structfieldref(id.image, enlaceFuente(t));}
-      break;
-    case TRUE:
-    case FALSE:
-    case MUL:
-    case OPEN_PAREN:
-    case identificador:
-    case intNumber:
-    case realNumber:
-    case stringLiteral:
-    case charLiteral:
-      exp = exp6();
-             {if (true) return exp;}
+      field = jj_consume_token(identificador);
+         {if (true) return ops.structfieldref(exph, field.image, enlaceFuente(t));}
       break;
     default:
       jj_la1[20] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
+         {if (true) return exph;}
     }
     throw new Error("Missing return statement in function");
   }
@@ -876,13 +865,13 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
       jj_la1_init_2();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x160000,0x160000,0x160000,0x1f000,0x0,0x0,0x0,0x1f000,0x1a80c00,0x400000,0x0,0x1a80c00,0x1a80c00,0x0,0x0,0x0,0x0,0xc00,0x1f000,0x0,0xc00,0xc00,0xc00,0xc00,};
+      jj_la1_0 = new int[] {0x160000,0x160000,0x160000,0x1f000,0x0,0x0,0x0,0x1f000,0x1a80c00,0x400000,0x0,0x1a80c00,0x1a80c00,0x0,0x0,0x0,0x0,0xc00,0x1f000,0x0,0x0,0xc00,0xc00,0xc00,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x1000000,0x10000000,0x40,0x0,0x84aa0860,0x0,0x1000000,0x84aa0860,0x84aa0860,0x2000000,0x7e00,0x8030,0x101c0,0x848a0860,0x0,0x40000000,0x840a0040,0x20040,0x20000,0x0,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x1000000,0x10000000,0x80040,0x0,0xa20860,0x0,0x1000000,0xa20860,0xa20860,0x2000000,0x7e00,0x8030,0x101c0,0x820860,0x0,0x40000000,0x84080000,0x20040,0x20000,0x0,};
    }
    private static void jj_la1_init_2() {
-      jj_la1_2 = new int[] {0x0,0x0,0x0,0x1,0x0,0x0,0x0,0x1,0x67,0x0,0x0,0x67,0x67,0x0,0x0,0x0,0x0,0x67,0x0,0x0,0x67,0x67,0x67,0x66,};
+      jj_la1_2 = new int[] {0x0,0x0,0x0,0x1,0x0,0x0,0x0,0x1,0x67,0x0,0x0,0x67,0x67,0x0,0x0,0x0,0x0,0x67,0x0,0x0,0x0,0x67,0x67,0x66,};
    }
 
   /** Constructor with InputStream. */

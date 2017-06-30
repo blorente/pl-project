@@ -64,4 +64,9 @@ public class SpaceAssignment extends Processing {
             r.putSize(r.declaration().decType().size());
         }
     }
+    public void process(TArray arr) {
+        if (arr.size() == 0) {
+            arr.putSize(arr.tbase().size());
+        }
+    }
 }

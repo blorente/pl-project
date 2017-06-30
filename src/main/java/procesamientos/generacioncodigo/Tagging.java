@@ -22,7 +22,7 @@ public class Tagging extends Processing {
 		// apilaDir(...dir variable...)
 		exp.putDirNext(++etq);
 	}
-	public void procesa(DecRef exp) {
+	public void process(DecRef exp) {
 		exp.putDirFirst(etq);
 		exp.mem().processWith(this);
 		// apilaind
@@ -37,90 +37,74 @@ public class Tagging extends Processing {
 		exp.putDirFirst(etq);
 		exp.putDirNext(++etq);
 	}
-	
 	public void process(RealCt exp) {
 		exp.putDirFirst(etq);
 		exp.putDirNext(++etq);
 	}
-	
 	public void process(UniCharCt exp) {
 		exp.putDirFirst(etq);
 		exp.putDirNext(++etq);
 	}
-	
 	public void process(UniStringCt exp) {
 		exp.putDirFirst(etq);
 		exp.putDirNext(++etq);
 	}
-
 	public void process(Addition exp) {
 		tagBinaryNumericExpression(exp);
 	}
 	public void process(Subtraction exp) {
 		tagBinaryNumericExpression(exp);
 	}
-
 	public void process(Multiplication exp) {
 		tagBinaryNumericExpression(exp);
 	}
 	public void process(Division exp) {
 		tagBinaryNumericExpression(exp);
 	}
-	
 	public void process(Modulus exp) {
 		tagBinaryNumericExpression(exp);
-	}	
-
+	}
 	public void process(And exp) {
 		exp.putDirFirst(etq);
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
 		exp.putDirNext(++etq);
 	}
-	
 	public void process(Or exp) {
 		exp.putDirFirst(etq);
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
 		exp.putDirNext(++etq);
 	}
-	
 	public void process(Not exp) {
 		exp.putDirFirst(etq);
 		exp.op().processWith(this);
 		exp.putDirNext(++etq);
 	}
-	
 	public void process(Equals exp) {
 		tagBinaryNumericExpression(exp);
 	}
-	
 	public void process(NotEquals exp) {
 		tagBinaryNumericExpression(exp);
 	}
-	
 	public void process(Greater exp) {
 		tagBinaryNumericExpression(exp);
 	}
-	
 	public void process(GreaterEq exp) {
 		tagBinaryNumericExpression(exp);
 	}
-	
 	public void process(Less exp) {
 		tagBinaryNumericExpression(exp);
 	}
 	public void process(LessEq exp) {
 		tagBinaryNumericExpression(exp);
 	}
-	
 	public void process(StrElem exp) {
 		exp.putDirFirst(etq);
 		exp.opnd1().processWith(this);
 		exp.opnd2().processWith(this);
 		exp.putDirNext(++etq);
 	}
-	
 	public void process(Negative exp) {
 		exp.putDirFirst(etq);
 		exp.op().processWith(this);
@@ -129,7 +113,6 @@ public class Tagging extends Processing {
 	public void process(IntCast exp) {
 		tagCastExpression(exp);
 	}
-
 	public void process(RealCast exp) {
 		tagCastExpression(exp);
 	}
@@ -139,18 +122,16 @@ public class Tagging extends Processing {
 	public void process(UniCharCast exp) {
 		tagCastExpression(exp);
 	}
-
 	public void process(UniStrCast exp) {
 		tagCastExpression(exp);
 	}
-
 	public void process(IAsig i) {
 		i.putDirFirst(etq);
+		i.mem().processWith(this);
 		i.exp().processWith(this);
-		// desapilaDir
+		// move or popInd
 		i.putDirNext(++etq);
 	}
-
 	public void process(IBlock b) {
 		b.putDirFirst(etq);
 		for (Inst i : b.is()) {
@@ -158,7 +139,6 @@ public class Tagging extends Processing {
 		}
 		b.putDirNext(etq);
 	}
-
 	public void process(IWhile i) {
 		i.putDirFirst(etq);
 		i.getCond().processWith(this);
@@ -169,7 +149,6 @@ public class Tagging extends Processing {
 		etq++;
 		i.putDirNext(etq);
 	}
-
 	public void process(IDoWhile i) {
 		i.putDirFirst(etq);
 		i.getBody().processWith(this);
@@ -180,7 +159,6 @@ public class Tagging extends Processing {
 		etq++;
 		i.putDirNext(etq);
 	}
-
 	public void process(IIfThen i) {
 		i.putDirFirst(etq);
 		i.getCond().processWith(this);
@@ -189,7 +167,6 @@ public class Tagging extends Processing {
 		i.getThen().processWith(this);
 		i.putDirNext(etq);
 	}
-
 	public void process(IIfThenElse i) {
 		i.putDirFirst(etq);
 		i.getCond().processWith(this);
@@ -201,7 +178,6 @@ public class Tagging extends Processing {
 		i.getElse().processWith(this);
 		i.putDirNext(etq);
 	}
-
 	public void process(ISwitch i) {
 		i.putDirFirst(etq);
 		i.getCond().processWith(this);
@@ -219,7 +195,6 @@ public class Tagging extends Processing {
 		}
 		i.putDirNext(etq);
 	}
-
 	public void process(ICase i) {
 		i.putDirFirst(etq);
 		i.getExp().processWith(this);
@@ -230,19 +205,16 @@ public class Tagging extends Processing {
 		i.getBody().processWith(this);
 		i.putDirNext(etq);
 	}
-
 	public void process(IRead i){
 		i.putDirFirst(etq);
 		etq++;
 		i.putDirNext(++etq);
 	}
-	
 	public void process(IWrite i){
 		i.putDirFirst(etq);
 		etq++;
 		i.putDirNext(++etq);
 	}
-
 	private void tagBinaryNumericExpression(BinaryExp exp) {
 		Type t1 = exp.opnd1().type();
 		Type t2 = exp.opnd2().type();
@@ -257,26 +229,37 @@ public class Tagging extends Processing {
 		}
 		exp.putDirNext(++etq);
 	}
-
 	private void tagCastExpression(UnaryExp exp) {
 		exp.putDirFirst(etq);
 		exp.op().processWith(this);
 		if (!exp.op().type().equals(exp.type()))
 			exp.putDirNext(++etq);
 	}
-
-	public void procesa(INew i) {
+	public void process(INew i) {
 		i.putDirFirst(etq);
 		i.mem().processWith(this);
 		// alloc desapilaind
 		etq +=2;
 		i.putDirNext(etq);
 	}
-	public void procesa(IFree i) {
+	public void process(IFree i) {
 		i.putDirFirst(etq);
 		i.mem().processWith(this);
 		// apilaind dealloc
 		etq +=2;
 		i.putDirNext(etq);
+	}
+	public void process(ArrayIndex exp) {
+		exp.putDirFirst(etq);
+		exp.var().processWith(this);
+		exp.index().processWith(this);
+
+		if (exp.index().isMem()) {
+			etq++;
+		}
+		etq++; // pushInt
+		etq++; // Mul
+		etq++; // Sum
+		exp.putDirNext(etq);
 	}
 }

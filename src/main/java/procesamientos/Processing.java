@@ -53,6 +53,8 @@ public class Processing {
    public void process(DecType d) {}
    public void process(DecVar d) {}
 
+   public void process(ArrayIndex a) {}
+
    public void process(IAsig i) {}
    public void process(IBlock i) {}
    public void process(IRead i) {}

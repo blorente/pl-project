@@ -244,5 +244,9 @@ public class Vinculacion extends Processing {
 	public void process(DecRef d) {
 		d.mem().processWith(this);
 	}
+	public void process(ArrayIndex exp) {
+		exp.var().processWith(this);
+		exp.index().processWith(this);
+	}
 
 }

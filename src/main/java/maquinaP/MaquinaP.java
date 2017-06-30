@@ -113,7 +113,7 @@ public class MaquinaP {
 	}
 
 	private List<Instruction> codigoP;
-	private Stack<Valor> pilaEvaluacion;
+	private Stack<Valor> evalStack;
 	private Valor[] datos;
 	private int pc;
 
@@ -123,14 +123,14 @@ public class MaquinaP {
 	private IAddInt IADDINT;
 	private class IAddInt implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new IntValue(opnd1.intValue() + opnd2.intValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -141,14 +141,14 @@ public class MaquinaP {
 	private IAddReal IADDREAL;
 	private class IAddReal implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new RealValue(opnd1.realValue() + opnd2.realValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -159,14 +159,14 @@ public class MaquinaP {
 	private IConcat ICONCAT;
 	private class IConcat implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new UniStringValue(opnd1.uniStringValue() + opnd2.uniStringValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -177,14 +177,14 @@ public class MaquinaP {
 	private ISubInt ISUBINT;
 	private class ISubInt implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new IntValue(opnd1.intValue() - opnd2.intValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -195,14 +195,14 @@ public class MaquinaP {
 	private ISubReal ISUBREAL;
 	private class ISubReal implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new RealValue(opnd1.realValue() - opnd2.realValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -213,14 +213,14 @@ public class MaquinaP {
 	private IMulInt IMULINT;
 	private class IMulInt implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new IntValue(opnd1.intValue() * opnd2.intValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -231,14 +231,14 @@ public class MaquinaP {
 	private IMulReal IMULREAL;
 	private class IMulReal implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new RealValue(opnd1.realValue() * opnd2.realValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -249,14 +249,14 @@ public class MaquinaP {
 	private IDivInt IDIVINT;
 	private class IDivInt implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new IntValue(opnd1.intValue() / opnd2.intValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -267,14 +267,14 @@ public class MaquinaP {
 	private IDivReal IDIVREAL;
 	private class IDivReal implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new RealValue(opnd1.realValue() / opnd2.realValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -286,13 +286,13 @@ public class MaquinaP {
 	private class IMod implements Instruction {
 		public void execute() {
 			Valor resul;
-			Valor op2 = pilaEvaluacion.pop();
-			Valor op1 = pilaEvaluacion.pop();
+			Valor op2 = evalStack.pop();
+			Valor op1 = evalStack.pop();
 			if (op1 == UNKNOWN || op2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new IntValue(op1.intValue() % op2.intValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -303,14 +303,14 @@ public class MaquinaP {
 	private IAnd IAND;
 	private class IAnd implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.boolValue() && opnd2.boolValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -321,14 +321,14 @@ public class MaquinaP {
 	private IOr IOR;
 	private class IOr implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.boolValue() || opnd2.boolValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -340,12 +340,12 @@ public class MaquinaP {
 	private class INot implements Instruction {
 		public void execute() {
 			Valor resul;
-			Valor op = pilaEvaluacion.pop();
+			Valor op = evalStack.pop();
 			if (op == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(!op.boolValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -356,14 +356,14 @@ public class MaquinaP {
 	private IEqualsInt IEQUALSINT;
 	private class IEqualsInt implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.intValue() == opnd2.intValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -374,14 +374,14 @@ public class MaquinaP {
 	private IEqualsReal IEQUALSREAL;
 	private class IEqualsReal implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.realValue() == opnd2.realValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -392,14 +392,14 @@ public class MaquinaP {
 	private IEqualsBool IEQUALSBOOL;
 	private class IEqualsBool implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.boolValue() == opnd2.boolValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -410,14 +410,14 @@ public class MaquinaP {
 	private IEqualsChar IEQUALSCHAR;
 	private class IEqualsChar implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.uniCharValue() == opnd2.uniCharValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -428,14 +428,14 @@ public class MaquinaP {
 	private IEqualsString IEQUALSSTRING;
 	private class IEqualsString implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.uniStringValue().equals(opnd2.uniStringValue()));
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -446,14 +446,14 @@ public class MaquinaP {
 	private INotEqualsInt INOTEQUALSINT;
 	private class INotEqualsInt implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.intValue() != opnd2.intValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -464,14 +464,14 @@ public class MaquinaP {
 	private INotEqualsReal INOTEQUALSREAL;
 	private class INotEqualsReal implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.realValue() != opnd2.realValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -482,14 +482,14 @@ public class MaquinaP {
 	private INotEqualsBool INOTEQUALSBOOL;
 	private class INotEqualsBool implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.boolValue() != opnd2.boolValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -500,14 +500,14 @@ public class MaquinaP {
 	private INotEqualsChar INOTEQUALSCHAR;
 	private class INotEqualsChar implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.uniCharValue() != opnd2.uniCharValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -518,14 +518,14 @@ public class MaquinaP {
 	private INotEqualsString INOTEQUALSSTRING;
 	private class INotEqualsString implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(!opnd1.uniStringValue().equals(opnd2.uniStringValue()));
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -536,14 +536,14 @@ public class MaquinaP {
 	private IGreaterInt IGREATERINT;
 	private class IGreaterInt implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.intValue() > opnd2.intValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -554,14 +554,14 @@ public class MaquinaP {
 	private IGreaterReal IGREATERREAL;
 	private class IGreaterReal implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.realValue() > opnd2.realValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -572,15 +572,15 @@ public class MaquinaP {
 	private IGreaterBool IGREATERBOOL;
 	private class IGreaterBool implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue((opnd1.boolValue() == true)
 				&& (opnd2.boolValue() == false));
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -591,14 +591,14 @@ public class MaquinaP {
 	private IGreaterChar IGREATERCHAR;
 	private class IGreaterChar implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.uniCharValue() > opnd2.uniCharValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -609,14 +609,14 @@ public class MaquinaP {
 	private IGreaterString IGREATERSTRING;
 	private class IGreaterString implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.uniStringValue().compareTo(opnd2.uniStringValue()) > 0);
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -627,14 +627,14 @@ public class MaquinaP {
 	private IGreaterEqInt IGREATEREQINT;
 	private class IGreaterEqInt implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.intValue() >= opnd2.intValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -645,14 +645,14 @@ public class MaquinaP {
 	private IGreaterEqReal IGREATEREQREAL;
 	private class IGreaterEqReal implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.realValue() >= opnd2.realValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -663,8 +663,8 @@ public class MaquinaP {
 	private IGreaterEqBool IGREATEREQBOOL;
 	private class IGreaterEqBool implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
@@ -672,7 +672,7 @@ public class MaquinaP {
 				resul = new BoolValue(
 						(opnd1.boolValue() == true) || 
 						(opnd1.boolValue() == false) && (opnd2.boolValue() == false));
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -683,14 +683,14 @@ public class MaquinaP {
 	private IGreaterEqChar IGREATEREQCHAR;
 	private class IGreaterEqChar implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.uniCharValue() >= opnd2.uniCharValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -701,14 +701,14 @@ public class MaquinaP {
 	private IGreaterEqString IGREATEREQSTRING;
 	private class IGreaterEqString implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.uniStringValue().compareTo(opnd2.uniStringValue()) >= 0);
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -719,14 +719,14 @@ public class MaquinaP {
 	private ILessInt ILESSINT;
 	private class ILessInt implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.intValue() < opnd2.intValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -737,14 +737,14 @@ public class MaquinaP {
 	private ILessReal ILESSREAL;
 	private class ILessReal implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.realValue() < opnd2.realValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -755,15 +755,15 @@ public class MaquinaP {
 	private ILessBool ILESSBOOL;
 	private class ILessBool implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue((opnd1.boolValue() == false)
 				&& (opnd2.boolValue() == true));
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -774,14 +774,14 @@ public class MaquinaP {
 	private ILessChar ILESSCHAR;
 	private class ILessChar implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.uniCharValue() < opnd2.uniCharValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -792,14 +792,14 @@ public class MaquinaP {
 	private ILessString ILESSSTRING;
 	private class ILessString implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.uniStringValue().compareTo(opnd2.uniStringValue()) < 0);
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -810,14 +810,14 @@ public class MaquinaP {
 	private ILessEqInt ILESSEQINT;
 	private class ILessEqInt implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.intValue() <= opnd2.intValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -828,14 +828,14 @@ public class MaquinaP {
 	private ILessEqReal ILESSEQREAL;
 	private class ILessEqReal implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.realValue() <= opnd2.realValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -846,8 +846,8 @@ public class MaquinaP {
 	private ILessEqBool ILESSEQBOOL;
 	private class ILessEqBool implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
@@ -855,7 +855,7 @@ public class MaquinaP {
 				resul = new BoolValue(
 						(opnd1.boolValue() == false) || 
 						(opnd1.boolValue() == true) && (opnd2.boolValue() == true));
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -866,14 +866,14 @@ public class MaquinaP {
 	private ILessEqChar ILESSEQCHAR;
 	private class ILessEqChar implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.uniCharValue() <= opnd2.uniCharValue());
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -884,14 +884,14 @@ public class MaquinaP {
 	private ILessEqString ILESSEQSTRING;
 	private class ILessEqString implements Instruction {
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN)
 				resul = UNKNOWN;
 			else
 				resul = new BoolValue(opnd1.uniStringValue().compareTo(opnd2.uniStringValue()) <= 0);
-			pilaEvaluacion.push(resul);
+			evalStack.push(resul);
 			pc++;
 		}
 
@@ -903,19 +903,19 @@ public class MaquinaP {
 	private class IStrElem implements Instruction {
 
 		public void execute() {
-			Valor opnd2 = pilaEvaluacion.pop();
-			Valor opnd1 = pilaEvaluacion.pop();
+			Valor opnd2 = evalStack.pop();
+			Valor opnd1 = evalStack.pop();
 			Valor resul;
 			if (opnd1 == UNKNOWN || opnd2 == UNKNOWN) {
-				pilaEvaluacion.push(UNKNOWN);
+				evalStack.push(UNKNOWN);
 			} else {
 				int index = opnd2.intValue();
 				String source = opnd1.uniStringValue();
 				if (index >= source.length() || index < 0) {
-					pilaEvaluacion.push(UNKNOWN);
+					evalStack.push(UNKNOWN);
 				} else {
 					char value = source.charAt(index);
-					pilaEvaluacion.push(new UniCharValue(value));
+					evalStack.push(new UniCharValue(value));
 				}
 			}
 			pc++;
@@ -929,11 +929,11 @@ public class MaquinaP {
 	private INegInt INEGINT;
 	private class INegInt implements Instruction {
 		public void execute() {
-			Valor operand = pilaEvaluacion.pop();
+			Valor operand = evalStack.pop();
 			if (operand == UNKNOWN) {
-				pilaEvaluacion.push(UNKNOWN);
+				evalStack.push(UNKNOWN);
 			} else {
-				pilaEvaluacion.push(new IntValue(-operand.intValue()));
+				evalStack.push(new IntValue(-operand.intValue()));
 			}
 			pc++;
 		}
@@ -945,11 +945,11 @@ public class MaquinaP {
 	private INegReal INEGREAL;
 	private class INegReal implements Instruction {
 		public void execute() {
-			Valor operand = pilaEvaluacion.pop();
+			Valor operand = evalStack.pop();
 			if (operand == UNKNOWN) {
-				pilaEvaluacion.push(UNKNOWN);
+				evalStack.push(UNKNOWN);
 			} else {
-				pilaEvaluacion.push(new RealValue(-operand.realValue()));
+				evalStack.push(new RealValue(-operand.realValue()));
 			}
 			pc++;
 		}
@@ -966,7 +966,7 @@ public class MaquinaP {
 		}
 
 		public void execute() {
-			pilaEvaluacion.push(new IntValue(value));
+			evalStack.push(new IntValue(value));
 			pc++;
 		}
 
@@ -982,7 +982,7 @@ public class MaquinaP {
 		}
 
 		public void execute() {
-			pilaEvaluacion.push(new RealValue(valor));
+			evalStack.push(new RealValue(valor));
 			pc++;
 		}
 
@@ -998,7 +998,7 @@ public class MaquinaP {
 		}
 
 		public void execute() {
-			pilaEvaluacion.push(new UniCharValue(value));
+			evalStack.push(new UniCharValue(value));
 			pc++;
 		}
 
@@ -1014,7 +1014,7 @@ public class MaquinaP {
 		}
 
 		public void execute() {
-			pilaEvaluacion.push(new UniStringValue(value));
+			evalStack.push(new UniStringValue(value));
 			pc++;
 		}
 
@@ -1030,7 +1030,7 @@ public class MaquinaP {
 		}
 
 		public void execute() {
-			datos[dir] = pilaEvaluacion.pop();
+			datos[dir] = evalStack.pop();
 			pc++;
 		}
 
@@ -1054,9 +1054,9 @@ public class MaquinaP {
 		public void execute() {
 			if (datos[dir] == null) {
 				System.err.println(enlaceFuente + ":" + W_ACCESO);
-				pilaEvaluacion.push(UNKNOWN);
+				evalStack.push(UNKNOWN);
 			} else
-				pilaEvaluacion.push(datos[dir]);
+				evalStack.push(datos[dir]);
 			pc++;
 		}
 
@@ -1072,7 +1072,7 @@ public class MaquinaP {
 		}
 
 		public void execute() {
-			pilaEvaluacion.push(new BoolValue(valor));
+			evalStack.push(new BoolValue(valor));
 			pc++;
 		}
 
@@ -1092,12 +1092,12 @@ public class MaquinaP {
 		}
 
 		public void execute() {
-			Valor source = pilaEvaluacion.pop();
+			Valor source = evalStack.pop();
 			if (source == UNKNOWN) {
-				pilaEvaluacion.push(UNKNOWN);
+				evalStack.push(UNKNOWN);
 			} else {
 				Valor casted = new RealValue((double) source.intValue());
-				pilaEvaluacion.push(casted);
+				evalStack.push(casted);
 			}
 			pc++;
 		}
@@ -1118,12 +1118,12 @@ public class MaquinaP {
 		}
 
 		public void execute() {
-			Valor source = pilaEvaluacion.pop();
+			Valor source = evalStack.pop();
 			if (source == UNKNOWN) {
-				pilaEvaluacion.push(UNKNOWN);
+				evalStack.push(UNKNOWN);
 			} else {
 				Valor casted = new BoolValue(source.intValue() == 0);
-				pilaEvaluacion.push(casted);
+				evalStack.push(casted);
 			}
 			pc++;
 		}
@@ -1144,12 +1144,12 @@ public class MaquinaP {
 		}
 
 		public void execute() {
-			Valor source = pilaEvaluacion.pop();
+			Valor source = evalStack.pop();
 			if (source == UNKNOWN) {
-				pilaEvaluacion.push(UNKNOWN);
+				evalStack.push(UNKNOWN);
 			} else {
 				Valor casted = new RealValue((double) source.uniCharValue());
-				pilaEvaluacion.push(casted);
+				evalStack.push(casted);
 			}
 			pc++;
 		}
@@ -1170,12 +1170,12 @@ public class MaquinaP {
 		}
 
 		public void execute() {
-			Valor source = pilaEvaluacion.pop();
+			Valor source = evalStack.pop();
 			if (source == UNKNOWN) {
-				pilaEvaluacion.push(UNKNOWN);
+				evalStack.push(UNKNOWN);
 			} else {
 				Valor casted = new RealValue(source.boolValue() ? 1.0 : 0.0);
-				pilaEvaluacion.push(casted);
+				evalStack.push(casted);
 			}
 			pc++;
 		}
@@ -1196,12 +1196,12 @@ public class MaquinaP {
 		}
 
 		public void execute() {
-			Valor source = pilaEvaluacion.pop();
+			Valor source = evalStack.pop();
 			if (source == UNKNOWN) {
-				pilaEvaluacion.push(UNKNOWN);
+				evalStack.push(UNKNOWN);
 			} else {
 				Valor casted = new IntValue((int) source.realValue());
-				pilaEvaluacion.push(casted);
+				evalStack.push(casted);
 			}
 			pc++;
 		}
@@ -1222,12 +1222,12 @@ public class MaquinaP {
 		}
 
 		public void execute() {
-			Valor source = pilaEvaluacion.pop();
+			Valor source = evalStack.pop();
 			if (source == UNKNOWN) {
-				pilaEvaluacion.push(UNKNOWN);
+				evalStack.push(UNKNOWN);
 			} else {
 				Valor casted = new IntValue(source.boolValue() ? 1 : 0);
-				pilaEvaluacion.push(casted);
+				evalStack.push(casted);
 			}
 			pc++;
 		}
@@ -1248,12 +1248,12 @@ public class MaquinaP {
 		}
 
 		public void execute() {
-			Valor source = pilaEvaluacion.pop();
+			Valor source = evalStack.pop();
 			if (source == UNKNOWN) {
-				pilaEvaluacion.push(UNKNOWN);
+				evalStack.push(UNKNOWN);
 			} else {
 				Valor casted = new IntValue((int) source.uniCharValue());
-				pilaEvaluacion.push(casted);
+				evalStack.push(casted);
 			}
 			pc++;
 		}
@@ -1274,12 +1274,12 @@ public class MaquinaP {
 		}
 
 		public void execute() {
-			Valor source = pilaEvaluacion.pop();
+			Valor source = evalStack.pop();
 			if (source == UNKNOWN) {
-				pilaEvaluacion.push(UNKNOWN);
+				evalStack.push(UNKNOWN);
 			} else {
 				Valor casted = new UniCharValue((char) source.intValue());
-				pilaEvaluacion.push(casted);
+				evalStack.push(casted);
 			}
 			pc++;
 		}
@@ -1300,12 +1300,12 @@ public class MaquinaP {
 		}
 
 		public void execute() {
-			Valor source = pilaEvaluacion.pop();
+			Valor source = evalStack.pop();
 			if (source == UNKNOWN) {
-				pilaEvaluacion.push(UNKNOWN);
+				evalStack.push(UNKNOWN);
 			} else {
 				Valor casted = new UniStringValue("" + source.uniCharValue());
-				pilaEvaluacion.push(casted);
+				evalStack.push(casted);
 			}
 			pc++;
 		}
@@ -1324,7 +1324,7 @@ public class MaquinaP {
 		
 		public void execute() {
 			int value = in.nextInt();
-			pilaEvaluacion.push(new IntValue(value));
+			evalStack.push(new IntValue(value));
 			pc++;
 		}
 		
@@ -1342,7 +1342,7 @@ public class MaquinaP {
 		
 		public void execute() {
 			double value = in.nextDouble();
-			pilaEvaluacion.push(new RealValue(value));
+			evalStack.push(new RealValue(value));
 			pc++;
 		}
 		
@@ -1360,7 +1360,7 @@ public class MaquinaP {
 		
 		public void execute() {
 			boolean value = in.nextBoolean();
-			pilaEvaluacion.push(new BoolValue(value));
+			evalStack.push(new BoolValue(value));
 			pc++;
 		}
 		
@@ -1378,7 +1378,7 @@ public class MaquinaP {
 		
 		public void execute() {
 			char value = in.findInLine(".").charAt(0);
-			pilaEvaluacion.push(new UniCharValue(value));
+			evalStack.push(new UniCharValue(value));
 			pc++;
 		}
 		
@@ -1396,7 +1396,7 @@ public class MaquinaP {
 		
 		public void execute() {
 			String value = in.next();
-			pilaEvaluacion.push(new UniStringValue(value));
+			evalStack.push(new UniStringValue(value));
 			pc++;
 		}
 		
@@ -1407,7 +1407,7 @@ public class MaquinaP {
 	private IWriteString IWRITESTRING;
 	private class IWriteString implements Instruction {
 		public void execute() {
-			Valor value = pilaEvaluacion.pop();
+			Valor value = evalStack.pop();
 			System.out.println(value.uniStringValue());
 			pc++;
 		}
@@ -1419,7 +1419,7 @@ public class MaquinaP {
 	private IWriteInt IWRITEINT;
 	private class IWriteInt implements Instruction {
 		public void execute() {
-			Valor value = pilaEvaluacion.pop();
+			Valor value = evalStack.pop();
 			System.out.println(value.intValue());
 			pc++;
 		}
@@ -1431,7 +1431,7 @@ public class MaquinaP {
 	private IWriteReal IWRITEREAL;
 	private class IWriteReal implements Instruction {
 		public void execute() {
-			Valor value = pilaEvaluacion.pop();
+			Valor value = evalStack.pop();
 			System.out.println(value.realValue());
 			pc++;
 		}
@@ -1443,7 +1443,7 @@ public class MaquinaP {
 	private IWriteBool IWRITEBOOL;
 	private class IWriteBool implements Instruction {
 		public void execute() {
-			Valor value = pilaEvaluacion.pop();
+			Valor value = evalStack.pop();
 			System.out.println(value.boolValue());
 			pc++;
 		}
@@ -1455,7 +1455,7 @@ public class MaquinaP {
 	private IWriteChar IWRITECHAR;
 	private class IWriteChar implements Instruction {
 		public void execute() {
-			Valor value = pilaEvaluacion.pop();
+			Valor value = evalStack.pop();
 			System.out.println(value.uniCharValue());
 			pc++;
 		}
@@ -1473,7 +1473,7 @@ public class MaquinaP {
 		}
 
 		public void execute() {
-			Valor value = pilaEvaluacion.pop();
+			Valor value = evalStack.pop();
 			if (!value.boolValue()) {
 				pc = target;
 			} else {
@@ -1505,9 +1505,9 @@ public class MaquinaP {
 	private class IDup implements Instruction {
 		@Override
 		public void execute() {
-			Valor v = pilaEvaluacion.pop();
-			pilaEvaluacion.push(v);
-			pilaEvaluacion.push(v);
+			Valor v = evalStack.pop();
+			evalStack.push(v);
+			evalStack.push(v);
 			pc++;
 		}
 
@@ -1520,7 +1520,7 @@ public class MaquinaP {
 	private class IPop implements Instruction {
 		@Override
 		public void execute() {
-			pilaEvaluacion.pop();
+			evalStack.pop();
 			pc++;
 		}
 
@@ -1535,8 +1535,8 @@ public class MaquinaP {
 			this.size = size;
 		}
 		public void execute() {
-			int dirOrigen = pilaEvaluacion.pop().intValue();
-			int dirDestino = pilaEvaluacion.pop().intValue();
+			int dirOrigen = evalStack.pop().intValue();
+			int dirDestino = evalStack.pop().intValue();
 			if ((dirOrigen + (size -1)) >= datos.length)
 				throw new EOutOfRangeAccess();
 			if ((dirDestino + (size -1)) >= datos.length)
@@ -1550,10 +1550,10 @@ public class MaquinaP {
 	private IPushInd IPUSHIND;
 	private class IPushInd implements Instruction {
 		public void execute() {
-			int dir = pilaEvaluacion.pop().intValue();
+			int dir = evalStack.pop().intValue();
 			if (dir >= datos.length) throw new EOutOfRangeAccess();
 			if (datos[dir] == null) throw new EUninitializedMemoryAccess();
-			pilaEvaluacion.push(datos[dir]);
+			evalStack.push(datos[dir]);
 			pc++;
 		}
 		public String toString() {return "pushInd";};
@@ -1562,8 +1562,8 @@ public class MaquinaP {
 	private IPopInd IPOPIND;
 	private class IPopInd implements Instruction {
 		public void execute() {
-			Valor valor = pilaEvaluacion.pop();
-			int dir = pilaEvaluacion.pop().intValue();
+			Valor valor = evalStack.pop();
+			int dir = evalStack.pop().intValue();
 			if (dir >= datos.length) throw new EOutOfRangeAccess();
 			datos[dir] = valor;
 			pc++;
@@ -1577,7 +1577,7 @@ public class MaquinaP {
 		}
 		public void execute() {
 			int inicio = gestorMemoriaDinamica.alloc(tam);
-			pilaEvaluacion.push(new IntValue(inicio));
+			evalStack.push(new IntValue(inicio));
 			pc++;
 		}
 		public String toString() {return "alloc("+tam+")";};
@@ -1588,7 +1588,7 @@ public class MaquinaP {
 			this.tam = tam;
 		}
 		public void execute() {
-			int inicio = pilaEvaluacion.pop().intValue();
+			int inicio = evalStack.pop().intValue();
 			gestorMemoriaDinamica.free(inicio,tam);
 			pc++;
 		}
@@ -1848,7 +1848,7 @@ public class MaquinaP {
 
 	public MaquinaP(int dataSize, int heapSize) {
 		this.codigoP = new ArrayList<>();
-		pilaEvaluacion = new Stack<>();
+		evalStack = new Stack<>();
 		datos = new Valor[dataSize + heapSize];
 		this.pc = 0;
 		IADDINT = new IAddInt();
@@ -1940,17 +1940,17 @@ public class MaquinaP {
 		}
 	}
 
-	public void muestraCodigo() {
+	public void showCode() {
 		System.out.println("CodigoP");
 		for (int i = 0; i < codigoP.size(); i++) {
 			System.out.println(" " + i + ":" + codigoP.get(i));
 		}
 	}
 
-	public void muestraEstado() {
+	public void showState() {
 		System.out.println("Pila de evaluacion");
-		for (int i = 0; i < pilaEvaluacion.size(); i++) {
-			System.out.println(" " + i + ":" + pilaEvaluacion.get(i));
+		for (int i = 0; i < evalStack.size(); i++) {
+			System.out.println(" " + i + ":" + evalStack.get(i));
 		}
 		System.out.println("Datos");
 		for (int i = 0; i < datos.length; i++) {

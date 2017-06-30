@@ -6,7 +6,7 @@ import maquinaP.MaquinaP;
 import procesamientos.generacioncodigo.CodeGeneration;
 import procesamientos.generacioncodigo.SpaceAssignment;
 import procesamientos.generacioncodigo.Tagging;
-import procesamientos.impresion.Impresion;
+import procesamientos.impresion.Printing;
 import procesamientos.typecheck.TypeCheck;
 import procesamientos.typecheck.Vinculacion;
 import program.Program;
@@ -16,7 +16,7 @@ public class Prueba extends Program {
 
 	public Prueba() {
 		programa = prog(new Dec[] {
-						dectype(tipoPointer(tref("miEntero")),"pMientero"),
+						dectype(tPointer(tref("miEntero")),"pMientero"),
 						dectype(tInt(),"miEntero"),
 
 						decvar(tref("miEntero"),"e"),
@@ -38,7 +38,7 @@ public class Prueba extends Program {
 	public static void main(String[] args) {
 		Prueba program = new Prueba();
 		Errors errores = new Errors();
-		Impresion impresionSimple = new Impresion();
+		Printing impresionSimple = new Printing();
 		program.root().processWith(impresionSimple);
 		Vinculacion vinculacion = new Vinculacion(program, errores);
 		program.root().processWith(vinculacion);
@@ -50,16 +50,16 @@ public class Prueba extends Program {
 				program.root().processWith(asignaciondirs);
 				Tagging tagging = new Tagging(program);
 				program.root().processWith(tagging);
-				Impresion impresionCompleta = new Impresion(true);
+				Printing impresionCompleta = new Printing(true);
 				program.root().processWith(impresionCompleta);
 				MaquinaP maquina = new MaquinaP(asignaciondirs.dataSize(), HEAP_SIZE);
 				CodeGeneration generacioncod = new CodeGeneration(program, maquina);
 				program.root().processWith(generacioncod);
-				maquina.muestraCodigo();
+				maquina.showCode();
 				maquina.execute();
-				maquina.muestraEstado();
+				maquina.showState();
 				maquina.execute();
-				maquina.muestraEstado();
+				maquina.showState();
 			}
 
 		}

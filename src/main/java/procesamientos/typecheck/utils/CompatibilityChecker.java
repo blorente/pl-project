@@ -151,4 +151,12 @@ public class CompatibilityChecker {
 			return true;
 		}
 	}
+
+	public static Type arrType(Program p, Type t) {
+		if (t instanceof Program.TArray) {
+			return ((Program.TArray) t).tbase();
+		} else {
+			return p.tError();
+		}
+	}
 }

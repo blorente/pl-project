@@ -279,7 +279,13 @@ public class CodeGeneration extends Processing {
 	}
 	public void process(StrElem exp) {
 		exp.opnd1().processWith(this);
+		if (exp.opnd1().isMem()) {
+			maquina.addInstruction(maquina.pushInd());
+		}
 		exp.opnd2().processWith(this);
+		if (exp.opnd2().isMem()) {
+			maquina.addInstruction(maquina.pushInd());
+		}
 		maquina.addInstruction(maquina.strElem());
 	}
 	public void process(Negative exp) {
@@ -431,6 +437,16 @@ public class CodeGeneration extends Processing {
 		i.mem().processWith(this);
 		maquina.addInstruction(maquina.pushInd());
 		maquina.addInstruction(maquina.dealloc(((TPointer)i.mem().type()).tbase().size()));
+	}
+	public void process(ArrayIndex arr) {
+		arr.var().processWith(this);
+		arr.index().processWith(this);
+		if (arr.index().isMem()) {
+			maquina.addInstruction(maquina.pushInd());
+		}
+		maquina.addInstruction(maquina.pushInt(1));
+		maquina.addInstruction(maquina.mulInt());
+		maquina.addInstruction(maquina.addInt());
 	}
 
 }
