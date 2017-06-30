@@ -215,7 +215,8 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
       jj_consume_token(OPEN_BRACKET);
       size = jj_consume_token(intNumber);
       jj_consume_token(CLOSE_BRACKET);
-             {if (true) return ops.tarray(tipoh, ops.parseInt(size.image));}
+      tipo = rTipo0(ops.tarray(tipoh, ops.parseInt(size.image)));
+             {if (true) return tipo;}
       break;
     default:
       jj_la1[6] = jj_gen;

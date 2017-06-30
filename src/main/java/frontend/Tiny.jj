@@ -228,8 +228,8 @@ PARSER_END(AnalizadorSintacticoTiny)
 	  <MUL> tipo=rTipo0(ops.tPointer(tipoh))
 		{return tipo;}
 	   |
-	  <OPEN_BRACKET> size=<intNumber> <CLOSE_BRACKET>
-	    {return ops.tarray(tipoh, ops.parseInt(size.image));}
+	  <OPEN_BRACKET> size=<intNumber> <CLOSE_BRACKET> tipo=rTipo0(ops.tarray(tipoh, ops.parseInt(size.image)))
+	    {return tipo;}
 	  |
 		{return tipoh;}
 	}

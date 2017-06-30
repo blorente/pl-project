@@ -101,6 +101,11 @@ public abstract class Program {
 		public void accept(Processing p) {
 			p.process(this);
 		}
+
+		@Override
+		public String toString() {
+			return tbase.toString() + "*";
+		}
 	}
 	public class TRef extends DeclaredType {
 		private String typeId;

@@ -1,0 +1,15 @@
+var string* strptr;
+var int[4]* arrayptr;
+var int* intptr;
+var int* otherptr;
+var int a;
+
+{
+    new strptr;
+    new intptr;
+    *intptr=3;
+    a = *intptr;
+    otherptr = intptr;
+    delete intptr;
+    a = *otherptr;
+}
