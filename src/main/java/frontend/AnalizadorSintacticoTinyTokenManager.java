@@ -7,6 +7,10 @@ import program.Program.DeclaredType;
 import program.Program.FParam;
 import program.Program.Exp;
 import frontend.ASTOps.Lista;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 /** Token Manager. */
 public class AnalizadorSintacticoTinyTokenManager implements AnalizadorSintacticoTinyConstants

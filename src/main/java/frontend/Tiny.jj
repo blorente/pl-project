@@ -13,6 +13,10 @@ import program.Program.Exp;
 
 
 import frontend.ASTOps.Lista;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 class CabezaProcAs {
    public String proc;
@@ -216,10 +220,16 @@ PARSER_END(AnalizadorSintacticoTiny)
 
   DeclaredType tipo0() :
 	{DeclaredType tipo$tipo1;
-	 DeclaredType tipo$rTipo0;}
+	 DeclaredType tipo$rTipo0;
+	 Token t;
+	 Map<String, DeclaredType> fields;
+	 }
 	{
 	  tipo$tipo1=tipo1() tipo$rTipo0 = rTipo0(tipo$tipo1)
 		{return tipo$rTipo0;}
+	  |
+	  t=<STRUCT> <OPEN_BRACE> fields=fields() <CLOSE_BRACE>
+      	 {return ops.tStruct(fields, enlaceFuente(t));}
 	}
 
   DeclaredType rTipo0(DeclaredType tipoh) :
@@ -231,8 +241,18 @@ PARSER_END(AnalizadorSintacticoTiny)
 	  <OPEN_BRACKET> size=<intNumber> <CLOSE_BRACKET> tipo=rTipo0(ops.tarray(tipoh, ops.parseInt(size.image)))
 	    {return tipo;}
 	  |
-		{return tipoh;}
+
+	    {return tipoh;}
 	}
+
+  Map<String, DeclaredType> fields() :
+  {DeclaredType type; Token token; Map<String, DeclaredType> full;}
+  {
+    type=tipo0() token=<identificador> <SEMICOLON> full=fields()
+        {full.put(token.image, type); return full;}
+    |
+    {return new HashMap<String, DeclaredType>();}
+  }
 
   DeclaredType tipo1() :
 	{Token id; }

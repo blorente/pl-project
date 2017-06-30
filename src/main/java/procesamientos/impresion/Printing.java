@@ -3,6 +3,8 @@ package procesamientos.impresion;
 import procesamientos.Processing;
 import program.Program.*;
 
+import java.util.Map;
+
 public class Printing extends Processing {
 	private boolean attributes;
 	private int indentation;
@@ -230,6 +232,11 @@ public class Printing extends Processing {
 		System.out.print(']');
 		printAttributes(exp);
 	}
+	public void process(StructField exp) {
+		exp.var().processWith(this);
+		System.out.print('.'+exp.field());
+		printAttributes(exp);
+	}
 	public void process(Prog p) {
 		for (Dec d : p.decs())
 			d.processWith(this);
@@ -261,6 +268,14 @@ public class Printing extends Processing {
 	}
 	public void process(TRef t) {
 		System.out.print(t.typeId());
+	}
+	public void process(TStruct a) {
+		System.out.println("struct {");
+		for (Map.Entry field: a.fields().entrySet()) {
+			indent();
+			System.out.println(field.getKey() + ": " + field.getValue()+';');
+		}
+		System.out.println("};");
 	}
 	public void process(IAsig i) {
 		indent();

@@ -10,6 +10,10 @@ import program.Program.Exp;
 
 
 import frontend.ASTOps.Lista;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 class CabezaProcAs {
    public String proc;
@@ -135,6 +139,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
     case CHAR:
     case STRING:
     case DOUBLE:
+    case STRUCT:
     case identificador:
       fparams = listaParametrosFormales();
                   {if (true) return fparams;}
@@ -197,9 +202,31 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
   final public DeclaredType tipo0() throws ParseException {
          DeclaredType tipo$tipo1;
          DeclaredType tipo$rTipo0;
-    tipo$tipo1 = tipo1();
-    tipo$rTipo0 = rTipo0(tipo$tipo1);
+         Token t;
+         Map<String, DeclaredType> fields;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case INT:
+    case BOOL:
+    case CHAR:
+    case STRING:
+    case DOUBLE:
+    case identificador:
+      tipo$tipo1 = tipo1();
+      tipo$rTipo0 = rTipo0(tipo$tipo1);
                  {if (true) return tipo$rTipo0;}
+      break;
+    case STRUCT:
+      t = jj_consume_token(STRUCT);
+      jj_consume_token(OPEN_BRACE);
+      fields = fields();
+      jj_consume_token(CLOSE_BRACE);
+          {if (true) return ops.tStruct(fields, enlaceFuente(t));}
+      break;
+    default:
+      jj_la1[6] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
     throw new Error("Missing return statement in function");
   }
 
@@ -219,8 +246,31 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
              {if (true) return tipo;}
       break;
     default:
-      jj_la1[6] = jj_gen;
-                 {if (true) return tipoh;}
+      jj_la1[7] = jj_gen;
+             {if (true) return tipoh;}
+    }
+    throw new Error("Missing return statement in function");
+  }
+
+  final public Map<String, DeclaredType> fields() throws ParseException {
+   DeclaredType type; Token token; Map<String, DeclaredType> full;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case INT:
+    case BOOL:
+    case CHAR:
+    case STRING:
+    case DOUBLE:
+    case STRUCT:
+    case identificador:
+      type = tipo0();
+      token = jj_consume_token(identificador);
+      jj_consume_token(SEMICOLON);
+      full = fields();
+         full.put(token.image, type); {if (true) return full;}
+      break;
+    default:
+      jj_la1[8] = jj_gen;
+     {if (true) return new HashMap<String, DeclaredType>();}
     }
     throw new Error("Missing return statement in function");
   }
@@ -253,7 +303,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
                  {if (true) return ops.tref(id.image,enlaceFuente(id));}
       break;
     default:
-      jj_la1[7] = jj_gen;
+      jj_la1[9] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -299,7 +349,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
            {if (true) return ins;}
       break;
     default:
-      jj_la1[8] = jj_gen;
+      jj_la1[10] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -353,7 +403,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
                   {if (true) return rparams;}
       break;
     default:
-      jj_la1[9] = jj_gen;
+      jj_la1[11] = jj_gen;
                   {if (true) return ops.norparams();}
     }
     throw new Error("Missing return statement in function");
@@ -377,7 +427,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
             {if (true) return rparams;}
       break;
     default:
-      jj_la1[10] = jj_gen;
+      jj_la1[12] = jj_gen;
          {if (true) return rparamsh;}
     }
     throw new Error("Missing return statement in function");
@@ -435,7 +485,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
             {if (true) return insts;}
       break;
     default:
-      jj_la1[11] = jj_gen;
+      jj_la1[13] = jj_gen;
             {if (true) return ops.noInsts();}
     }
     throw new Error("Missing return statement in function");
@@ -474,7 +524,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
                  {if (true) return insts;}
       break;
     default:
-      jj_la1[12] = jj_gen;
+      jj_la1[14] = jj_gen;
           {if (true) return instsh;}
     }
     throw new Error("Missing return statement in function");
@@ -486,7 +536,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
       jj_consume_token(SEMICOLON);
       break;
     default:
-      jj_la1[13] = jj_gen;
+      jj_la1[15] = jj_gen;
 
     }
   }
@@ -539,7 +589,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
                          {if (true) return exp$rexp0;}
       break;
     default:
-      jj_la1[14] = jj_gen;
+      jj_la1[16] = jj_gen;
                   {if (true) return exph;}
     }
     throw new Error("Missing return statement in function");
@@ -575,7 +625,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
                   {if (true) return exp$rexp1;}
       break;
     default:
-      jj_la1[15] = jj_gen;
+      jj_la1[17] = jj_gen;
            {if (true) return exph;}
     }
     throw new Error("Missing return statement in function");
@@ -613,7 +663,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
                  {if (true) return ops.modulus(exph,exp,enlaceFuente(t));}
       break;
     default:
-      jj_la1[16] = jj_gen;
+      jj_la1[18] = jj_gen;
           {if (true) return exph;}
     }
     throw new Error("Missing return statement in function");
@@ -650,7 +700,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
              {if (true) return exp;}
       break;
     default:
-      jj_la1[17] = jj_gen;
+      jj_la1[19] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -691,7 +741,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
      {if (true) return ops.strcast(exp, enlaceFuente(t));}
       break;
     default:
-      jj_la1[18] = jj_gen;
+      jj_la1[20] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -715,7 +765,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
      {if (true) return ops.strElem(exph, exp, enlaceFuente(t));}
       break;
     default:
-      jj_la1[19] = jj_gen;
+      jj_la1[21] = jj_gen;
    {if (true) return exph;}
     }
     throw new Error("Missing return statement in function");
@@ -749,7 +799,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
          {if (true) return ops.structfieldref(exph, field.image, enlaceFuente(t));}
       break;
     default:
-      jj_la1[20] = jj_gen;
+      jj_la1[22] = jj_gen;
          {if (true) return exph;}
     }
     throw new Error("Missing return statement in function");
@@ -775,7 +825,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
             {if (true) return exp;}
       break;
     default:
-      jj_la1[21] = jj_gen;
+      jj_la1[23] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -805,7 +855,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
                  {if (true) return e;}
       break;
     default:
-      jj_la1[22] = jj_gen;
+      jj_la1[24] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -840,7 +890,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
                          {if (true) return ops.boolct(false);}
       break;
     default:
-      jj_la1[23] = jj_gen;
+      jj_la1[25] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -856,7 +906,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
   public Token jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[24];
+  final private int[] jj_la1 = new int[26];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static private int[] jj_la1_2;
@@ -866,13 +916,13 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
       jj_la1_init_2();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x160000,0x160000,0x160000,0x1f000,0x0,0x0,0x0,0x1f000,0x1a80c00,0x400000,0x0,0x1a80c00,0x1a80c00,0x0,0x0,0x0,0x0,0xc00,0x1f000,0x0,0x0,0xc00,0xc00,0xc00,};
+      jj_la1_0 = new int[] {0x160000,0x160000,0x160000,0x201f000,0x0,0x0,0x201f000,0x0,0x201f000,0x1f000,0x1a80c00,0x400000,0x0,0x1a80c00,0x1a80c00,0x0,0x0,0x0,0x0,0xc00,0x1f000,0x0,0x0,0xc00,0xc00,0xc00,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x1000000,0x10000000,0x80040,0x0,0xa20860,0x0,0x1000000,0xa20860,0xa20860,0x2000000,0x7e00,0x8030,0x101c0,0x820860,0x0,0x40000000,0x84080000,0x20040,0x20000,0x0,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x1000000,0x10000000,0x0,0x80040,0x0,0x0,0xa20860,0x0,0x1000000,0xa20860,0xa20860,0x2000000,0x7e00,0x8030,0x101c0,0x820860,0x0,0x40000000,0x84080000,0x20040,0x20000,0x0,};
    }
    private static void jj_la1_init_2() {
-      jj_la1_2 = new int[] {0x0,0x0,0x0,0x1,0x0,0x0,0x0,0x1,0x67,0x0,0x0,0x67,0x67,0x0,0x0,0x0,0x0,0x67,0x0,0x0,0x0,0x67,0x67,0x66,};
+      jj_la1_2 = new int[] {0x0,0x0,0x0,0x1,0x0,0x0,0x1,0x0,0x1,0x1,0x67,0x0,0x0,0x67,0x67,0x0,0x0,0x0,0x0,0x67,0x0,0x0,0x0,0x67,0x67,0x66,};
    }
 
   /** Constructor with InputStream. */
@@ -886,7 +936,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 26; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -900,7 +950,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 26; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -910,7 +960,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 26; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -920,7 +970,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 26; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -929,7 +979,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 26; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -938,7 +988,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 26; i++) jj_la1[i] = -1;
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -994,7 +1044,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 24; i++) {
+    for (int i = 0; i < 26; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {

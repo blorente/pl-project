@@ -248,5 +248,8 @@ public class Vinculacion extends Processing {
 		exp.var().processWith(this);
 		exp.index().processWith(this);
 	}
+	public void process(StructField exp) {
+		exp.var().processWith(this);
+	}
 
 }

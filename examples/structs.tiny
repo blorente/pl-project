@@ -1,0 +1,11 @@
+type string mystring;
+type struct {
+    int valor;
+    mystring* siguiente;
+} tcelda;
+
+var tcelda celda;
+
+{
+    celda.valor = 3;
+}

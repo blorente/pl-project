@@ -98,7 +98,6 @@ public class ASTOps extends Program {
         chequeaDesig(l,sourceLink);
         return iasig((Mem)l,r,sourceLink);
     }
-       
     public Inst inew(Exp d, String sourceLink) {
         chequeaDesig(d,sourceLink);
         return inew((Mem)d,sourceLink);
@@ -153,7 +152,6 @@ public class ASTOps extends Program {
             return unicharct(i.charAt(1));
         }
     }
-
     public Exp stringLiteral(String i) {
         String body = i.substring(1, i.length()-1);
         body = StringEscapeUtils.unescapeJava(body);

@@ -6,6 +6,7 @@ import program.Program.TRef;
 import program.Program.Type;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class CompatibilityChecker {
@@ -149,8 +150,19 @@ public class CompatibilityChecker {
 				Program.TArray ta1 = (Program.TArray) t1;
 				Program.TArray ta2 = (Program.TArray) t2;
 				return ta1.size() == ta2.size() && CompatibilityChecker.areCompatible(ta1.tbase(), ta2.tbase());
-			} else
+			} else if (CompatibilityChecker.isStruct(t1) && CompatibilityChecker.isStruct(t2)) {
+				Program.TStruct ts1 = (Program.TStruct) t1;
+				Program.TStruct ts2 = (Program.TStruct) t2;
+				boolean compat = true;
+				for (Map.Entry<String, Program.DeclaredType> field : ts1.fields().entrySet()) {
+					compat = compat &&
+							CompatibilityChecker.areCompatible(field.getValue(), ts2.fields().get(field.getKey()));
+				}
+				return (ts1.fields().size() == ts2.fields().size()) && compat;
+
+			} else {
 				return false;
+			}
 		} else {
 			return true;
 		}
@@ -158,6 +170,10 @@ public class CompatibilityChecker {
 
 	public static boolean isArray(Type t) {
 		return t instanceof Program.TArray;
+	}
+
+	public static boolean isStruct(Type t) {
+		return t instanceof Program.TStruct;
 	}
 
 	public static Program.DeclaredType arrType(Type t) {

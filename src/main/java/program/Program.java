@@ -4,7 +4,9 @@ import procesamientos.Processing;
 import procesamientos.typecheck.utils.CompatibilityChecker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class Program {
 	private final DeclaredType TINT;
@@ -134,6 +136,11 @@ public abstract class Program {
 		public void accept(Processing p) {
 			p.process(this);
 		}
+
+		@Override
+		public String toString() {
+			return typeId+"->"+vinculo;
+		}
 	}
 	public class TArray extends DeclaredType {
 		private DeclaredType tbase;
@@ -174,6 +181,32 @@ public abstract class Program {
 
 		public String toString() {
 			return "ERROR";
+		}
+	}
+	public class TStruct extends DeclaredType {
+		private Map<String, DeclaredType> fields;
+		private String sourceLink;
+
+		public TStruct(Map<String, DeclaredType> fields, String sourceLink) {
+			this.sourceLink = sourceLink;
+			int tsize = 0;
+			this.fields = fields;
+			for (DeclaredType field : fields.values()) {
+				tsize += field.size();
+			}
+			putSize(tsize);
+		}
+		@Override
+		public void accept(Processing p) {
+			p.process(this);
+		}
+
+		public Map<String, DeclaredType> fields() {
+			return fields;
+		}
+		@Override
+		public String toString() {
+			return "TSTRUCT";
 		}
 	}
 
@@ -1146,6 +1179,23 @@ public abstract class Program {
 		public Exp var() {return this.var;}
 		public Exp index() {return this.index;}
 	}
+	public class StructField extends Mem {
+		private final Exp var;
+		private final String field;
+
+		public StructField(Exp var, String field, String sourceLink) {
+			super(sourceLink);
+			this.var = var;
+			this.field = field;
+		}
+		@Override
+		public void processWith(Processing p) {
+			p.process(this);
+		}
+
+		public Exp var() {return this.var;}
+		public String field() {return this.field;}
+	}
 
 	public Prog prog(Dec[] decs, Inst i) {
 		return new Prog(decs, i);
@@ -1355,9 +1405,12 @@ public abstract class Program {
 	    return new ArrayIndex(var, index, sourceLink);
     }
     public Exp structfield(Exp var, String field, String sourceLink) {
-        throw new RuntimeException("Direct struct field access unimplemented");
+        return new StructField(var, field, sourceLink);
     }
     public Exp structfieldref(Exp var, String field, String sourceLink) {
         throw new RuntimeException("Referenced struct field access unimplemented");
     }
+	public TStruct tStruct(Map<String, DeclaredType> fields, String sourceLink) {
+		return new TStruct(fields, sourceLink);
+	}
 }

@@ -47,6 +47,7 @@ public class Processing {
    public void process(TArray t) {}
    public void process(Ok t) {}
    public void process(Error t) {}
+   public void process(TStruct a) {}
 
    public void process(Prog p) {}
    public void process(DecRef d) {}
@@ -54,6 +55,7 @@ public class Processing {
    public void process(DecVar d) {}
 
    public void process(ArrayIndex a) {}
+   public void process(StructField a) {}
 
    public void process(IAsig i) {}
    public void process(IBlock i) {}

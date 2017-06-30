@@ -275,6 +275,11 @@ public class TypeCheck extends Processing {
             exp.ponTipo(program.tError());
         }
     }
+    public void process(StructField exp) {
+        exp.var().processWith(this);
+        TStruct t = (TStruct) exp.var().type();
+        exp.ponTipo(t.fields().get(exp.field()));
+    }
 
     public void process(Prog p) {
         p.inst().processWith(this);
