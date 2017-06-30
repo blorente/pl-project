@@ -7,14 +7,13 @@ var float k;
 var string s;
 var char ch;
 var myarr arr;
+var myarr other;
 
 {
     s = "Hello";
     ch = s _ 3;
     i = 0;
     arr[i] = 4;
-    arr[i + 2] = arr[i];
-    arr[i + 3] = 6;
     j = 0.6;
     i = i - 1;
     k = <float>i;

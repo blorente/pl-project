@@ -257,6 +257,7 @@ public class Tagging extends Processing {
 		if (exp.index().isMem()) {
 			etq++;
 		}
+		etq++; // inRange
 		etq++; // pushInt
 		etq++; // Mul
 		etq++; // Sum

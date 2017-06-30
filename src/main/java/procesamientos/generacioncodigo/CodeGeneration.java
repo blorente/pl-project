@@ -1,15 +1,15 @@
 package procesamientos.generacioncodigo;
 
-import maquinaP.MaquinaP;
+import maquinaP.PMachine;
 import procesamientos.Processing;
 import program.Program;
 import program.Program.*;
 
 public class CodeGeneration extends Processing {
-	private MaquinaP maquina;
+	private PMachine maquina;
 	private Program program;
 
-	public CodeGeneration(Program program, MaquinaP maquina) {
+	public CodeGeneration(Program program, PMachine maquina) {
 		this.program = program;
 		this.maquina = maquina;
 	}
@@ -439,11 +439,13 @@ public class CodeGeneration extends Processing {
 		maquina.addInstruction(maquina.dealloc(((TPointer)i.mem().type()).tbase().size()));
 	}
 	public void process(ArrayIndex arr) {
+		DeclaredType t = (DeclaredType) arr.var().type();
 		arr.var().processWith(this);
 		arr.index().processWith(this);
 		if (arr.index().isMem()) {
 			maquina.addInstruction(maquina.pushInd());
 		}
+		maquina.addInstruction(maquina.inRange(t.size()));
 		maquina.addInstruction(maquina.pushInt(1));
 		maquina.addInstruction(maquina.mulInt());
 		maquina.addInstruction(maquina.addInt());

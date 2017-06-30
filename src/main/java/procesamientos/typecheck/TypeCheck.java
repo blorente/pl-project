@@ -262,7 +262,7 @@ public class TypeCheck extends Processing {
     }
     public void process(ArrayIndex exp) {
         exp.var().processWith(this);
-        Type tarr = CompatibilityChecker.arrType(program, exp.var().type());
+        Type tarr = CompatibilityChecker.arrType(exp.var().type());
         if (tarr.equals(program.tError())) {
             errors.msg(exp.sourcelink() + ":" + ERROR_INDEX);
             exp.ponTipo(program.tError());

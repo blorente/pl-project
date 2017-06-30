@@ -145,6 +145,10 @@ public class CompatibilityChecker {
 			if(t1.equals(t2)) return true;
 			else if (CompatibilityChecker.isPointer(t1) && CompatibilityChecker.isPointer(t2)) {
 				return areCompatible(CompatibilityChecker.pointer(t1).tbase(),CompatibilityChecker.pointer(t2).tbase(),considered);
+			} else if (CompatibilityChecker.isArray(t1) && CompatibilityChecker.isArray(t2)) {
+				Program.TArray ta1 = (Program.TArray) t1;
+				Program.TArray ta2 = (Program.TArray) t2;
+				return ta1.size() == ta2.size() && CompatibilityChecker.areCompatible(ta1.tbase(), ta2.tbase());
 			} else
 				return false;
 		} else {
@@ -152,11 +156,11 @@ public class CompatibilityChecker {
 		}
 	}
 
-	public static Type arrType(Program p, Type t) {
-		if (t instanceof Program.TArray) {
-			return ((Program.TArray) t).tbase();
-		} else {
-			return p.tError();
-		}
+	public static boolean isArray(Type t) {
+		return t instanceof Program.TArray;
+	}
+
+	public static Program.DeclaredType arrType(Type t) {
+		return ((Program.TArray) t).tbase();
 	}
 }

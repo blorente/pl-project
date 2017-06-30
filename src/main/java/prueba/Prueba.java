@@ -2,7 +2,7 @@
 package prueba;
 
 import errores.Errors;
-import maquinaP.MaquinaP;
+import maquinaP.PMachine;
 import procesamientos.generacioncodigo.CodeGeneration;
 import procesamientos.generacioncodigo.SpaceAssignment;
 import procesamientos.generacioncodigo.Tagging;
@@ -52,7 +52,7 @@ public class Prueba extends Program {
 				program.root().processWith(tagging);
 				Printing impresionCompleta = new Printing(true);
 				program.root().processWith(impresionCompleta);
-				MaquinaP maquina = new MaquinaP(asignaciondirs.dataSize(), HEAP_SIZE);
+				PMachine maquina = new PMachine(asignaciondirs.dataSize(), HEAP_SIZE);
 				CodeGeneration generacioncod = new CodeGeneration(program, maquina);
 				program.root().processWith(generacioncod);
 				maquina.showCode();

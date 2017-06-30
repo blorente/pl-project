@@ -1,7 +1,7 @@
 package frontend;
 
 import errores.Errors;
-import maquinaP.MaquinaP;
+import maquinaP.PMachine;
 import procesamientos.generacioncodigo.CodeGeneration;
 import procesamientos.generacioncodigo.SpaceAssignment;
 import procesamientos.generacioncodigo.Tagging;
@@ -33,7 +33,7 @@ public class Main{
           Tagging tagging = new Tagging(ops);
           ops.root().processWith(tagging);
           fullPrinter.process(ops.root());
-          MaquinaP machine = new MaquinaP(spaceAssig.dataSize(),50);//,10,asignacionEspacio.numDisplays());
+          PMachine machine = new PMachine(spaceAssig.dataSize(),50);//,10,asignacionEspacio.numDisplays());
           CodeGeneration codegen = new CodeGeneration(ops, machine);
           ops.root().processWith(codegen);
           machine.showCode();
