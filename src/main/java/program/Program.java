@@ -1,7 +1,7 @@
 package program;
 
-import procesamientos.Processing;
-import procesamientos.typecheck.utils.CompatibilityChecker;
+import processings.Processing;
+import processings.typecheck.utils.CompatibilityChecker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,7 @@ public abstract class Program {
 	private final DeclaredType TREAL;
 	private final DeclaredType TUNICHAR;
 	private final DeclaredType TUNISTRING;
+	private final DeclaredType TNULL;
 	private final Type TOK;
 	private final Type TERROR;
 
@@ -24,6 +25,7 @@ public abstract class Program {
 		TUNISTRING = new UniString();
 		TOK = new Ok();
 		TERROR = new Error();
+		TNULL = new TNull();
 	}
 
 	public interface Type {
@@ -206,6 +208,15 @@ public abstract class Program {
 		@Override
 		public String toString() {
 			return "TSTRUCT";
+		}
+	}
+	public class TNull extends DeclaredType {
+		@Override
+		public void accept(Processing p) {
+			p.process(this);
+		}
+		public String toString() {
+			return "TNULL";
 		}
 	}
 
@@ -844,6 +855,21 @@ public abstract class Program {
 			p.process(this);
 		}
 	}
+	public class NullCt extends Exp {
+		private String sourceLink;
+		public NullCt(String sourceLink) {
+			this.sourceLink = sourceLink;
+		}
+		@Override
+		public void processWith(Processing p) {
+			p.process(this);
+		}
+
+		@Override
+		public String toString() {
+			return "NULL";
+		}
+	}
 	public abstract class BinaryExp extends Exp {
 		private Exp opnd1;
 		private Exp opnd2;
@@ -1380,6 +1406,7 @@ public abstract class Program {
 		return TERROR;
 	}
 	public DeclaredType tPointer(DeclaredType tbase) {return new TPointer(tbase);}
+	public DeclaredType tNull() { return TNULL;	}
 
 	public DeclaredType tref(String typeId) {return new TRef(typeId);}
 	public DeclaredType tref(String typeId, String sourceLink) {return new TRef(typeId,sourceLink);}
@@ -1416,5 +1443,8 @@ public abstract class Program {
 	}
 	public TStruct tStruct(Map<String, DeclaredType> fields, String sourceLink) {
 		return new TStruct(fields, sourceLink);
+	}
+	public Exp makeNull(String sourceLink) {
+		return new NullCt(sourceLink);
 	}
 }

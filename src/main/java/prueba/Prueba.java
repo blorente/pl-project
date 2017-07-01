@@ -2,13 +2,13 @@
 package prueba;
 
 import errores.Errors;
-import maquinaP.PMachine;
-import procesamientos.generacioncodigo.CodeGeneration;
-import procesamientos.generacioncodigo.SpaceAssignment;
-import procesamientos.generacioncodigo.Tagging;
-import procesamientos.impresion.Printing;
-import procesamientos.typecheck.TypeCheck;
-import procesamientos.typecheck.Vinculacion;
+import PMachine.PMachine;
+import processings.codegeneration.CodeGeneration;
+import processings.codegeneration.SpaceAssignment;
+import processings.codegeneration.Tagging;
+import processings.impresion.Printing;
+import processings.typecheck.TypeCheck;
+import processings.typecheck.Vinculacion;
 import program.Program;
 
 public class Prueba extends Program {

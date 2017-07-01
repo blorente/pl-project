@@ -12,6 +12,7 @@ var tcelda* cptr;
 {
     celda.valor = 3;
     celda.valor = 4;
+    cptr = NULL;
     new cptr;
     cptr->cc = 2;
 }

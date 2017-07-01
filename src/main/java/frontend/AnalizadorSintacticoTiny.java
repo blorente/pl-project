@@ -315,6 +315,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case TRUE:
     case FALSE:
+    case NULL:
     case MINUS:
     case MUL:
     case LESS:
@@ -470,6 +471,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
     case CALL:
     case NEW:
     case DELETE:
+    case NULL:
     case MINUS:
     case MUL:
     case LESS:
@@ -508,6 +510,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
     case CALL:
     case NEW:
     case DELETE:
+    case NULL:
     case MINUS:
     case MUL:
     case LESS:
@@ -689,6 +692,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
       break;
     case TRUE:
     case FALSE:
+    case NULL:
     case MUL:
     case OPEN_PAREN:
     case identificador:
@@ -815,6 +819,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
       break;
     case TRUE:
     case FALSE:
+    case NULL:
     case OPEN_PAREN:
     case identificador:
     case intNumber:
@@ -853,6 +858,10 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
       e = exp0();
       jj_consume_token(CLOSE_PAREN);
                  {if (true) return e;}
+      break;
+    case NULL:
+      t = jj_consume_token(NULL);
+             {if (true) return ops.makeNull(t.image);}
       break;
     default:
       jj_la1[24] = jj_gen;
@@ -919,7 +928,7 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
       jj_la1_0 = new int[] {0x160000,0x160000,0x160000,0x201f000,0x0,0x0,0x201f000,0x0,0x201f000,0x1f000,0x1a80c00,0x400000,0x0,0x1a80c00,0x1a80c00,0x0,0x0,0x0,0x0,0xc00,0x1f000,0x0,0x0,0xc00,0xc00,0xc00,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x1000000,0x10000000,0x0,0x80040,0x0,0x0,0xa20860,0x0,0x1000000,0xa20860,0xa20860,0x2000000,0x7e00,0x8030,0x101c0,0x820860,0x0,0x40000000,0x84080000,0x20040,0x20000,0x0,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x1000000,0x10000000,0x0,0x80040,0x0,0x0,0xa20862,0x0,0x1000000,0xa20862,0xa20862,0x2000000,0x7e00,0x8030,0x101c0,0x820862,0x0,0x40000000,0x84080000,0x20042,0x20002,0x0,};
    }
    private static void jj_la1_init_2() {
       jj_la1_2 = new int[] {0x0,0x0,0x0,0x1,0x0,0x0,0x1,0x0,0x1,0x1,0x67,0x0,0x0,0x67,0x67,0x0,0x0,0x0,0x0,0x67,0x0,0x0,0x0,0x67,0x67,0x66,};

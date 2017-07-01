@@ -574,6 +574,9 @@ PARSER_END(AnalizadorSintacticoTiny)
 	  |
 	  <OPEN_PAREN> e=exp0() <CLOSE_PAREN>
 		{return e;}
+	  |
+	  t=<NULL>
+	    {return ops.makeNull(t.image);}
 	 }
   Exp literal() :
 	{Token t;}
