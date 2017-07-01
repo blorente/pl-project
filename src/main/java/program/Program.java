@@ -275,6 +275,10 @@ public abstract class Program {
 		public void processWith(Processing p) {
 			p.process(this);
 		}
+		@Override
+		public String toString() {
+			return decType.toString();
+		}
 	}
 	public class DecVar extends Dec {
 		private String sourceLink;

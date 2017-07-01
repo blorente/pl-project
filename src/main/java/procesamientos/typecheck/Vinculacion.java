@@ -48,6 +48,11 @@ public class Vinculacion extends Processing {
 				r.ponDeclaracion(d);
 			}
 		}
+		public void process(TStruct st) {
+			for (Map.Entry<String, DeclaredType> field : st.fields().entrySet()) {
+				field.getValue().accept(this);
+			}
+		}
 	}
 
 	public void process(Prog p) {
@@ -89,6 +94,11 @@ public class Vinculacion extends Processing {
 		}
 		else {
 			r.ponDeclaracion(d);
+		}
+	}
+	public void process(TStruct st) {
+		for (Map.Entry<String, DeclaredType> field : st.fields().entrySet()) {
+			field.getValue().accept(this);
 		}
 	}
 	public void process(IAsig i) {

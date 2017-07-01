@@ -263,4 +263,12 @@ public class Tagging extends Processing {
 		etq++; // Sum
 		exp.putDirNext(etq);
 	}
+	public void process(StructField exp) {
+		exp.putDirFirst(etq);
+		exp.var().processWith(this);
+		etq++;// pushInt(struct.addr)
+		etq++;// pushInt(field.offset)
+		etq++;// Sum
+		exp.putDirNext(etq);
+	}
 }

@@ -246,8 +246,7 @@ public class Printing extends Processing {
 	}
 	public void process(DecVar t) {
 		t.decType().accept(this);
-		System.out.print(" "+t.var());
-		System.out.println();
+		System.out.println(" "+t.var());
 	}
 	public void process(DecRef mem) {
 		System.out.print("(*");
@@ -258,7 +257,7 @@ public class Printing extends Processing {
 	public void process(DecType t) {
 		System.out.print("typedef ");
 		t.decType().accept(this);
-		System.out.print(" "+t.typeId());
+		System.out.print(" "+t.typeId()+';');
 		System.out.println();
 	}
 	public void process(TPointer t) {
@@ -271,11 +270,13 @@ public class Printing extends Processing {
 	}
 	public void process(TStruct a) {
 		System.out.println("struct {");
+		this.indentation += 3;
 		for (Map.Entry field: a.fields().entrySet()) {
 			indent();
-			System.out.println(field.getKey() + ": " + field.getValue()+';');
+			System.out.print(field.getKey() + ": " + field.getValue()+";\n");
 		}
-		System.out.println("};");
+		System.out.print("}");
+		this.indentation -= 3;
 	}
 	public void process(IAsig i) {
 		indent();
@@ -367,11 +368,15 @@ public class Printing extends Processing {
 		printAttributes(i);
 	}
 	public void process(INew i) {
+		indent();
 		System.out.print("new ");
 		i.mem().processWith(this);
+		System.out.println("");
 	}
 	public void process(IFree i) {
-		System.out.print("free ");
+		indent();
+		System.out.print("delete ");
 		i.mem().processWith(this);
+		System.out.println("");
 	}
 }

@@ -158,8 +158,7 @@ public class CompatibilityChecker {
 					compat = compat &&
 							CompatibilityChecker.areCompatible(field.getValue(), ts2.fields().get(field.getKey()));
 				}
-				return (ts1.fields().size() == ts2.fields().size()) && compat;
-
+				return compat && (ts1.fields().size() == ts2.fields().size());
 			} else {
 				return false;
 			}

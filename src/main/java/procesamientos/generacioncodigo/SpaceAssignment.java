@@ -4,6 +4,8 @@ import procesamientos.Processing;
 import program.Program;
 import program.Program.*;
 
+import java.util.Map;
+
 public class SpaceAssignment extends Processing {
     private int dir;
 
@@ -68,5 +70,13 @@ public class SpaceAssignment extends Processing {
         if (arr.size() == 0) {
             arr.putSize(arr.tbase().size());
         }
+    }
+    public void process(TStruct str) {
+        int size = 0;
+        for (Map.Entry<String, DeclaredType> field : str.fields().entrySet()) {
+            field.getValue().accept(this);
+            size += field.getValue().size();
+        }
+        str.putSize(size);
     }
 }
