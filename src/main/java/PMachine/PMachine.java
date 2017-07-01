@@ -1429,9 +1429,7 @@ public class PMachine {
 		}
 	}
 	private class IBranchIfFalse implements Instruction {
-
 		int target;
-
 		public IBranchIfFalse(int target) {
 			this.target = target;
 		}
@@ -1444,7 +1442,6 @@ public class PMachine {
 				pc++;
 			}
 		}
-
 		public String toString() {
 			return "branchIfFalse(" + target + ")";
 		}
@@ -1544,7 +1541,7 @@ public class PMachine {
 			evalStack.push(new IntValue(inicio));
 			pc++;
 		}
-		public String toString() {return "alloc("+tam+")";};
+		public String toString() {return "alloc("+tam+")";}
 	}
 	private class IDealloc implements Instruction {
 		private int tam;
@@ -1595,7 +1592,7 @@ public class PMachine {
 			pc++;
 		}
 		public String toString() {
-			return "activa("+ level +","+dataSize+","+ retAddr +")";
+			return "activate("+ level +","+dataSize+","+ retAddr +")";
 		}
 	}
 	private class IDeactivate implements Instruction {
@@ -1657,7 +1654,7 @@ public class PMachine {
 			pc = evalStack.pop().intValue();
 		}
 		public String toString() {
-			return "irind";
+			return "branchInd";
 		}
 	}
 
@@ -1910,10 +1907,10 @@ public class PMachine {
 		Pcode.add(i);
 	}
 
-	public PMachine(int dataSize, int heapSize, int stackSize, int numDisplays) {
+	public PMachine(int dataSize, int stackSize, int heapSize, int numDisplays) {
 		this.Pcode = new ArrayList<>();
 		evalStack = new Stack<>();
-		data = new Value[dataSize + heapSize];
+		data = new Value[dataSize + heapSize + stackSize];
 		this.displayNum = numDisplays;
 		this.stackSize = stackSize;
 		this.heapSize = heapSize;
@@ -2003,12 +2000,20 @@ public class PMachine {
 		ISTOP = new IStop();
 
 		activationsManager = new GestorPilaActivaciones(dataSize,(dataSize+stackSize)-1,numDisplays);
-		memoryManager = new GestorMemoriaDinamica(dataSize,(dataSize+heapSize)-1);
+		memoryManager = new GestorMemoriaDinamica(dataSize+stackSize,(dataSize+stackSize+heapSize)-1);
 	}
 
 	public void execute() {
 		while (pc != Pcode.size()) {
-			Pcode.get(pc).execute();
+			try {
+				Pcode.get(pc).execute();
+			} catch (RuntimeException e) {
+				System.out.println("Crash!!! Here's the state of the machine");
+				showCode();
+				showState();
+				e.printStackTrace();
+				pc = Pcode.size();
+			}
 		}
 	}
 
@@ -2022,7 +2027,6 @@ public class PMachine {
 			}
 		}
 	}
-
 	public void showState() {
 		System.out.println("Tam datos:"+dataSize);
 		System.out.println("Tam heap:"+heapSize);

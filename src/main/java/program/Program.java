@@ -334,7 +334,7 @@ public abstract class Program {
 		public FParam(String id, DeclaredType type, boolean byReference) {
 			this(null,id,type,byReference);
 		}
-		public FParam(String sourceLink, String id, DeclaredType type, boolean porReferencia) {
+		public FParam(String sourceLink, String id, DeclaredType type, boolean byReference) {
 			super(type,id,sourceLink);
 			this.byReference = byReference;
 		}
@@ -1328,11 +1328,13 @@ public abstract class Program {
 	public Inst idowhile(Inst body, Exp cond) {
 		return new IDoWhile(cond, body);
 	}
-	public Inst iswitch(Exp exp, Inst defaul, ICase... cases) {
-		return new ISwitch(exp, defaul, cases);
+	public Inst iswitch(Exp exp, Inst defaul, List<ICase> cases) {
+		ICase[] icases = new ICase[cases.size()];
+		return new ISwitch(exp, defaul, icases);
 	}
-	public Inst iswitch(Exp exp, ICase... cases) {
-		return new ISwitch(exp, cases);
+	public Inst iswitch(Exp exp, List<ICase> cases) {
+		ICase[] icases = new ICase[cases.size()];
+		return new ISwitch(exp, cases.toArray(icases));
 	}
 	public ICase icase(Exp exp, Inst body) {
 		return new ICase(exp, body);

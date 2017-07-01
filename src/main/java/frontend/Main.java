@@ -26,19 +26,17 @@ public class Main{
       if (vinculacion.error()) System.exit(1);
       TypeCheck tipado = new TypeCheck(ops,errors);
       ops.root().processWith(tipado);
-      fullPrinter.process(ops.root());
       if (ops.root().tipo() != ops.tError()) {
           SpaceAssignment spaceAssig = new SpaceAssignment();
           ops.root().processWith(spaceAssig);
           Tagging tagging = new Tagging(ops);
           ops.root().processWith(tagging);
-          fullPrinter.process(ops.root());
-          PMachine machine = new PMachine(spaceAssig.dataSize(),10, 50, spaceAssig.getDisplayNum());
+          //fullPrinter.process(ops.root());
+          PMachine machine = new PMachine(spaceAssig.dataSize(),50, 10, spaceAssig.getDisplayNum());
           CodeGeneration codegen = new CodeGeneration(ops, machine);
           ops.root().processWith(codegen);
-          machine.showCode();
+          //machine.showCode();
           machine.execute();
-          machine.showState();
       }
      }
      catch(TokenMgrError err) {

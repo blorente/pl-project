@@ -18,8 +18,8 @@ public class CodeGeneration extends Processing {
 		this.m = machine;
 		remainingProcs = new Stack<>();
 	}
-	public void process(Var exp) {
-		DecVar dvar =  exp.declaration();
+
+	public void process(DecVar dvar) {
 		if (dvar.level() == 0)
 			m.addInstruction(m.pushInt(dvar.addr()));
 		else {
@@ -29,6 +29,10 @@ public class CodeGeneration extends Processing {
 			if (dvar.isByReference())
 				m.addInstruction(m.pushInd());
 		}
+	}
+
+	public void process(Var exp) {
+		exp.declaration().processWith(this);
 	}
 	public void process(DRefPtr exp) {
 		exp.mem().processWith(this);
@@ -346,6 +350,7 @@ public class CodeGeneration extends Processing {
 			remainingProcs.pop().processWith(this);
 		}		
 	}
+
 	public void process(IAsig i) {
 		i.mem().processWith(this);
 		i.exp().processWith(this);
@@ -379,6 +384,7 @@ public class CodeGeneration extends Processing {
 		m.addInstruction(m.popInd());
 	}
 	public void process(IWrite w) {
+		w.declaration().processWith(this);
 		m.addInstruction(m.pushInd());
 		if (w.declaration().decType().equals(program.tInt())) {
 			m.addInstruction(m.writeInt());
@@ -394,6 +400,7 @@ public class CodeGeneration extends Processing {
 	}
 	public void process(IWhile wh) {
 		wh.getCond().processWith(this);
+		if (wh.getCond().isMem()) {m.addInstruction(m.pushInd());}
 		m.addInstruction(m.branchIfFalse(wh.addrNext()));
 		wh.getBody().processWith(this);
 		m.addInstruction(m.branch(wh.addrFirst()));
@@ -401,16 +408,19 @@ public class CodeGeneration extends Processing {
 	public void process(IDoWhile i) {
 		i.getBody().processWith(this);
 		i.getCond().processWith(this);
+		if (i.getCond().isMem()) {m.addInstruction(m.pushInd());}
 		m.addInstruction(m.branchIfFalse(i.addrNext()));
 		m.addInstruction(m.branch(i.addrFirst()));
 	}
 	public void process(IIfThen i) {
 		i.getCond().processWith(this);
+		if (i.getCond().isMem()) {m.addInstruction(m.pushInd());}
 		m.addInstruction(m.branchIfFalse(i.addrNext()));
 		i.getThen().processWith(this);
 	}
 	public void process(IIfThenElse i) {
 		i.getCond().processWith(this);
+		if (i.getCond().isMem()) {m.addInstruction(m.pushInd());}
 		m.addInstruction(m.branchIfFalse(i.getElse().addrFirst()));
 		i.getThen().processWith(this);
 		m.addInstruction(m.branch(i.addrNext()));
@@ -418,6 +428,7 @@ public class CodeGeneration extends Processing {
 	}
 	public void process(ISwitch i) {
 		i.getCond().processWith(this);
+		if (i.getCond().isMem()) {m.addInstruction(m.pushInd());}
 		for (ICase c : i.getCases()) {
 			m.addInstruction(m.dup());
 			c.processWith(this);
@@ -430,6 +441,7 @@ public class CodeGeneration extends Processing {
 	}
 	public void process(ICase i) {
 		i.getExp().processWith(this);
+		if (i.getExp().isMem()) {m.addInstruction(m.pushInd());}
 		if (i.getExp().type().equals(program.tReal())) {
 			m.addInstruction(m.equalsReal());
 		} else if (i.getExp().type().equals(program.tInt())) {
@@ -463,8 +475,7 @@ public class CodeGeneration extends Processing {
 			if (p.fparams()[i].isByReference() ||
 					! c.aparams()[i].isMem()) {
 				m.addInstruction(m.popInd());
-			}
-			else {
+			} else {
 				m.addInstruction(m.move(p.fparams()[i].decType().size()));
 			}
 		}
@@ -499,7 +510,7 @@ public class CodeGeneration extends Processing {
 		m.addInstruction(m.addInt());
 	}
 
-	public void procesa(DecProc p) {
+	public void process(DecProc p) {
 		p.body().processWith(this);
 		m.addInstruction(m.desactiva(p.level(),p.size()));
 		m.addInstruction(m.branchInd());

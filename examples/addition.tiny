@@ -1,0 +1,12 @@
+proc addone(int* v) {
+    *v = *v + 1;
+    write v;
+}
+{
+    var int* res;
+    new res;
+    *res = 0;
+    while (*res < 10) {
+        call addone with res;
+    }
+}

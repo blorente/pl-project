@@ -1,12 +1,12 @@
 type int[6] myarr;
 
+var myarr arr;
 var int i;
 var float j;
 var bool b;
 var float k;
 var string s;
 var char ch;
-var myarr arr;
 var myarr other;
 
 {

@@ -45,7 +45,7 @@ public class Binding extends Processing {
 			p.tbase().accept(this);
 		}
 		public void process(TRef r) {
-			DecType d = types.get(r.typeId());
+			DecType d = symbolTable.decTipo(r.typeId());
 			if (d == null) {
 				error = true;
 				errors.msg(r.sourceLink()+":"+ERROR_UNDECLARED_TYPE_ID+"("+r.typeId()+")");

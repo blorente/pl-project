@@ -4,15 +4,10 @@ options  {
 PARSER_BEGIN(AnalizadorSintacticoTiny)
 package frontend;
 
-import program.Program.Prog;
-import program.Program.Dec;
-import program.Program.Inst;
-import program.Program.DeclaredType;
-import program.Program.FParam;
-import program.Program.Exp;
-
+import program.Program.*;
 
 import frontend.ASTOps.Lista;
+import java.lang.Error;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -297,6 +292,79 @@ PARSER_END(AnalizadorSintacticoTiny)
 	  |
 	 ins = idelete()
 	  {return ins;}
+	 |
+	 ins = iwrite()
+	    {return ins;}
+	 |
+     ins = iread()
+        {return ins;}
+     |
+     ins = iswitch()
+        {return ins;}
+     |
+     ins = idowhile()
+        {return ins;}
+     |
+     ins = iif()
+        {return ins;}
+  }
+
+  Inst iif() :
+  {Exp cond; Inst then; Inst inst; Token t;}
+  	{
+  	 t=<IF> cond=exp0() <THEN> then=iblock() inst=riif(cond, then, t)
+  	  {return inst;}
+  	}
+  Inst riif(Exp cond, Inst then, Token t):
+  {Inst els;}
+  {
+    <ELSE> els=iblock()
+        {return ops.iifthenelse(cond, then, els);}
+    |
+    {return ops.iifthen(cond, then);}
+  }
+
+  Inst iwrite():
+  {Token t; Token exp;}
+  {
+    t=<WRITE> exp=<identificador> <SEMICOLON>
+    {return ops.iwrite(exp.image);}
+  }
+  Inst iread():
+    {Token t; Token exp;}
+    {
+      t=<READ> exp=<identificador> <SEMICOLON>
+      {return ops.iread(exp.image);}
+    }
+
+  Inst iswitch():
+  {Token t; List<ICase> cases; Inst inst; Exp cond;}
+  {
+    t=<SWITCH> cond=exp0() <OPEN_BRACE> cases=caseList() inst=riswitch(cond, cases, t)
+    {return inst;}
+  }
+  Inst riswitch(Exp cond, List<ICase> cases, Token t):
+  {Inst definst;}
+  {
+  <DEFAULTT> <COLON> definst=instruccion() <SEMICOLON> <CLOSE_BRACE>
+    {return ops.iswitch(cond, definst, cases);}
+  |
+  <CLOSE_BRACE>
+    {return ops.iswitch(cond, cases);}
+  }
+  List<ICase> caseList():
+  {ICase icase; List<ICase> rest;}
+  {
+    icase = icase() rest=caseList()
+    {rest.add(icase); return rest;}
+    |
+    {return new ArrayList<ICase>();}
+  }
+  ICase icase():
+  {Token t; Exp exp; Inst inst;}
+  {
+  t=<CASE> exp=exp0() <COLON> inst=instruccion() <SEMICOLON>
+  {return ops.icase(exp, inst);}
   }
 
   Inst iasig() :
@@ -319,6 +387,12 @@ PARSER_END(AnalizadorSintacticoTiny)
 	 While=<WHILE> exp=exp0() i=bloque() pyComa()
 	  {return ops.iwhile(exp,i,enlaceFuente(While));}
    }
+   Inst idowhile() :
+      {Exp exp; Inst i; Token While, Do;}
+      {
+      Do=<DO> i=bloque() While=<WHILE> exp=exp0() <SEMICOLON>
+   	  {return ops.idowhile(i, exp);}
+      }
 
 
   Inst icall() :
@@ -576,7 +650,7 @@ PARSER_END(AnalizadorSintacticoTiny)
 		{return e;}
 	  |
 	  t=<NULL>
-	    {return ops.makeNull(t.image);}
+	    {return ops.makeNull(enlaceFuente(t));}
 	 }
   Exp literal() :
 	{Token t;}

@@ -177,7 +177,6 @@ public class Tagging extends Processing {
 		i.putAddrFirst(etq);
 		i.mem().processWith(this);
 		i.exp().processWith(this);
-		if (i.exp().isMem()) /*pushInd*/ etq++;
 		// move or popInd
 		i.putAddrNext(++etq);
 	}
@@ -269,6 +268,7 @@ public class Tagging extends Processing {
 	}
 	public void process(IWrite i){
 		i.putAddrFirst(etq);
+		etq++;
 		etq++;
 		i.putAddrNext(++etq);
 	}

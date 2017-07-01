@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class SpaceAssignment extends Processing {
     private int addr;
-    private int tam;
+    private int size;
     private int level;
     private int displayNum;
 
@@ -22,9 +22,9 @@ public class SpaceAssignment extends Processing {
         for(Program.Dec d: p.decs())
             d.processWith(this);
         int dirAntesDeInst = addr;
-        tam=0;
+        size =0;
         p.inst().processWith(this);
-        tam += dirAntesDeInst;
+        size += dirAntesDeInst;
     }
 
     public void process(DecVar d) {
@@ -52,7 +52,7 @@ public class SpaceAssignment extends Processing {
         int tamParametros = addr;
         d.body().processWith(this);
         d.putLevel(level);
-        d.putSize(tam+tamParametros);
+        d.putSize(size +tamParametros);
         level--;
         addr = addrBeforeProc;
     }
@@ -112,15 +112,15 @@ public class SpaceAssignment extends Processing {
             d.processWith(this);
         int bodySize = 0;
         for(Program.Inst i: b.is()) {
-            tam=0;
+            size =0;
             i.processWith(this);
-            if (tam > bodySize)
-                bodySize=tam;
+            if (size > bodySize)
+                bodySize= size;
         }
-        tam = bodySize + (addr-dirAntesDeBloque);
+        size = bodySize + (addr-dirAntesDeBloque);
         addr = dirAntesDeBloque;
     }
 
-    public int dataSize() {return tam;}
+    public int dataSize() {return size;}
     public int getDisplayNum() {return displayNum;}
 }

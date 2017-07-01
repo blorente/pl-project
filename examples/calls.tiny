@@ -8,6 +8,7 @@ proc swap(int& v2) {
      res=val;
    }
    var int r;
+   write v2;
    call valorDe with **v1, r;
    **v1=v2;
    v2=r;
