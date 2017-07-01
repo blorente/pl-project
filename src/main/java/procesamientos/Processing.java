@@ -50,7 +50,7 @@ public class Processing {
    public void process(TStruct a) {}
 
    public void process(Prog p) {}
-   public void process(DecRef d) {}
+   public void process(DRefPtr d) {}
    public void process(DecType d) {}
    public void process(DecVar d) {}
 

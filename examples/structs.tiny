@@ -7,8 +7,11 @@ type struct {
 } tcelda;
 
 var tcelda celda;
+var tcelda* cptr;
 
 {
     celda.valor = 3;
     celda.valor = 4;
+    new cptr;
+    cptr->cc = 2;
 }

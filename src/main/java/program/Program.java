@@ -4,7 +4,6 @@ import procesamientos.Processing;
 import procesamientos.typecheck.utils.CompatibilityChecker;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -718,12 +717,12 @@ public abstract class Program {
 		}
 		public boolean isMem() {return true;}
 	}
-	public class DecRef extends Mem {
+	public class DRefPtr extends Mem {
 		private Mem mem;
-		public DecRef(Mem mem) {
+		public DRefPtr(Mem mem) {
 			this(mem,null);
 		}
-		public DecRef(Mem mem, String sourcelink) {
+		public DRefPtr(Mem mem, String sourcelink) {
 			super(sourcelink);
 			this.mem = mem;
 		}
@@ -1264,8 +1263,8 @@ public abstract class Program {
 
 	public Mem var(String id) {return new Var(id);}
 	public Mem var(String id, String sourceLink) {return new Var(id, sourceLink);}
-	public Mem dref(Mem m) {return new DecRef(m);}
-	public Mem dref(Mem m, String sourceLink) {return new DecRef(m,sourceLink);}
+	public Mem dref(Mem m) {return new DRefPtr(m);}
+	public Mem dref(Mem m, String sourceLink) {return new DRefPtr(m,sourceLink);}
 	public Exp intct(int val) {
 		return new IntCt(val);
 	}
@@ -1412,8 +1411,9 @@ public abstract class Program {
         return new StructField(var, field, sourceLink);
     }
     public Exp structfieldref(Exp var, String field, String sourceLink) {
-        throw new RuntimeException("Referenced struct field access unimplemented");
-    }
+		DRefPtr val = new DRefPtr((Mem)var, sourceLink);
+		return new StructField(val, field, sourceLink);
+	}
 	public TStruct tStruct(Map<String, DeclaredType> fields, String sourceLink) {
 		return new TStruct(fields, sourceLink);
 	}

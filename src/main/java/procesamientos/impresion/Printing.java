@@ -248,7 +248,7 @@ public class Printing extends Processing {
 		t.decType().accept(this);
 		System.out.println(" "+t.var());
 	}
-	public void process(DecRef mem) {
+	public void process(DRefPtr mem) {
 		System.out.print("(*");
 		mem.mem().processWith(this);
 		System.out.print(")");

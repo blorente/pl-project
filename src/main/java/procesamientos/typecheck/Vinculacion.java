@@ -251,7 +251,7 @@ public class Vinculacion extends Processing {
 			exp.putDeclaration(decVar);
 		}
 	}
-	public void process(DecRef d) {
+	public void process(DRefPtr d) {
 		d.mem().processWith(this);
 	}
 	public void process(ArrayIndex exp) {

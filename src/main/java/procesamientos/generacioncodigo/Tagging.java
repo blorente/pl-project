@@ -22,7 +22,7 @@ public class Tagging extends Processing {
 		// apilaDir(...dir variable...)
 		exp.putDirNext(++etq);
 	}
-	public void process(DecRef exp) {
+	public void process(DRefPtr exp) {
 		exp.putDirFirst(etq);
 		exp.mem().processWith(this);
 		// apilaind

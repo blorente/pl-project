@@ -28,7 +28,7 @@ public class TypeCheck extends Processing {
         this.inferrer = new TypeInferer(program);
     }
 
-    public void process(DecRef p) {
+    public void process(DRefPtr p) {
         p.mem().processWith(this);
         if(CompatibilityChecker.isPointer(p.mem().type())) {
             p.ponTipo(CompatibilityChecker.pointer(p.mem().type()).tbase());

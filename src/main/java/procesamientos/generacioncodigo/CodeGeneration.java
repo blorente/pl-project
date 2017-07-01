@@ -18,7 +18,7 @@ public class CodeGeneration extends Processing {
 	public void process(Var exp) {
 		m.addInstruction(m.pushInt(exp.declaration().addr()));
 	}
-	public void process(DecRef exp) {
+	public void process(DRefPtr exp) {
 		exp.mem().processWith(this);
 		m.addInstruction(m.pushInd());
 	}
