@@ -16,18 +16,12 @@ public class Binding extends Processing {
 	private final static String ERROR_DUPLICATED_TYPE_ID = "Duplicated type ID";
 	private static final String ERROR_UNDECLARED_TYPE_ID = "Undeclared type ID";
 	private static final String ERROR_UNDECLARED_PROC_ID = "Undeclared Procedure";
-	private Map<String,DecVar> variables;
-	private Map<String,DecType> types;
 	private boolean error;
 	private Errors errors;
-	private CompatibilityChecker compat;
 	private TablaDeSimbolos symbolTable;
 	private RefCompletion refCompletion;
 
-	public Binding(Program p, Errors errors) {
-		variables = new HashMap<>();
-		types = new HashMap<>();
-		compat = new CompatibilityChecker(p);
+	public Binding(Errors errors) {
 		this.errors = errors;
 		error = false;
 		symbolTable = new TablaDeSimbolos();
@@ -42,7 +36,12 @@ public class Binding extends Processing {
 			d.decType().accept(this);
 		}
 		public void process(TPointer p) {
-			p.tbase().accept(this);
+			if (CompatibilityChecker.isRef(p.tbase())) {
+				processRef(CompatibilityChecker.asRef(p.tbase()));
+			}
+			else {
+				p.tbase().accept(this);
+			}
 		}
 		public void process(TRef r) {
 			DecType d = symbolTable.decTipo(r.typeId());
@@ -107,8 +106,6 @@ public class Binding extends Processing {
 	public void process(TPointer p) {
 		if (!CompatibilityChecker.isRef(p.tbase())) {
 			p.tbase().accept(this);
-		} else {
-			processRef(CompatibilityChecker.asRef(p.tbase()));
 		}
 	}
 	public void process(TRef r) {

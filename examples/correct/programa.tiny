@@ -1,0 +1,30 @@
+type int[50] tbuffer;
+type tcelda* tlista;
+type struct {
+          int valor;
+          tlista siguiente;
+} tcelda;
+
+{
+    var tbuffer buffer;
+    var tlista lista;
+    var int i;
+    var int peso;
+    var tlista celda;
+    i= 0;
+    while (i < 10) {
+      buffer[i] = i;
+      i = i+1;
+    }
+    peso = 5;
+    new lista;
+    lista->valor = 10;
+    i=0;
+    while(i < 10) {
+      new celda;
+      celda->valor = buffer[buffer[i-1]+lista->valor]*peso;
+      celda->siguiente = lista;
+      lista = celda;
+      i=i+1;
+    }
+}
