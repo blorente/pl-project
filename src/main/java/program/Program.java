@@ -339,7 +339,43 @@ public abstract class Program {
 			super(type,id,sourceLink);
 			this.byReference = byReference;
 		}
-		public boolean esParametroPorReferencia() {return byReference;}
+		public boolean isByReference() {return byReference;}
+	}
+	public class DecProc extends Dec {
+		private String sourceLink;
+		private String idproc;
+		private FParam[] fparams;
+		private Inst body;
+		private int level;
+		private int size;
+		public DecProc(String idproc, FParam[] fparams, Inst cuerpo) {
+			this(null,idproc,fparams,cuerpo);
+		}
+		public DecProc(String sourceLink,String idproc, FParam[] fparams, Inst cuerpo) {
+			this.sourceLink = sourceLink;
+			this.idproc = idproc;
+			this.fparams = fparams;
+			this.body = cuerpo;
+		}
+		public String sourceLink() {
+			return sourceLink;
+		}
+		public String idproc () {
+			return idproc;
+		}
+		public FParam[] fparams() {
+			return fparams;
+		}
+		public Inst body() {
+			return body;
+		}
+		public void processWith(Processing p) {
+			p.process(this);
+		}
+		public int level() {return level;}
+		public int size() {return size;}
+		public void putLevel(int level) {this.level = level;}
+		public void putSize(int size) {this.size = size;}
 	}
 
 	public abstract class Inst {
@@ -439,11 +475,12 @@ public abstract class Program {
 	}
 	public class IBlock extends Inst {
 		private Inst[] is;
-
-		public IBlock(Inst[] is) {
+		private Dec[] decs;
+		public IBlock(Dec[] decs, Inst[] is) {
+			this.decs = decs;
 			this.is = is;
 		}
-
+		public Dec[] decs() {return decs;}
 		public Inst[] is() {
 			return is;
 		}
@@ -676,6 +713,28 @@ public abstract class Program {
 		}
 
 		@Override
+		public void processWith(Processing p) {
+			p.process(this);
+		}
+	}
+	public class ICall extends Inst {
+		private String sourceLink;
+		private String idproc;
+		private Exp[] aparams;
+		private DecProc decProc;
+		public ICall(String idproc, Exp[] aparams) {
+			this(null,idproc,aparams);
+		}
+		public ICall(String sourceLink, String idproc, Exp[] aparams) {
+			this.sourceLink = sourceLink;
+			this.idproc = idproc;
+			this.aparams = aparams;
+		}
+		public String sourceLink() {return sourceLink;}
+		public String idproc() {return idproc;}
+		public Exp[] aparams() {return aparams;}
+		public DecProc declaration() {return decProc;}
+		public void putDecl(DecProc dec) {this.decProc = dec;}
 		public void processWith(Processing p) {
 			p.process(this);
 		}
@@ -1249,9 +1308,6 @@ public abstract class Program {
 	public Inst iasig(Mem m, Exp e, String sourceLink) {
 		return new IAsig(m, e, sourceLink);
 	}
-	public Inst iblock(Inst[] is) {
-		return new IBlock(is);
-	}
 	public Inst iread(String v) {
 		return new IRead(v);
 	}
@@ -1416,19 +1472,16 @@ public abstract class Program {
 	public abstract Prog root();
 
 	public Inst icall(String name, Exp[] params, String sourceLink) {
-		throw new RuntimeException("Function calls not implemented");
+		return new ICall(sourceLink,name,params);
 	}
 	public Dec decProc(String id, FParam[] fparams, Inst i, String enlaceFuente) {
-		throw new RuntimeException("Procedure declaration not implemented");
+		return new DecProc(enlaceFuente,id,fparams,i);
 	}
 	public FParam fparam(DeclaredType tipo,boolean porReferencia, String id,String enlaceFuente) {
-		throw new RuntimeException("Procedure parameters not implemented");
+		return new FParam(enlaceFuente,id,tipo,porReferencia);
 	}
 	public Inst iblock(Dec[] decs, Inst[] is) {
-		if (decs.length != 0) {
-			throw new RuntimeException("Blocks with declarations not implemented");
-		}
-		return iblock(is);
+		return new IBlock(decs, is);
 	}
 
 	public Exp arrayindex(Exp var, Exp index, String sourceLink) {

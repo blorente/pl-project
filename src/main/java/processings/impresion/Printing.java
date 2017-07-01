@@ -248,8 +248,9 @@ public class Printing extends Processing {
 		System.out.println();
 	}
 	public void process(DecVar t) {
+		indent();
 		t.decType().accept(this);
-		System.out.println(" "+t.var());
+		System.out.println(t.decType().toString()+" "+t.var()+';');
 	}
 	public void process(DRefPtr mem) {
 		System.out.print("(*");
@@ -267,6 +268,23 @@ public class Printing extends Processing {
 		System.out.print("(");
 		t.tbase().accept(this);
 		System.out.print("*)");
+	}
+	public void process(DecProc p) {
+		indent();
+		System.out.print("proc "+p.idproc()+"(");
+		int nparam=0;
+		for (FParam param: p.fparams()) {
+			if (nparam > 0) System.out.print(",");
+			nparam++;
+			param.decType().accept(this);
+			if (param.isByReference())
+				System.out.print("&");
+			else
+				System.out.print(" ");
+			System.out.print(param.var());
+		}
+		System.out.println(")");
+		p.body().processWith(this);
 	}
 	public void process(TRef t) {
 		System.out.print(t.typeId());
@@ -297,6 +315,8 @@ public class Printing extends Processing {
 		indent();
 		System.out.println("{");
 		indentation += 3;
+		for(Dec d: b.decs())
+			d.processWith(this);
 		for (Inst i : b.is())
 			i.processWith(this);
 		indentation -= 3;
@@ -385,5 +405,16 @@ public class Printing extends Processing {
 		System.out.print("delete ");
 		i.mem().processWith(this);
 		System.out.println("");
+	}
+	public void process(ICall c) {
+		indent();
+		System.out.print(c.idproc()+"(");
+		int nparam=0;
+		for (Exp param: c.aparams()) {
+			if(nparam > 0) System.out.print(",");
+			nparam++;
+			param.processWith(this);
+		}
+		System.out.println(")");
 	}
 }

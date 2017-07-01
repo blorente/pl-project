@@ -11,14 +11,18 @@ import java.util.Map;
 
 public class Vinculacion extends Processing {
 	private final static String ERROR_DUPLICATED_ID = "Duplicated identifier";
+	private final static String ERROR_DUPLICATED_PROC_ID = "Duplicated Procedure declaration";
 	private final static String ERROR_UNDECLARED_ID = "Undeclared identifier";
 	private final static String ERROR_DUPLICATED_TYPE_ID = "Duplicated type ID";
 	private static final String ERROR_UNDECLARED_TYPE_ID = "Undeclared type ID";
+	private static final String ERROR_UNDECLARED_PROC_ID = "Undeclared Procedure";
 	private Map<String,DecVar> variables;
 	private Map<String,DecType> types;
 	private boolean error;
 	private Errors errors;
 	private CompatibilityChecker compat;
+	private TablaDeSimbolos symbolTable;
+	private RefCompletion refCompletion;
 
 	public Vinculacion(Program p, Errors errors) {
 		variables = new HashMap<>();
@@ -26,6 +30,8 @@ public class Vinculacion extends Processing {
 		compat = new CompatibilityChecker(p);
 		this.errors = errors;
 		error = false;
+		symbolTable = new TablaDeSimbolos();
+		refCompletion = new RefCompletion();
 	}
 
 	private class RefCompletion extends Processing {
@@ -56,43 +62,61 @@ public class Vinculacion extends Processing {
 	}
 
 	public void process(Prog p) {
-		for (Dec d : p.decs())
-			d.processWith(this);
-		RefCompletion crefs = new RefCompletion();
+		symbolTable.creaNivel();
 		for (Dec d: p.decs())
-			d.processWith(crefs);
+			d.processWith(this);
+		for (Dec d: p.decs())
+			d.processWith(refCompletion);
 		p.inst().processWith(this);
 	}
 	public void process(DecType d) {
-		if(types.containsKey(d.typeId())) {
+		if(symbolTable.decTipoDuplicada(d.typeId())) {
 			error = true;
 			errors.msg(d.sourceLink()+":"+ERROR_DUPLICATED_TYPE_ID+"("+d.typeId()+")");
-		} else {
-			types.put(d.typeId(),d);
+		}
+		else {
+			symbolTable.ponDecTipo(d.typeId(),d);
 			d.decType().accept(this);
 		}
 	}
 	public void process(DecVar d) {
-		if(variables.containsKey(d.var())) {
+		if(symbolTable.decVarDuplicada(d.var())) {
 			error = true;
 			errors.msg(d.sourceLink()+":"+ERROR_DUPLICATED_ID+"("+d.var()+")");
 		} else {
-			variables.put(d.var(), d);
+			symbolTable.ponDecVar(d.var(), d);
 			d.decType().accept(this);
+		}
+	}
+	public void process(DecProc d) {
+		if(symbolTable.decProcDuplicado(d.idproc())) {
+			error = true;
+			errors.msg(d.sourceLink()+":"+ERROR_DUPLICATED_PROC_ID+"("+d.idproc()+")");
+		}
+		else {
+			symbolTable.ponDecProc(d.idproc(), d);
+			symbolTable.creaNivel();
+			for(FParam param: d.fparams()) {
+				symbolTable.ponDecVar(param.var(),param);
+				param.decType().accept(this);
+			}
+			d.body().processWith(this);
+			symbolTable.destruyeNivel();
 		}
 	}
 	public void process(TPointer p) {
 		if (!CompatibilityChecker.isRef(p.tbase())) {
 			p.tbase().accept(this);
+		} else {
+			processRef(CompatibilityChecker.asRef(p.tbase()));
 		}
 	}
 	public void process(TRef r) {
-		DecType d = types.get(r.typeId());
+		DecType d = symbolTable.decTipo(r.typeId());
 		if (d == null) {
 			error = true;
 			errors.msg(r.sourceLink()+":"+ERROR_UNDECLARED_TYPE_ID+"("+r.typeId()+")");
-		}
-		else {
+		} else {
 			r.ponDeclaracion(d);
 		}
 	}
@@ -112,11 +136,17 @@ public class Vinculacion extends Processing {
 		i.mem().processWith(this);
 	}
 	public void process(IBlock b) {
-		for (Inst i : b.is())
+		symbolTable.creaNivel();
+		for(Dec d: b.decs())
+			d.processWith(this);
+		for (Dec d: b.decs())
+			d.processWith(refCompletion);
+		for (Inst i: b.is())
 			i.processWith(this);
+		symbolTable.destruyeNivel();
 	}
 	public void process(IRead i) {
-		DecVar decVar = variables.get(i.var());
+		DecVar decVar = symbolTable.decVar(i.var());
 		if (decVar == null) {
 			error = true;
 			errors.msg(ERROR_UNDECLARED_ID + "(" + i.var() + ")");
@@ -125,7 +155,7 @@ public class Vinculacion extends Processing {
 		}
 	}
 	public void process(IWrite i) {
-		DecVar decVar = variables.get(i.var());
+		DecVar decVar = symbolTable.decVar(i.var());
 		if (decVar == null) {
 			error = true;
 			errors.msg(ERROR_UNDECLARED_ID + "(" + i.var() + ")");
@@ -161,6 +191,18 @@ public class Vinculacion extends Processing {
 	public void process(ICase i) {
 		i.getExp().processWith(this);
 		i.getBody().processWith(this);
+	}
+	public void process(ICall c) {
+		DecProc proc = symbolTable.decProc(c.idproc());
+		if (proc == null) {
+			error=true;
+			errors.msg(c.sourceLink()+":"+ERROR_UNDECLARED_PROC_ID+"("+c.idproc()+")");
+		}
+		else {
+			c.putDecl(proc);
+		}
+		for(Exp e: c.aparams())
+			e.processWith(this);
 	}
 	public boolean error() {
 		return error;
@@ -243,7 +285,7 @@ public class Vinculacion extends Processing {
 		exp.op().processWith(this);
 	}
 	public void process(Var exp) {
-		DecVar decVar = variables.get(exp.var());
+		DecVar decVar = symbolTable.decVar(exp.var());
 		if (decVar == null) {
 			error = true;
 			errors.msg(exp.sourceLink() + ":" + ERROR_UNDECLARED_ID + "(" + exp.var() + ")");
@@ -262,4 +304,13 @@ public class Vinculacion extends Processing {
 		exp.var().processWith(this);
 	}
 
+	private void processRef(TRef r) {
+		DecType d = symbolTable.decTipo(r.typeId());
+		if (d == null) {
+			error = true;
+			errors.msg(r.sourceLink()+":"+ERROR_UNDECLARED_TYPE_ID+"("+r.typeId()+")");
+		} else {
+			r.ponDeclaracion(d);
+		}
+	}
 }

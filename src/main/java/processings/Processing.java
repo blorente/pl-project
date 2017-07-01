@@ -1,5 +1,6 @@
 package processings;
 
+import program.Program;
 import program.Program.*;
 import program.Program.Error;
 
@@ -55,6 +56,7 @@ public class Processing {
    public void process(DRefPtr d) {}
    public void process(DecType d) {}
    public void process(DecVar d) {}
+   public void process(DecProc d) {}
 
    public void process(ArrayIndex a) {}
    public void process(StructField a) {}
@@ -70,6 +72,6 @@ public class Processing {
    public void process(ISwitch i) {}
    public void process(ICase i) {}
    public void process(IFree i) {}
-
    public void process(INew i) {}
+   public void process(ICall i) {}
 }
