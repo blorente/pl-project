@@ -18,6 +18,9 @@ public class TypeCheck extends Processing {
     private final static String ERROR_COND="Erroneous condition type";
     private final static String ERROR_NEW="The operand of New must be a pointer";
     private final static String ERROR_FREE="The operand of Free must be a pointer";
+    private final static String ERROR_PARAM_NUM="The number of actual parameters is not the same as the number of formal parameters";
+    private final static String ERROR_PARAM_MODE="A non-designator expression is being passed by reference";
+    private final static String ERROR_PARAM_TYPE="The formal and actual parameter types are not compatible";
     private Program program;
     private Errors errors;
     private TypeInferer inferrer;
@@ -285,87 +288,109 @@ public class TypeCheck extends Processing {
     public void process(Prog p) {
         p.inst().processWith(this);
         p.ponTipo(p.inst().tipo());
+        boolean ok=true;
+        for (Dec d: p.decs()) {
+            d.processWith(this);
+            if (CompatibilityChecker.isProc(d)) {
+                ok = ok && (CompatibilityChecker.proc(d).body().tipo() == program.tOk());
+            }
+        }
+        p.inst().processWith(this);
+        ok = ok && (p.inst().tipo() == program.tOk());
+        if (ok) {
+            p.ponTipo(program.tOk());
+        }
+        else {
+            p.ponTipo(program.tError());
+        }
     }
+
     public void process(IAsig i) {
         i.mem().processWith(this);
         i.exp().processWith(this);
         if(CompatibilityChecker.areCompatible(i.mem().type(),i.exp().type())) {
-            i.ponTipo(program.tOk());
+            i.putType(program.tOk());
         }
         else {
             if (! i.mem().type().equals(program.tError()) &&
                     ! i.exp().type().equals(program.tError())) {
                 errors.msg(i.sourceLink()+":"+ERROR_ASSIGNMENT);
             }
-            i.ponTipo(program.tError());
+            i.putType(program.tError());
         }
     }
     public void process(INew i) {
         i.mem().processWith(this);
         if (CompatibilityChecker.isPointer(i.mem().type())) {
-            i.ponTipo(program.tOk());
+            i.putType(program.tOk());
         } else {
             if (!i.mem().type().equals(program.tError())) {
                 errors.msg(i.sourceLink()+":"+ERROR_NEW);
             }
-            i.ponTipo(program.tError());
+            i.putType(program.tError());
         }
     }
     public void process(IFree i) {
         i.mem().processWith(this);
         if (CompatibilityChecker.isPointer(i.mem().type())) {
-            i.ponTipo(program.tOk());
+            i.putType(program.tOk());
         }
         else {
             if (!i.mem().type().equals(program.tError())) {
                 errors.msg(i.sourceLink()+":"+ERROR_FREE);
             }
-            i.ponTipo(program.tError());
+            i.putType(program.tError());
         }
     }
     public void process(IBlock b) {
-        boolean ok = true;
-        for (Inst i : b.is()) {
+        boolean ok=true;
+        for (Dec d: b.decs()) {
+            d.processWith(this);
+            if (CompatibilityChecker.isProc(d)) {
+                ok = ok && (CompatibilityChecker.proc(d).body().tipo() == program.tOk());
+            }
+        }
+        for (Inst i: b.is()) {
             i.processWith(this);
             ok = ok && i.tipo().equals(program.tOk());
         }
         if (ok)
-            b.ponTipo(program.tOk());
+            b.putType(program.tOk());
         else
-            b.ponTipo(program.tError());
+            b.putType(program.tError());
     }
     public void process(IRead i) {
-    	i.ponTipo(program.tOk());
+    	i.putType(program.tOk());
     }
     public void process(IWrite i) {
-    	i.ponTipo(program.tOk());
+    	i.putType(program.tOk());
     }
     public void process(IWhile wh) {
     	wh.getCond().processWith(this);
     	wh.getBody().processWith(this);
     	if (!wh.getCond().type().equals(program.tBool()) ||
     			wh.getBody().tipo().equals(program.tError()))
-    		wh.ponTipo(program.tError());
+    		wh.putType(program.tError());
     	else
-    		wh.ponTipo(program.tOk());
+    		wh.putType(program.tOk());
     }
     public void process(IDoWhile wh) {
         wh.getBody().processWith(this);
         wh.getCond().processWith(this);
         if (!wh.getCond().type().equals(program.tBool()) ||
                 wh.getBody().tipo().equals(program.tError()))
-            wh.ponTipo(program.tError());
+            wh.putType(program.tError());
         else
-            wh.ponTipo(program.tOk());
+            wh.putType(program.tOk());
     }
     public void process(IIfThen i) {
         i.getCond().processWith(this);
         i.getThen().processWith(this);
         if (!i.getCond().type().equals(program.tBool()) ||
                 i.getThen().tipo().equals(program.tError()))
-            i.ponTipo(program.tError());
+            i.putType(program.tError());
         else
-            i.ponTipo(program.tOk());
+            i.putType(program.tOk());
     }
     public void process(IIfThenElse i) {
         i.getCond().processWith(this);
@@ -374,9 +399,9 @@ public class TypeCheck extends Processing {
         if (!i.getCond().type().equals(program.tBool()) ||
                 i.getThen().tipo().equals(program.tError()) ||
                 i.getElse().tipo().equals(program.tError()))
-            i.ponTipo(program.tError());
+            i.putType(program.tError());
         else
-            i.ponTipo(program.tOk());
+            i.putType(program.tOk());
     }
     public void process(ISwitch i) {
         i.getCond().processWith(this);
@@ -394,11 +419,41 @@ public class TypeCheck extends Processing {
                 blockT = program.tError();
             }
         }
-        i.ponTipo(blockT);
+        i.putType(blockT);
     }
     public void process(ICase i) {
         i.getExp().processWith(this);
         i.getBody().processWith(this);
-        i.ponTipo(i.getBody().tipo());
+        i.putType(i.getBody().tipo());
     }
+    public void process(ICall c) {
+        DecProc dec = c.declaration();
+        if (dec.fparams().length != c.aparams().length) {
+            errors.msg(c.sourceLink()+":"+ERROR_PARAM_NUM+"("+c.idproc()+")");
+            for(Exp e: c.aparams()) {
+                e.processWith(this);
+            }
+            c.putType(program.tError());
+        }
+        else {
+            boolean error=false;
+            for (int i=0; i < dec.fparams().length; i++) {
+                if (dec.fparams()[i].isByReference() && ! c.aparams()[i].isMem()) {
+                    errors.msg(c.sourceLink()+":"+ERROR_PARAM_MODE+"("+c.idproc()+", param:"+(i+1)+")");
+                    error=true;
+                }
+                c.aparams()[i].processWith(this);
+                if (! CompatibilityChecker.areCompatible(dec.fparams()[i].decType(), c.aparams()[i].type())) {
+                    if(! c.aparams()[i].type().equals(program.tError())) {
+                        errors.msg(c.sourceLink()+":"+ERROR_PARAM_TYPE+"("+c.idproc()+", param:"+(i+1)+")");
+                    }
+                    error = true;
+                }
+            }
+            if (error) c.putType(program.tError());
+            else c.putType(program.tOk());
+        }
+    }
+
+    public void process(DecProc d) { d.body().processWith(this); }
 }

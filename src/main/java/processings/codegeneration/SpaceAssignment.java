@@ -8,30 +8,53 @@ import java.util.Map;
 
 public class SpaceAssignment extends Processing {
     private int addr;
+    private int tam;
+    private int level;
+    private int displayNum;
 
     public SpaceAssignment() {
         addr = 0;
+        displayNum = 0;
+        level = 0;
     }
-    public int numDisplays() {return 10;}
 
     public void process(Prog p) {
-        for (Program.Dec d : p.decs())
+        for(Program.Dec d: p.decs())
             d.processWith(this);
-    }
-
-    public int dataSize() {
-        return addr;
+        int dirAntesDeInst = addr;
+        tam=0;
+        p.inst().processWith(this);
+        tam += dirAntesDeInst;
     }
 
     public void process(DecVar d) {
         d.decType().accept(this);
-        d.assignAddr(addr);
-        addr += d.decType().size();
+        d.putAddr(addr);
+        d.putLevel(level);
+        if (d.isByReference())
+            addr++;
+        else
+            addr += d.decType().size();
     }
     public void process(DecType d) {
         if (d.decType().size() == 0) {
             d.decType().accept(this);
         }
+    }
+    public void process(DecProc d) {
+        int addrBeforeProc = addr;
+        addr = 0;
+        level++;
+        if (displayNum < level) displayNum =level;
+        for(FParam p: d.fparams()) {
+            p.processWith(this);
+        }
+        int tamParametros = addr;
+        d.body().processWith(this);
+        d.putLevel(level);
+        d.putSize(tam+tamParametros);
+        level--;
+        addr = addrBeforeProc;
     }
 
     public void process(Int t) {
@@ -83,4 +106,21 @@ public class SpaceAssignment extends Processing {
         if (n.size() == 0)
             n.putSize(1);
     }
+    public void process(IBlock b) {
+        int dirAntesDeBloque = addr;
+        for(Program.Dec d: b.decs())
+            d.processWith(this);
+        int bodySize = 0;
+        for(Program.Inst i: b.is()) {
+            tam=0;
+            i.processWith(this);
+            if (tam > bodySize)
+                bodySize=tam;
+        }
+        tam = bodySize + (addr-dirAntesDeBloque);
+        addr = dirAntesDeBloque;
+    }
+
+    public int dataSize() {return tam;}
+    public int getDisplayNum() {return displayNum;}
 }

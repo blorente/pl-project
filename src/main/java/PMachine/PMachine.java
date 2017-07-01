@@ -7,11 +7,17 @@ import java.util.Stack;
 
 public class PMachine {
 	private final static String W_ACCESO = "**** WARNING: Acceso a memoria sin inicializar";
+	private final int heapSize;
+	private final int displayNum;
+	private final int stackSize;
+	private final int dataSize;
+
 	private class EOutOfRangeAccess extends RuntimeException{}
 	private class EUninitializedMemoryAccess extends RuntimeException{}
 	private final Value UNKNOWN;
 
 	private GestorMemoriaDinamica memoryManager;
+	private GestorPilaActivaciones activationsManager;
 
 	private class Value {
 		public int intValue() {
@@ -1022,48 +1028,6 @@ public class PMachine {
 			return "pushUniString(" + value + ")";
 		};
 	}
-	private class IDesapilaDir implements Instruction {
-		private int dir;
-
-		public IDesapilaDir(int dir) {
-			this.dir = dir;
-		}
-
-		public void execute() {
-			data[dir] = evalStack.pop();
-			pc++;
-		}
-
-		public String toString() {
-			return "desapilaDir(" + dir + ")";
-		};
-	}
-	private class IApilaDir implements Instruction {
-		private int dir;
-		private String enlaceFuente;
-
-		public IApilaDir(int dir) {
-			this(dir, null);
-		}
-
-		public IApilaDir(int dir, String enlaceFuente) {
-			this.enlaceFuente = enlaceFuente;
-			this.dir = dir;
-		}
-
-		public void execute() {
-			if (data[dir] == null) {
-				System.err.println(enlaceFuente + ":" + W_ACCESO);
-				evalStack.push(UNKNOWN);
-			} else
-				evalStack.push(data[dir]);
-			pc++;
-		}
-
-		public String toString() {
-			return "pushDir(" + dir + ")";
-		}
-	}
 	private class IPushBool implements Instruction {
 		private boolean valor;
 
@@ -1614,6 +1578,89 @@ public class PMachine {
 		}
 	}
 
+	private class IActivate implements Instruction {
+		private int level;
+		private int dataSize;
+		private int retAddr;
+		public IActivate(int level, int dataSize, int retAddr) {
+			this.level = level;
+			this.dataSize = dataSize;
+			this.retAddr = retAddr;
+		}
+		public void execute() {
+			int base = activationsManager.creaRegistroActivacion(dataSize);
+			data[base] = new IntValue(retAddr);
+			data[base+1] = new IntValue(activationsManager.display(level));
+			evalStack.push(new IntValue(base+2));
+			pc++;
+		}
+		public String toString() {
+			return "activa("+ level +","+dataSize+","+ retAddr +")";
+		}
+	}
+	private class IDeactivate implements Instruction {
+		private int level;
+		private int dataSize;
+		public IDeactivate(int level, int dataSize) {
+			this.level = level;
+			this.dataSize = dataSize;
+		}
+		public void execute() {
+			int base = activationsManager.liberaRegistroActivacion(dataSize);
+			activationsManager.fijaDisplay(level,data[base+1].intValue());
+			evalStack.push(data[base]);
+			pc++;
+		}
+		public String toString() {
+			return "deactivate("+ level +","+ dataSize +")";
+		}
+	}
+	private class ISetd implements Instruction {
+		private int level;
+		public ISetd(int level) {
+			this.level = level;
+		}
+		public void execute() {
+			activationsManager.fijaDisplay(level,evalStack.pop().intValue());
+			pc++;
+		}
+		public String toString() {
+			return "setd("+ level +")";
+		}
+	}
+	private Instruction ISTOP;
+	private class IStop implements Instruction {
+		public void execute() {
+			pc = Pcode.size();
+		}
+		public String toString() {
+			return "stop";
+		}
+	}
+
+	private class IPushD implements Instruction {
+		private int level;
+		public IPushD(int level) {
+			this.level = level;
+		}
+		public void execute() {
+			evalStack.push(new IntValue(activationsManager.display(level)));
+			pc++;
+		}
+		public String toString() {
+			return "pushd("+ level +")";
+		}
+	}
+	private Instruction IBRANCHIND;
+	private class IBranchInd implements Instruction {
+		public void execute() {
+			pc = evalStack.pop().intValue();
+		}
+		public String toString() {
+			return "irind";
+		}
+	}
+
 	public Instruction addInt() {
 		return IADDINT;
 	}
@@ -1767,15 +1814,6 @@ public class PMachine {
 	public Instruction pushBool(boolean val) {
 		return new IPushBool(val);
 	}
-	public Instruction desapilaDir(int dir) {
-		return new IDesapilaDir(dir);
-	}
-	public Instruction apilaDir(int dir) {
-		return new IApilaDir(dir);
-	}
-	public Instruction apilaDir(int dir, String dinfo) {
-		return new IApilaDir(dir, dinfo);
-	}
 	public Instruction intToReal() {
 		return IINTTOREAL;
 	}
@@ -1839,6 +1877,7 @@ public class PMachine {
 	public Instruction branch(int dir) {
 		return new IBranch(dir);
 	}
+	public Instruction branchInd() {return IBRANCHIND;}
 	public Instruction dup() {
 		return IDUP;
 	}
@@ -1861,15 +1900,24 @@ public class PMachine {
 		return new IDealloc(addr);
 	}
 	public Instruction inRange(int bound) {return new IInRange(bound);}
+	public Instruction activate(int level,int size, int retAddr) {return new IActivate(level,size,retAddr);}
+	public Instruction desactiva(int level, int size) {return new IDeactivate(level,size);}
+	public Instruction setd(int level) {return new ISetd(level);}
+	public Instruction stop() {return ISTOP;}
+	public Instruction pushd(int level) {return new IPushD(level);}
 
 	public void addInstruction(Instruction i) {
 		Pcode.add(i);
 	}
 
-	public PMachine(int dataSize, int heapSize) {
+	public PMachine(int dataSize, int heapSize, int stackSize, int numDisplays) {
 		this.Pcode = new ArrayList<>();
 		evalStack = new Stack<>();
 		data = new Value[dataSize + heapSize];
+		this.displayNum = numDisplays;
+		this.stackSize = stackSize;
+		this.heapSize = heapSize;
+		this.dataSize = dataSize;
 		this.pc = 0;
 		IADDINT = new IAddInt();
 		IADDREAL = new IAddReal();
@@ -1951,6 +1999,10 @@ public class PMachine {
 
 		UNKNOWN = new UnknownValue();
 
+		IBRANCHIND = new IBranchInd();
+		ISTOP = new IStop();
+
+		activationsManager = new GestorPilaActivaciones(dataSize,(dataSize+stackSize)-1,numDisplays);
 		memoryManager = new GestorMemoriaDinamica(dataSize,(dataSize+heapSize)-1);
 	}
 
@@ -1972,6 +2024,13 @@ public class PMachine {
 	}
 
 	public void showState() {
+		System.out.println("Tam datos:"+dataSize);
+		System.out.println("Tam heap:"+heapSize);
+		System.out.println("PP:"+ activationsManager.pp());
+		System.out.print("Displays:");
+		for (int i = 1; i <= displayNum; i++)
+			System.out.print(i+":"+ activationsManager.display(i)+" ");
+		System.out.println();
 		System.out.println("Pila de evaluacion");
 		for (int i = 0; i < evalStack.size(); i++) {
 			System.out.println(" " + i + ":" + evalStack.get(i));

@@ -34,7 +34,7 @@ public class Printing extends Processing {
 	private void printAttributes(Inst i) {
 		if (attributes) {
 			System.out.print("@{t:" + i.tipo() + ",");
-			System.out.print("df:" + i.dirFirst() + ", dn:" + i.dirNext() + "}");
+			System.out.print("df:" + i.addrFirst() + ", dn:" + i.addrNext() + "}");
 		}
 	}
 

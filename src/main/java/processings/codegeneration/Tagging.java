@@ -4,23 +4,40 @@ import processings.Processing;
 import program.Program;
 import program.Program.*;
 
+import java.util.Stack;
+
 public class Tagging extends Processing {
 	private int etq;
 	private Program program;
+	private Stack<DecProc> remainingProcs;
 
 	public Tagging(Program program) {
 		this.program = program;
 		etq = 0;
+		remainingProcs = new Stack<DecProc>();
 	}
 	
 	public void process(Prog p) {
+		for(Dec d: p.decs()) {
+			if (d instanceof DecProc) {
+				remainingProcs.push((DecProc)d);
+			}
+		}
 		p.inst().processWith(this);
+		etq++; //stop
+		while(! remainingProcs.isEmpty())
+			remainingProcs.pop().processWith(this);
 	}
 
 	public void process(Var exp) {
-		exp.putDirFirst(etq);
-		// apilaDir(...dir variable...)
-		exp.putDirNext(++etq);
+		DecVar dvar =  exp.declaration();
+		if (dvar.level() == 0)
+			etq++; // apilaInt
+		else {
+			etq += 3; // apilad, apilaInt, suma
+			if (dvar.isByReference())
+				etq++; // apilaInd
+		}
 	}
 	public void process(DRefPtr exp) {
 		exp.putDirFirst(etq);
@@ -53,6 +70,7 @@ public class Tagging extends Processing {
 		exp.putDirFirst(etq);
 		exp.putDirNext(++etq);
 	}
+
 	public void process(Addition exp) {
 		tagBinaryNumericExpression(exp);
 	}
@@ -69,21 +87,13 @@ public class Tagging extends Processing {
 		tagBinaryNumericExpression(exp);
 	}
 	public void process(And exp) {
-		exp.putDirFirst(etq);
-		exp.opnd1().processWith(this);
-		exp.opnd2().processWith(this);
-		exp.putDirNext(++etq);
+		tagBinaryExpressionSimple(exp);
 	}
 	public void process(Or exp) {
-		exp.putDirFirst(etq);
-		exp.opnd1().processWith(this);
-		exp.opnd2().processWith(this);
-		exp.putDirNext(++etq);
+		tagBinaryExpressionSimple(exp);
 	}
 	public void process(Not exp) {
-		exp.putDirFirst(etq);
-		exp.op().processWith(this);
-		exp.putDirNext(++etq);
+		tagUnaryExpressionSimple(exp);
 	}
 	public void process(Equals exp) {
 		tagBinaryNumericExpression(exp);
@@ -104,15 +114,10 @@ public class Tagging extends Processing {
 		tagBinaryNumericExpression(exp);
 	}
 	public void process(StrElem exp) {
-		exp.putDirFirst(etq);
-		exp.opnd1().processWith(this);
-		exp.opnd2().processWith(this);
-		exp.putDirNext(++etq);
+		tagBinaryExpressionSimple(exp);
 	}
 	public void process(Negative exp) {
-		exp.putDirFirst(etq);
-		exp.op().processWith(this);
-		exp.putDirNext(++etq);
+		tagUnaryExpressionSimple(exp);
 	}
 	public void process(IntCast exp) {
 		tagCastExpression(exp);
@@ -129,62 +134,109 @@ public class Tagging extends Processing {
 	public void process(UniStrCast exp) {
 		tagCastExpression(exp);
 	}
+
+	private void tagBinaryExpressionSimple(BinaryExp exp) {
+		exp.putDirFirst(etq);
+		exp.opnd1().processWith(this);
+		if (exp.opnd1().isMem()) /* pushInd */ etq++;
+		exp.opnd2().processWith(this);
+		if (exp.opnd2().isMem()) /* pushInd */ etq++;
+		exp.putDirNext(++etq);
+	}
+	private void tagUnaryExpressionSimple(UnaryExp exp) {
+		exp.putDirFirst(etq);
+		exp.op().processWith(this);
+		if (exp.op().isMem()) /* pushInd */ etq++;
+		exp.putDirNext(++etq);
+	}
+	private void tagBinaryNumericExpression(BinaryExp exp) {
+		Type t1 = exp.opnd1().type();
+		Type t2 = exp.opnd2().type();
+		exp.putDirFirst(etq);
+		exp.opnd1().processWith(this);
+		if (exp.opnd1().isMem()) /* pushInd */ etq++;
+		if (t1.equals(program.tInt()) && t2.equals(program.tReal())) {
+			etq++;
+		}
+		exp.opnd2().processWith(this);
+		if (exp.opnd2().isMem()) /* pushInd */ etq++;
+		if (t1.equals(program.tReal()) && t2.equals(program.tInt())) {
+			etq++;
+		}
+		exp.putDirNext(++etq);
+	}
+	private void tagCastExpression(UnaryExp exp) {
+		exp.putDirFirst(etq);
+		exp.op().processWith(this);
+		if (exp.op().isMem()) /* pushInd */ etq++;
+		if (!exp.op().type().equals(exp.type()))
+			exp.putDirNext(++etq);
+	}
+
 	public void process(IAsig i) {
-		i.putDirFirst(etq);
+		i.putAddrFirst(etq);
 		i.mem().processWith(this);
 		i.exp().processWith(this);
+		if (i.exp().isMem()) /*pushInd*/ etq++;
 		// move or popInd
-		i.putDirNext(++etq);
+		i.putAddrNext(++etq);
 	}
 	public void process(IBlock b) {
-		b.putDirFirst(etq);
-		for (Inst i : b.is()) {
+		b.putAddrFirst(etq);
+		for(Dec dec: b.decs())
+			if (dec instanceof DecProc)
+				remainingProcs.push((DecProc)dec);
+		for(Inst i: b.is())
 			i.processWith(this);
-		}
-		b.putDirNext(etq);
+		b.putAddrNext(etq);
 	}
 	public void process(IWhile i) {
-		i.putDirFirst(etq);
+		i.putAddrFirst(etq);
 		i.getCond().processWith(this);
+		if (i.getCond().isMem()) /*pushInd*/ etq++;
 		// ir_f(...)
 		etq++;
 		i.getBody().processWith(this);
 		// ir_a(...)
 		etq++;
-		i.putDirNext(etq);
+		i.putAddrNext(etq);
 	}
 	public void process(IDoWhile i) {
-		i.putDirFirst(etq);
+		i.putAddrFirst(etq);
 		i.getBody().processWith(this);
 		i.getCond().processWith(this);
+		if (i.getCond().isMem()) /*pushInd*/ etq++;
 		// ir_f(...)
 		etq++;
 		// ir_a(...)
 		etq++;
-		i.putDirNext(etq);
+		i.putAddrNext(etq);
 	}
 	public void process(IIfThen i) {
-		i.putDirFirst(etq);
+		i.putAddrFirst(etq);
 		i.getCond().processWith(this);
+		if (i.getCond().isMem()) /*pushInd*/ etq++;
 		// ir_f(...)
 		etq++;
 		i.getThen().processWith(this);
-		i.putDirNext(etq);
+		i.putAddrNext(etq);
 	}
 	public void process(IIfThenElse i) {
-		i.putDirFirst(etq);
+		i.putAddrFirst(etq);
 		i.getCond().processWith(this);
+		if (i.getCond().isMem()) /*pushInd*/ etq++;
 		// ir_f(...)
 		etq++;
 		i.getThen().processWith(this);
 		// ir_a(...)
 		etq++;
 		i.getElse().processWith(this);
-		i.putDirNext(etq);
+		i.putAddrNext(etq);
 	}
 	public void process(ISwitch i) {
-		i.putDirFirst(etq);
+		i.putAddrFirst(etq);
 		i.getCond().processWith(this);
+		if (i.getCond().isMem()) /*pushInd*/ etq++;
 		for (ICase c : i.getCases()) {
 			// dup
 			etq++;
@@ -197,61 +249,42 @@ public class Tagging extends Processing {
 		if (i.hasDefault()) {
 			i.getDefault().processWith(this);
 		}
-		i.putDirNext(etq);
+		i.putAddrNext(etq);
 	}
 	public void process(ICase i) {
-		i.putDirFirst(etq);
+		i.putAddrFirst(etq);
 		i.getExp().processWith(this);
+		if (i.getExp().isMem()) /*pushInd*/ etq++;
 		// equals
 		etq++;
 		// branch if false
 		etq++;
 		i.getBody().processWith(this);
-		i.putDirNext(etq);
+		i.putAddrNext(etq);
 	}
 	public void process(IRead i){
-		i.putDirFirst(etq);
+		i.putAddrFirst(etq);
 		etq++;
-		i.putDirNext(++etq);
+		i.putAddrNext(++etq);
 	}
 	public void process(IWrite i){
-		i.putDirFirst(etq);
+		i.putAddrFirst(etq);
 		etq++;
-		i.putDirNext(++etq);
-	}
-	private void tagBinaryNumericExpression(BinaryExp exp) {
-		Type t1 = exp.opnd1().type();
-		Type t2 = exp.opnd2().type();
-		exp.putDirFirst(etq);
-		exp.opnd1().processWith(this);
-		if (t1.equals(program.tInt()) && t2.equals(program.tReal())) {
-			etq++;
-		}
-		exp.opnd2().processWith(this);
-		if (t1.equals(program.tReal()) && t2.equals(program.tInt())) {
-			etq++;
-		}
-		exp.putDirNext(++etq);
-	}
-	private void tagCastExpression(UnaryExp exp) {
-		exp.putDirFirst(etq);
-		exp.op().processWith(this);
-		if (!exp.op().type().equals(exp.type()))
-			exp.putDirNext(++etq);
+		i.putAddrNext(++etq);
 	}
 	public void process(INew i) {
-		i.putDirFirst(etq);
+		i.putAddrFirst(etq);
 		i.mem().processWith(this);
 		// alloc desapilaind
 		etq +=2;
-		i.putDirNext(etq);
+		i.putAddrNext(etq);
 	}
 	public void process(IFree i) {
-		i.putDirFirst(etq);
+		i.putAddrFirst(etq);
 		i.mem().processWith(this);
 		// apilaind dealloc
 		etq +=2;
-		i.putDirNext(etq);
+		i.putAddrNext(etq);
 	}
 	public void process(ArrayIndex exp) {
 		exp.putDirFirst(etq);
@@ -274,5 +307,22 @@ public class Tagging extends Processing {
 		etq++;// pushInt(field.offset)
 		etq++;// Sum
 		exp.putDirNext(etq);
+	}
+
+	public void process(DecProc p) {
+		p.body().processWith(this);
+		etq += 2;
+	}
+	public void process(ICall c) {
+		c.putAddrFirst(etq);
+		DecProc p = c.declaration();
+		etq++; //activa
+		for(int i=0; i <  p.fparams().length; i++) {
+			etq += 3; //dup, apilaInt, suma
+			c.aparams()[i].processWith(this);
+			etq++; //desapilaInd o mueve
+		}
+		etq += 2; // setD, irA
+		c.putAddrNext(etq);
 	}
 }

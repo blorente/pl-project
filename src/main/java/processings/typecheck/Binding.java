@@ -9,7 +9,7 @@ import program.Program.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Vinculacion extends Processing {
+public class Binding extends Processing {
 	private final static String ERROR_DUPLICATED_ID = "Duplicated identifier";
 	private final static String ERROR_DUPLICATED_PROC_ID = "Duplicated Procedure declaration";
 	private final static String ERROR_UNDECLARED_ID = "Undeclared identifier";
@@ -24,7 +24,7 @@ public class Vinculacion extends Processing {
 	private TablaDeSimbolos symbolTable;
 	private RefCompletion refCompletion;
 
-	public Vinculacion(Program p, Errors errors) {
+	public Binding(Program p, Errors errors) {
 		variables = new HashMap<>();
 		types = new HashMap<>();
 		compat = new CompatibilityChecker(p);

@@ -183,4 +183,10 @@ public class CompatibilityChecker {
 	}
 
 	public static boolean isNull(Type t) {return t instanceof Program.TNull;}
+	public static boolean isProc(Program.Dec d) {
+		return d instanceof Program.DecProc;
+	}
+	public static Program.DecProc proc(Program.Dec d) {
+		return (Program.DecProc)d;
+	}
 }

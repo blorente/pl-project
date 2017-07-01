@@ -7,7 +7,7 @@ import processings.codegeneration.SpaceAssignment;
 import processings.codegeneration.Tagging;
 import processings.impresion.Printing;
 import processings.typecheck.TypeCheck;
-import processings.typecheck.Vinculacion;
+import processings.typecheck.Binding;
 
 import java.io.FileReader;
 public class Main{
@@ -21,7 +21,7 @@ public class Main{
       Printing printer = new Printing(false);
       Printing fullPrinter = new Printing(true);
       printer.process(ops.root());
-      Vinculacion vinculacion = new Vinculacion(ops, errors);
+      Binding vinculacion = new Binding(ops, errors);
       ops.root().processWith(vinculacion);
       if (vinculacion.error()) System.exit(1);
       TypeCheck tipado = new TypeCheck(ops,errors);
@@ -33,7 +33,7 @@ public class Main{
           Tagging tagging = new Tagging(ops);
           ops.root().processWith(tagging);
           fullPrinter.process(ops.root());
-          PMachine machine = new PMachine(spaceAssig.dataSize(),50);//,10,asignacionEspacio.numDisplays());
+          PMachine machine = new PMachine(spaceAssig.dataSize(),10, 50, spaceAssig.getDisplayNum());
           CodeGeneration codegen = new CodeGeneration(ops, machine);
           ops.root().processWith(codegen);
           machine.showCode();

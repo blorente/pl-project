@@ -295,21 +295,18 @@ public abstract class Program {
 		private String var;
 		private DeclaredType decType;
 		private int addr;
-
+		private int level;
 		public DecVar(DeclaredType tipo, String var) {
 			this(tipo, var, null);
 		}
-
 		public DecVar(DeclaredType tipo, String var, String sourceLink) {
 			this.decType = tipo;
 			this.sourceLink = sourceLink;
 			this.var = var;
 		}
-
 		public DeclaredType decType() {
 			return decType;
 		}
-
 		public String var() {
 			return var;
 		}
@@ -317,15 +314,17 @@ public abstract class Program {
 		public int addr() {
 			return addr;
 		}
-
-		public void assignAddr(int addr) {
+		public void putAddr(int addr) {
 			this.addr = addr;
 		}
+		public int level() {return level;}
+		public void putLevel(int level) {this.level = level;}
+
+		public boolean isByReference() {return false;}
 
 		public String sourceLink() {
 			return sourceLink;
 		}
-
 		public void processWith(Processing p) {
 			p.process(this);
 		}
@@ -391,23 +390,23 @@ public abstract class Program {
 			return tipo;
 		}
 
-		public void ponTipo(Type tipo) {
+		public void putType(Type tipo) {
 			this.tipo = tipo;
 		}
 
-		public int dirFirst() {
+		public int addrFirst() {
 			return firstInstDir;
 		}
 
-		public void putDirFirst(int dir) {
+		public void putAddrFirst(int dir) {
 			firstInstDir = dir;
 		}
 
-		public int dirNext() {
+		public int addrNext() {
 			return nextInstDir;
 		}
 
-		public void putDirNext(int dir) {
+		public void putAddrNext(int dir) {
 			nextInstDir = dir;
 		}
 
