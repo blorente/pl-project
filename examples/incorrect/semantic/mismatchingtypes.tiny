@@ -1,0 +1,7 @@
+var int i;
+var string s;
+{
+    i = 1;
+    s = "";
+    s = i + s;
+}

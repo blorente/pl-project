@@ -1,0 +1,7 @@
+proc hello(string s) {
+    write s;
+}
+var int i;
+{
+    call hello with i;
+}

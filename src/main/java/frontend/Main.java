@@ -26,6 +26,7 @@ public class Main{
             printer.process(ops.root());
             TypeCheck tipado = new TypeCheck(ops,errors);
             ops.root().processWith(tipado);
+            //fullPrinter.process(ops.root());
             if (ops.root().tipo() != ops.tError()) {
                 SpaceAssignment spaceAssig = new SpaceAssignment();
                 ops.root().processWith(spaceAssig);

@@ -1,0 +1,7 @@
+type tcelda* tlista;
+
+var tlista a;
+
+{
+    new a;
+}

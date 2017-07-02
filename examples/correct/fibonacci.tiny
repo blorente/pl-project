@@ -1,0 +1,29 @@
+proc fibo(int base, int& res) {
+    var int a;
+    var int b;
+    if (base == 0) || (base == 1) then {
+        res = 1;
+    } else {
+        call fibo with (base - 1), a;
+        call fibo with (base - 2), b;
+        res = a + b;
+    }
+}
+{
+    var int fibolimit;
+    var int res;
+    var int curbase;
+    var string msg;
+
+    msg = "First nine Fibonacci numbers";
+    write msg;
+
+    curbase = 0;
+    fibolimit = 9;
+    while (curbase < fibolimit) {
+        res = 0;
+        call fibo with curbase, res;
+        write res;
+        curbase = curbase + 1;
+    }
+}

@@ -1,0 +1,9 @@
+proc hell(string s) {
+    write s;
+}
+
+var string mys;
+{
+    mys = "Hello";
+    call hello with mys;
+}
